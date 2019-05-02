@@ -1,0 +1,14 @@
+; Here's an alternative way of creating blocks using the arrow keys, almost
+; like other editors.
+
+; Increase the size of the block
+s+left    Macro  CharLeft  MarkBegin
+s+right   Macro  CharRight MarkEnd
+s+up      Macro  LineUp    MarkBegin
+s+down    Macro  LineDown  MarkEnd
+
+; Decrease the size of the block
+s+c+left  Macro  CharLeft  MarkEnd
+s+c+right Macro  CharRight MarkBegin
+s+c+up    Macro  LineUp    MarkEnd
+s+c+down  Macro  LineDown  MarkBegin

@@ -1,0 +1,334 @@
+<html lang="en">
+<head>
+<title>TDE 5.1v Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TDE 5.1v Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">TDE 5.1v Manual</h1>
+   <div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="index.html#Top">TDE Manual</a>
+<li><a name="toc_Overview" href="Overview.html#Overview">Overview</a>
+<ul>
+<li><a href="Overview.html#Overview">Description</a>
+<li><a href="Overview.html#Overview">Introduction</a>
+</li></ul>
+<li><a name="toc_Usage" href="Usage.html#Usage">Usage</a>
+<ul>
+<li><a href="Usage.html#Usage">Examples</a>
+</li></ul>
+<li><a name="toc_Screen-Layout" href="Screen-Layout.html#Screen-Layout">Screen Layout</a>
+<li><a name="toc_Configuration" href="Configuration.html#Configuration">Configuration</a>
+<ul>
+<li><a href="Configuration.html#Configuration">Syntax Highlighting</a>
+</li></ul>
+<li><a name="toc_Alphabetical-List" href="Alphabetical-List.html#Alphabetical-List">Alphabetical List</a>
+<ul>
+<li><a href="AbortCommand.html#AbortCommand">AbortCommand</a>
+<li><a href="About.html#About">About</a>
+<li><a href="AddLine.html#AddLine">AddLine</a>
+<li><a href="BackSpace.html#BackSpace">BackSpace</a>
+<li><a href="BackTab.html#BackTab">BackTab</a>
+<li><a href="BalanceHorizontal.html#BalanceHorizontal">BalanceHorizontal</a>
+<li><a href="BalanceVertical.html#BalanceVertical">BalanceVertical</a>
+<li><a href="BegNextLine.html#BegNextLine">BegNextLine</a>
+<li><a href="BegOfLine.html#BegOfLine">BegOfLine</a>
+<li><a href="BlockBegin.html#BlockBegin">BlockBegin</a>
+<li><a href="BlockBlockComment.html#BlockBlockComment">BlockBlockComment</a>
+<li><a href="BlockCapitalise.html#BlockCapitalise">BlockCapitalise</a>
+<li><a href="BlockCenterJustify.html#BlockCenterJustify">BlockCenterJustify</a>
+<li><a href="BlockCompressTabs.html#BlockCompressTabs">BlockCompressTabs</a>
+<li><a href="BlockEmailReply.html#BlockEmailReply">BlockEmailReply</a>
+<li><a href="BlockEnd.html#BlockEnd">BlockEnd</a>
+<li><a href="BlockExpandTabs.html#BlockExpandTabs">BlockExpandTabs</a>
+<li><a href="BlockFixUUE.html#BlockFixUUE">BlockFixUUE</a>
+<li><a href="BlockIndent.html#BlockIndent">BlockIndent</a>
+<li><a href="BlockIndentN.html#BlockIndentN">BlockIndentN</a>
+<li><a href="BlockIndentTabs.html#BlockIndentTabs">BlockIndentTabs</a>
+<li><a href="BlockInvertCase.html#BlockInvertCase">BlockInvertCase</a>
+<li><a href="BlockLeftJustify.html#BlockLeftJustify">BlockLeftJustify</a>
+<li><a href="BlockLineComment.html#BlockLineComment">BlockLineComment</a>
+<li><a href="BlockLowerCase.html#BlockLowerCase">BlockLowerCase</a>
+<li><a href="BlockRightJustify.html#BlockRightJustify">BlockRightJustify</a>
+<li><a href="BlockRot13.html#BlockRot13">BlockRot13</a>
+<li><a href="BlockStripHiBit.html#BlockStripHiBit">BlockStripHiBit</a>
+<li><a href="BlockToFile.html#BlockToFile">BlockToFile</a>
+<li><a href="BlockTrimTrailing.html#BlockTrimTrailing">BlockTrimTrailing</a>
+<li><a href="BlockUnComment.html#BlockUnComment">BlockUnComment</a>
+<li><a href="BlockUndent.html#BlockUndent">BlockUndent</a>
+<li><a href="BlockUndentN.html#BlockUndentN">BlockUndentN</a>
+<li><a href="BlockUpperCase.html#BlockUpperCase">BlockUpperCase</a>
+<li><a href="BorderBlock.html#BorderBlock">BorderBlock</a>
+<li><a href="BorderBlockEx.html#BorderBlockEx">BorderBlockEx</a>
+<li><a href="BotOfScreen.html#BotOfScreen">BotOfScreen</a>
+<li><a href="BottomLine.html#BottomLine">BottomLine</a>
+<li><a href="CenterJustify.html#CenterJustify">CenterJustify</a>
+<li><a href="CenterLine.html#CenterLine">CenterLine</a>
+<li><a href="CenterWindow.html#CenterWindow">CenterWindow</a>
+<li><a href="ChangeCurDir.html#ChangeCurDir">ChangeCurDir</a>
+<li><a href="CharacterSet.html#CharacterSet">CharacterSet</a>
+<li><a href="CharLeft.html#CharLeft">CharLeft</a>
+<li><a href="CharRight.html#CharRight">CharRight</a>
+<li><a href="ClearAllMacros.html#ClearAllMacros">ClearAllMacros</a>
+<li><a href="CloseWindow.html#CloseWindow">CloseWindow</a>
+<li><a href="ContextHelp.html#ContextHelp">ContextHelp</a>
+<li><a href="CopyBlock.html#CopyBlock">CopyBlock</a>
+<li><a href="CopyString.html#CopyString">CopyString</a>
+<li><a href="CopyToClipboard.html#CopyToClipboard">CopyToClipboard</a>
+<li><a href="CopyWord.html#CopyWord">CopyWord</a>
+<li><a href="CutToClipboard.html#CutToClipboard">CutToClipboard</a>
+<li><a href="DateTimeStamp.html#DateTimeStamp">DateTimeStamp</a>
+<li><a href="DefineDiff.html#DefineDiff">DefineDiff</a>
+<li><a href="DefineGrep.html#DefineGrep">DefineGrep</a>
+<li><a href="DefineSearch.html#DefineSearch">DefineSearch</a>
+<li><a href="DelBegOfLine.html#DelBegOfLine">DelBegOfLine</a>
+<li><a href="DelEndOfLine.html#DelEndOfLine">DelEndOfLine</a>
+<li><a href="DeleteBlock.html#DeleteBlock">DeleteBlock</a>
+<li><a href="DeleteChar.html#DeleteChar">DeleteChar</a>
+<li><a href="DeleteLine.html#DeleteLine">DeleteLine</a>
+<li><a href="DirList.html#DirList">DirList</a>
+<li><a href="DuplicateLine.html#DuplicateLine">DuplicateLine</a>
+<li><a href="DynamicTabSize.html#DynamicTabSize">DynamicTabSize</a>
+<li><a href="EditFile.html#EditFile">EditFile</a>
+<li><a href="EditNextFile.html#EditNextFile">EditNextFile</a>
+<li><a href="EndNextLine.html#EndNextLine">EndNextLine</a>
+<li><a href="EndOfFile.html#EndOfFile">EndOfFile</a>
+<li><a href="EndOfLine.html#EndOfLine">EndOfLine</a>
+<li><a href="EraseBegOfLine.html#EraseBegOfLine">EraseBegOfLine</a>
+<li><a href="Execute.html#Execute">Execute</a>
+<li><a href="File.html#File">File</a>
+<li><a href="FileAll.html#FileAll">FileAll</a>
+<li><a href="FileAttributes.html#FileAttributes">FileAttributes</a>
+<li><a href="FillBlock.html#FillBlock">FillBlock</a>
+<li><a href="FillBlockDown.html#FillBlockDown">FillBlockDown</a>
+<li><a href="FillBlockPattern.html#FillBlockPattern">FillBlockPattern</a>
+<li><a href="FindBackward.html#FindBackward">FindBackward</a>
+<li><a href="FindForward.html#FindForward">FindForward</a>
+<li><a href="FormatParagraph.html#FormatParagraph">FormatParagraph</a>
+<li><a href="FormatText.html#FormatText">FormatText</a>
+<li><a href="GotoMark_003cN_003e.html#GotoMark_003cN_003e">GotoMark&lt;N&gt;</a>
+<li><a href="GotoWindow.html#GotoWindow">GotoWindow</a>
+<li><a href="HalfScreenDown.html#HalfScreenDown">HalfScreenDown</a>
+<li><a href="HalfScreenLeft.html#HalfScreenLeft">HalfScreenLeft</a>
+<li><a href="HalfScreenRight.html#HalfScreenRight">HalfScreenRight</a>
+<li><a href="HalfScreenUp.html#HalfScreenUp">HalfScreenUp</a>
+<li><a href="Help.html#Help">Help</a>
+<li><a href="InsertFile.html#InsertFile">InsertFile</a>
+<li><a href="ISearchBackward.html#ISearchBackward">ISearchBackward</a>
+<li><a href="ISearchForward.html#ISearchForward">ISearchForward</a>
+<li><a href="JoinLine.html#JoinLine">JoinLine</a>
+<li><a href="JumpToPosition.html#JumpToPosition">JumpToPosition</a>
+<li><a href="KopyBlock.html#KopyBlock">KopyBlock</a>
+<li><a href="KopyToClipboard.html#KopyToClipboard">KopyToClipboard</a>
+<li><a href="LeftJustify.html#LeftJustify">LeftJustify</a>
+<li><a href="LineDown.html#LineDown">LineDown</a>
+<li><a href="LineUp.html#LineUp">LineUp</a>
+<li><a href="LoadMacro.html#LoadMacro">LoadMacro</a>
+<li><a href="Macro.html#Macro">Macro</a>
+<li><a href="MacroMark.html#MacroMark">MacroMark</a>
+<li><a href="MakeHalfHorizontal.html#MakeHalfHorizontal">MakeHalfHorizontal</a>
+<li><a href="MakeHalfVertical.html#MakeHalfVertical">MakeHalfVertical</a>
+<li><a href="MakeHorizontal.html#MakeHorizontal">MakeHorizontal</a>
+<li><a href="MakeVertical.html#MakeVertical">MakeVertical</a>
+<li><a href="MarkBegin.html#MarkBegin">MarkBegin</a>
+<li><a href="MarkBox.html#MarkBox">MarkBox</a>
+<li><a href="MarkEnd.html#MarkEnd">MarkEnd</a>
+<li><a href="MarkLine.html#MarkLine">MarkLine</a>
+<li><a href="MarkStream.html#MarkStream">MarkStream</a>
+<li><a href="MoveBlock.html#MoveBlock">MoveBlock</a>
+<li><a href="MoveMark.html#MoveMark">MoveMark</a>
+<li><a href="NextBrowse.html#NextBrowse">NextBrowse</a>
+<li><a href="NextDirtyLine.html#NextDirtyLine">NextDirtyLine</a>
+<li><a href="NextHiddenWindow.html#NextHiddenWindow">NextHiddenWindow</a>
+<li><a href="NextLine.html#NextLine">NextLine</a>
+<li><a href="NextWindow.html#NextWindow">NextWindow</a>
+<li><a href="Null.html#Null">Null</a>
+<li><a href="NumberBlock.html#NumberBlock">NumberBlock</a>
+<li><a href="OverlayBlock.html#OverlayBlock">OverlayBlock</a>
+<li><a href="PanDn.html#PanDn">PanDn</a>
+<li><a href="PanLeft.html#PanLeft">PanLeft</a>
+<li><a href="PanRight.html#PanRight">PanRight</a>
+<li><a href="PanUp.html#PanUp">PanUp</a>
+<li><a href="ParenBalance.html#ParenBalance">ParenBalance</a>
+<li><a href="PasteFromClipboard.html#PasteFromClipboard">PasteFromClipboard</a>
+<li><a href="Pause.html#Pause">Pause</a>
+<li><a href="PlayBack.html#PlayBack">PlayBack</a>
+<li><a href="PopupRuler.html#PopupRuler">PopupRuler</a>
+<li><a href="PrevBrowse.html#PrevBrowse">PrevBrowse</a>
+<li><a href="PrevDirtyLine.html#PrevDirtyLine">PrevDirtyLine</a>
+<li><a href="PrevHiddenWindow.html#PrevHiddenWindow">PrevHiddenWindow</a>
+<li><a href="PreviousPosition.html#PreviousPosition">PreviousPosition</a>
+<li><a href="PreviousWindow.html#PreviousWindow">PreviousWindow</a>
+<li><a href="PrintBlock.html#PrintBlock">PrintBlock</a>
+<li><a href="PseudoMacro.html#PseudoMacro">PseudoMacro</a>
+<li><a href="PullDown.html#PullDown">PullDown</a>
+<li><a href="Quit.html#Quit">Quit</a>
+<li><a href="QuitAll.html#QuitAll">QuitAll</a>
+<li><a href="ReadConfig.html#ReadConfig">ReadConfig</a>
+<li><a href="RecordMacro.html#RecordMacro">RecordMacro</a>
+<li><a href="Redo.html#Redo">Redo</a>
+<li><a href="RedrawScreen.html#RedrawScreen">RedrawScreen</a>
+<li><a href="RegXBackward.html#RegXBackward">RegXBackward</a>
+<li><a href="RegXForward.html#RegXForward">RegXForward</a>
+<li><a href="Repeat.html#Repeat">Repeat</a>
+<li><a href="RepeatDiff.html#RepeatDiff">RepeatDiff</a>
+<li><a href="RepeatFindBackward.html#RepeatFindBackward">RepeatFindBackward</a>
+<li><a href="RepeatFindForward.html#RepeatFindForward">RepeatFindForward</a>
+<li><a href="RepeatGrep.html#RepeatGrep">RepeatGrep</a>
+<li><a href="RepeatRegXBackward.html#RepeatRegXBackward">RepeatRegXBackward</a>
+<li><a href="RepeatRegXForward.html#RepeatRegXForward">RepeatRegXForward</a>
+<li><a href="RepeatSearch.html#RepeatSearch">RepeatSearch</a>
+<li><a href="ReplaceString.html#ReplaceString">ReplaceString</a>
+<li><a href="RestoreLine.html#RestoreLine">RestoreLine</a>
+<li><a href="RetrieveLine.html#RetrieveLine">RetrieveLine</a>
+<li><a href="Revert.html#Revert">Revert</a>
+<li><a href="RightJustify.html#RightJustify">RightJustify</a>
+<li><a href="Rturn.html#Rturn">Rturn</a>
+<li><a href="Save.html#Save">Save</a>
+<li><a href="SaveAll.html#SaveAll">SaveAll</a>
+<li><a href="SaveAs.html#SaveAs">SaveAs</a>
+<li><a href="SaveMacro.html#SaveMacro">SaveMacro</a>
+<li><a href="SaveTo.html#SaveTo">SaveTo</a>
+<li><a href="SaveUntouched.html#SaveUntouched">SaveUntouched</a>
+<li><a href="SaveWorkspace.html#SaveWorkspace">SaveWorkspace</a>
+<li><a href="ScratchWindow.html#ScratchWindow">ScratchWindow</a>
+<li><a href="ScreenDown.html#ScreenDown">ScreenDown</a>
+<li><a href="ScreenLeft.html#ScreenLeft">ScreenLeft</a>
+<li><a href="ScreenRight.html#ScreenRight">ScreenRight</a>
+<li><a href="ScreenUp.html#ScreenUp">ScreenUp</a>
+<li><a href="ScrollDnLine.html#ScrollDnLine">ScrollDnLine</a>
+<li><a href="ScrollUpLine.html#ScrollUpLine">ScrollUpLine</a>
+<li><a href="SetBreakPoint.html#SetBreakPoint">SetBreakPoint</a>
+<li><a href="SetDirectory.html#SetDirectory">SetDirectory</a>
+<li><a href="SetMargins.html#SetMargins">SetMargins</a>
+<li><a href="SetMark_003cN_003e.html#SetMark_003cN_003e">SetMark&lt;N&gt;</a>
+<li><a href="SetTabs.html#SetTabs">SetTabs</a>
+<li><a href="Shell.html#Shell">Shell</a>
+<li><a href="SizeWindow.html#SizeWindow">SizeWindow</a>
+<li><a href="SortBoxBlock.html#SortBoxBlock">SortBoxBlock</a>
+<li><a href="SplitHalfHorizontal.html#SplitHalfHorizontal">SplitHalfHorizontal</a>
+<li><a href="SplitHalfVertical.html#SplitHalfVertical">SplitHalfVertical</a>
+<li><a href="SplitHorizontal.html#SplitHorizontal">SplitHorizontal</a>
+<li><a href="SplitLine.html#SplitLine">SplitLine</a>
+<li><a href="SplitVertical.html#SplitVertical">SplitVertical</a>
+<li><a href="StampFormat.html#StampFormat">StampFormat</a>
+<li><a href="StartOfLine.html#StartOfLine">StartOfLine</a>
+<li><a href="Statistics.html#Statistics">Statistics</a>
+<li><a href="Status.html#Status">Status</a>
+<li><a href="StreamCharLeft.html#StreamCharLeft">StreamCharLeft</a>
+<li><a href="StreamCharRight.html#StreamCharRight">StreamCharRight</a>
+<li><a href="StreamDeleteChar.html#StreamDeleteChar">StreamDeleteChar</a>
+<li><a href="StringEndLeft.html#StringEndLeft">StringEndLeft</a>
+<li><a href="StringEndRight.html#StringEndRight">StringEndRight</a>
+<li><a href="StringLeft.html#StringLeft">StringLeft</a>
+<li><a href="StringRight.html#StringRight">StringRight</a>
+<li><a href="SumBlock.html#SumBlock">SumBlock</a>
+<li><a href="SwapBlock.html#SwapBlock">SwapBlock</a>
+<li><a href="SyntaxSelect.html#SyntaxSelect">SyntaxSelect</a>
+<li><a href="Tab.html#Tab">Tab</a>
+<li><a href="TitleWindow.html#TitleWindow">TitleWindow</a>
+<li><a href="ToggleCRLF.html#ToggleCRLF">ToggleCRLF</a>
+<li><a href="ToggleCursorCross.html#ToggleCursorCross">ToggleCursorCross</a>
+<li><a href="ToggleCWD.html#ToggleCWD">ToggleCWD</a>
+<li><a href="ToggleDraw.html#ToggleDraw">ToggleDraw</a>
+<li><a href="ToggleEOL.html#ToggleEOL">ToggleEOL</a>
+<li><a href="ToggleGraphicChars.html#ToggleGraphicChars">ToggleGraphicChars</a>
+<li><a href="ToggleIndent.html#ToggleIndent">ToggleIndent</a>
+<li><a href="ToggleLineNumbers.html#ToggleLineNumbers">ToggleLineNumbers</a>
+<li><a href="ToggleOverWrite.html#ToggleOverWrite">ToggleOverWrite</a>
+<li><a href="ToggleQuickEdit.html#ToggleQuickEdit">ToggleQuickEdit</a>
+<li><a href="ToggleReadOnly.html#ToggleReadOnly">ToggleReadOnly</a>
+<li><a href="ToggleRuler.html#ToggleRuler">ToggleRuler</a>
+<li><a href="ToggleSearchCase.html#ToggleSearchCase">ToggleSearchCase</a>
+<li><a href="ToggleSmartTabs.html#ToggleSmartTabs">ToggleSmartTabs</a>
+<li><a href="ToggleSync.html#ToggleSync">ToggleSync</a>
+<li><a href="ToggleSyntax.html#ToggleSyntax">ToggleSyntax</a>
+<li><a href="ToggleTabInflate.html#ToggleTabInflate">ToggleTabInflate</a>
+<li><a href="ToggleTrailing.html#ToggleTrailing">ToggleTrailing</a>
+<li><a href="ToggleUndoGroup.html#ToggleUndoGroup">ToggleUndoGroup</a>
+<li><a href="ToggleUndoMove.html#ToggleUndoMove">ToggleUndoMove</a>
+<li><a href="ToggleWordWrap.html#ToggleWordWrap">ToggleWordWrap</a>
+<li><a href="ToggleZ.html#ToggleZ">ToggleZ</a>
+<li><a href="TopLine.html#TopLine">TopLine</a>
+<li><a href="TopOfFile.html#TopOfFile">TopOfFile</a>
+<li><a href="TopOfScreen.html#TopOfScreen">TopOfScreen</a>
+<li><a href="Transpose.html#Transpose">Transpose</a>
+<li><a href="TwoCharKey.html#TwoCharKey">TwoCharKey</a>
+<li><a href="Undo.html#Undo">Undo</a>
+<li><a href="UnMarkBlock.html#UnMarkBlock">UnMarkBlock</a>
+<li><a href="UserScreen.html#UserScreen">UserScreen</a>
+<li><a href="WordDelete.html#WordDelete">WordDelete</a>
+<li><a href="WordDeleteBack.html#WordDeleteBack">WordDeleteBack</a>
+<li><a href="WordEndLeft.html#WordEndLeft">WordEndLeft</a>
+<li><a href="WordEndRight.html#WordEndRight">WordEndRight</a>
+<li><a href="WordLeft.html#WordLeft">WordLeft</a>
+<li><a href="WordRight.html#WordRight">WordRight</a>
+<li><a href="ZoomWindow.html#ZoomWindow">ZoomWindow</a>
+</li></ul>
+<li><a name="toc_Dialogs-_0026-Prompts" href="Dialogs-_0026-Prompts.html#Dialogs-_0026-Prompts">Dialogs &amp; Prompts</a>
+<ul>
+<li><a href="Dialogs-_0026-Prompts.html#Dialogs-_0026-Prompts">Dialogs</a>
+<li><a href="Dialogs-_0026-Prompts.html#Dialogs-_0026-Prompts">Prompts</a>
+</li></ul>
+<li><a name="toc_Issues" href="Issues.html#Issues">Issues</a>
+<li><a name="toc_Glossary" href="Glossary.html#Glossary">Glossary</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<p>
+<a name="Top"></a>
+Up:&nbsp;<a rel="up" accesskey="u" href="../index.html#dir">(dir)</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">TDE Manual</h2>
+
+<p>This manual is for the Thomson-Davis Editor, version 5.1v.
+
+   <p>Copyright &copy; 2003,2004,2005,2006,2007 Jason Hood.
+
+   <blockquote>
+Permission is granted to freely modify and distribute this document. 
+</blockquote>
+
+<ul class="menu">
+<li><a accesskey="1" href="Overview.html#Overview">Overview</a>:                 Description and Introduction
+<li><a accesskey="2" href="Usage.html#Usage">Usage</a>:                    Command line options
+<li><a accesskey="3" href="Screen-Layout.html#Screen-Layout">Screen Layout</a>:            Describes the items seen on the screen
+<li><a accesskey="4" href="Configuration.html#Configuration">Configuration</a>:            The files used to customise <acronym>TDE</acronym>
+<li><a accesskey="5" href="Alphabetical-List.html#Alphabetical-List">Alphabetical List</a>:        List of all functions recognised by <acronym>TDE</acronym>
+<li><a accesskey="6" href="Dialogs-_0026-Prompts.html#Dialogs-_0026-Prompts">Dialogs &amp; Prompts</a>:        How <acronym>TDE</acronym> handles user input
+<li><a accesskey="7" href="Issues.html#Issues">Issues</a>:                   Why isn't it working? 
+<li><a accesskey="8" href="Glossary.html#Glossary">Glossary</a>:                 An explanation of some terms
+</ul>
+
+   </body></html>
+

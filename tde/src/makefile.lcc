@@ -1,0 +1,116 @@
+#
+# Makefile for tde 5.1 for Win32 using LCC-Win32.
+#
+# August 23, 2002, Jason Hood.
+#
+# jmh 050920: add install target;
+#	      generate tdewdbg.exe (instead of win32/tde.exe), remove map.
+# jmh 060827: remove -A from CFLAGS (newer version has stupid warnings).
+#
+
+CFLAGS = -g -O -DNDEBUG -D__WIN32__
+
+PROJ = tdew.exe
+bindir = c:\utils
+UPX = upx -9 -qq
+#UPX = rem
+
+OBJS = win32\bj_ctype.obj  win32\block.obj    win32\cfgfile.obj   \
+       win32\config.obj    win32\console.obj  win32\criterr.obj   \
+       win32\default.obj   win32\dialogs.obj  win32\diff.obj	  \
+       win32\dirlist.obj   win32\ed.obj       win32\file.obj	  \
+       win32\filmatch.obj  win32\findrep.obj  win32\global.obj	  \
+       win32\help.obj	   win32\hwind.obj    win32\macro.obj	  \
+       win32\main.obj	   win32\memory.obj   win32\menu.obj	  \
+       win32\movement.obj  win32\port.obj     win32\prompts.obj   \
+       win32\pull.obj	   win32\query.obj    win32\regx.obj	  \
+       win32\sort.obj	   win32\syntax.obj   win32\tab.obj	  \
+       win32\undo.obj	   win32\utils.obj    win32\window.obj	  \
+       win32\wordwrap.obj  win32\tde.res
+
+INC  = tdestr.h common.h tdefunc.h define.h
+
+
+$(PROJ): $(OBJS)
+	@echo Creating $(PROJ)
+	@lcclnk -s -o $(PROJ) $(OBJS) $(LIBS)
+	@lcclnk -o tdewdbg.exe $(OBJS) $(LIBS)
+
+install: $(PROJ)
+	-$(UPX) $(PROJ)
+	copy /y $(PROJ) $(bindir)\tde.exe
+	copy /y tdv.cmd $(bindir)
+
+clean:
+	del win32\*.obj
+
+win32\bj_ctype.obj:  bj_ctype.c bj_ctype.h tdestr.h common.h
+	$(CC) $(CFLAGS) bj_ctype.c -Fo$@
+win32\block.obj:     block.c	$(INC)
+	$(CC) $(CFLAGS) block.c -Fo$@
+win32\cfgfile.obj:   cfgfile.c	tdestr.h syntax.h config.h
+	$(CC) $(CFLAGS) cfgfile.c -Fo$@
+win32\config.obj:    config.c	config.h $(INC)
+	$(CC) $(CFLAGS) config.c -Fo$@
+win32\console.obj:   win32\console.c  $(INC)
+	$(CC) $(CFLAGS) -I. win32\console.c -Fo$@
+win32\criterr.obj:   win32\criterr.c  win32\criterr.h $(INC)
+	$(CC) $(CFLAGS) -I. win32\criterr.c -Fo$@
+win32\default.obj:   default.c	tdestr.h define.h
+	$(CC) $(CFLAGS) default.c -Fo$@
+win32\dialogs.obj:   dialogs.c	tdestr.h
+	$(CC) $(CFLAGS) dialogs.c -Fo$@
+win32\diff.obj:      diff.c	$(INC)
+	$(CC) $(CFLAGS) diff.c -Fo$@
+win32\dirlist.obj:   dirlist.c	$(INC)
+	$(CC) $(CFLAGS) dirlist.c -Fo$@
+win32\ed.obj:	     ed.c	$(INC)
+	$(CC) $(CFLAGS) ed.c -Fo$@
+win32\file.obj:      file.c	$(INC)
+	$(CC) $(CFLAGS) file.c -Fo$@
+win32\filmatch.obj:  filmatch.c filmatch.h tdestr.h common.h
+	$(CC) $(CFLAGS) filmatch.c -Fo$@
+win32\findrep.obj:   findrep.c	$(INC)
+	$(CC) $(CFLAGS) findrep.c -Fo$@
+win32\global.obj:    global.c	tdestr.h tdefunc.h
+	$(CC) $(CFLAGS) global.c -Fo$@
+win32\help.obj:      help.c
+	$(CC) $(CFLAGS) help.c -Fo$@
+win32\hwind.obj:     hwind.c	$(INC)
+	$(CC) $(CFLAGS) hwind.c -Fo$@
+win32\macro.obj:     macro.c	$(INC)
+	$(CC) $(CFLAGS) macro.c -Fo$@
+win32\main.obj:      main.c	$(INC)
+	$(CC) $(CFLAGS) main.c -Fo$@
+win32\memory.obj:    memory.c	$(INC)
+	$(CC) $(CFLAGS) memory.c -Fo$@
+win32\menu.obj:      menu.c	tdestr.h define.h
+	$(CC) $(CFLAGS) menu.c -Fo$@
+win32\movement.obj:  movement.c $(INC)
+	$(CC) $(CFLAGS) movement.c -Fo$@
+win32\port.obj:      win32\port.c $(INC)
+	lcc $(CFLAGS) -I. win32\port.c -Fo$@
+win32\prompts.obj:   prompts.c	bj_ctype.h
+	$(CC) $(CFLAGS) prompts.c -Fo$@
+win32\pull.obj:      pull.c	$(INC)
+	$(CC) $(CFLAGS) pull.c -Fo$@
+win32\query.obj:     query.c	$(INC)
+	$(CC) $(CFLAGS) query.c -Fo$@
+win32\regx.obj:      regx.c	$(INC)
+	$(CC) $(CFLAGS) regx.c -Fo$@
+win32\sort.obj:      sort.c	$(INC)
+	$(CC) $(CFLAGS) sort.c -Fo$@
+win32\syntax.obj:    syntax.c	syntax.h $(INC)
+	$(CC) $(CFLAGS) syntax.c -Fo$@
+win32\tab.obj:	     tab.c	$(INC)
+	$(CC) $(CFLAGS) tab.c -Fo$@
+win32\undo.obj:      undo.c	$(INC)
+	$(CC) $(CFLAGS) undo.c -Fo$@
+win32\utils.obj:     utils.c	$(INC)
+	$(CC) $(CFLAGS) utils.c -Fo$@
+win32\window.obj:    window.c	$(INC)
+	$(CC) $(CFLAGS) window.c -Fo$@
+win32\wordwrap.obj:  wordwrap.c $(INC)
+	$(CC) $(CFLAGS) wordwrap.c -Fo$@
+win32\tde.res:	     tde.rc
+	lrc /fo$@ tde.rc

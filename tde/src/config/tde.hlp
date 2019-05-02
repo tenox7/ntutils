@@ -1,0 +1,51 @@
+ษออออออออออออออออออออออออออออออออออออ HELP ออออออออออออออออออออออออออออออออออออป
+บฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ  ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฟ   ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟบ
+บณ # = Shift   @ = Alt   ^ = Ctrl ณ  ณ ^\ for Menu ณ   ณ abort command     ^[ ณบ
+บภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู  ภฤฤฤฤฤฤฤฤฤฤฤฤฤู   ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูบ
+บฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ Cursor Movement ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟฺฤฤฤ Screen Movement ฤฤฟบ
+บณ next line, first char/begin/end        #/^/#^Enter ณณ pan left       @Left ณบ
+บณ first column                                 #Home ณณ pan right     @Right ณบ
+บรฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤดณ pan up           @Up ณบ
+บณ stream left       #Left ณ stream right      #Right ณณ pan down       @Down ณบ
+บณ word left         ^Left ณ word right        ^Right ณณ scroll up        ^Up ณบ
+บณ string left      #^Left ณ string right     #^Right ณณ scroll down    ^Down ณบ
+บณ word end left        @; ณ word end right        @' ณภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูบ
+บณ string end left     #@; ณ string end right     #@' ณฺฤฤฤฤฤฤฤฤ Macro ฤฤฤฤฤฤฤฟบ
+บณ set marker     @1 -  @3 ณ match () [] {} <> "   ^] ณณ marker           #@M ณบ
+บณ goto marker   #@1 - #@3 ณ previous position     @~ ณณ pause             ^P ณบ
+บภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูบ
+บฺฤฤฤฤฤฤฤฤฤฤฤฤฤ Insert / Delete ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟฺฤฤฤฤฤฤฤฤฤฤฤ Block ฤฤฤฤฤฤฤฤฤฤฤฤฟบ
+บณ insert newline, match indentation    Enter ณณ box                       @B ณบ
+บณ next tab, add spaces if insert         Tab ณณ line                      @L ณบ
+บณ previous tab, delete if insert        #Tab ณณ stream                    @X ณบ
+บณ delete, join lines if at eol       ^Delete ณณ unmark / re-mark          @U ณบ
+บณ delete word, previous word       ^T, ^Bksp ณณ adjust begin/end    #@[, #@] ณบ
+บณ restore, undo, redo     Esc, @Bksp, #@Bksp ณณ move to begin/end    @[,  @] ณบ
+บภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤูบ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+<<<>>>
+ษออออออออออออออออออออออออออออออออ VIEWER HELP อออออออออออออออออออออออออออออออออป
+บ                                                                              บ
+บ  ฺฤฤฤฤฤฤฤ File ฤฤฤฤฤฤฤฟ   ฺฤฤฤฤฤฤฤ Location ฤฤฤฤฤฤฤฟ   ฺฤฤฤฤฤ Search ฤฤฤฤฤฟ  บ
+บ  ณ next, prev   :n :p ณ   ณ top of file   '^ B     ณ   ณ define find  < > ณ  บ
+บ  ณ goto, first  :x :X ณ   ณ end of file   '$ F G   ณ   ณ repeat find  , . ณ  บ
+บ  ณ open         :e  E ณ   ณ goto line      g       ณ   ณ define regx  / ? ณ  บ
+บ  ณ close        :q  q ณ   ณ previous      '' `     ณ   ณ repeat regx  n N ณ  บ
+บ  ณ status       :f  = ณ   ณ set  marker   m1 m2 m3 ณ   ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู  บ
+บ  ณ exit viewer   v    ณ   ณ goto marker   '1 '2 '3 ณ                         บ
+บ  ณ exit TDE     :Q  Q ณ   ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู                         บ
+บ  ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู                                                      บ
+บ                                                                              บ
+บ  ฺฤฤฤฤฤฤฤฤฤฤฤฤฤ Window ฤฤฤฤฤฤฤฤฤฤฤฟ   ฺฤฤ Screen ฤฤฟ   ฺฤ Miscellaneous ฤฟ   บ
+บ  ณ up     b       ณ half up     u ณ   ณ up     k y ณ   ณ shell         ! ณ   บ
+บ  ณ down   f space ณ half down   d ณ   ณ down   j e ณ   ณ user screen   s ณ   บ
+บ  ณ left   {       ณ half left   [ ณ   ณ left   h   ณ   ณ redraw        R ณ   บ
+บ  ณ right  }       ณ half right  ] ณ   ณ right  l   ณ   ณ repeat        r ณ   บ
+บ  ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤมฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู   ภฤฤฤฤฤฤฤฤฤฤฤฤู   ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู   บ
+บ                                                                              บ
+บ                                                                              บ
+บ                   ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ                   บ
+บ                   ณ Press F1 or H for other help screen. ณ                   บ
+บ                   ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู                   บ
+บ                                                                              บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ

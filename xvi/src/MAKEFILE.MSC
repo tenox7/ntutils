@@ -1,0 +1,95 @@
+# Copyright (c) 1990,1991,1992 Chris and John Downey
+#***
+#
+# @(#)makefile.msc	2.2 (Chris & John Downey) 7/31/92
+#
+# program name:
+#	xvi
+# function:
+#	PD version of UNIX "vi" editor, with extensions.
+# module name:
+#	makefile.msc
+# module function:
+#	Makefile for Microsoft C for MS-DOS
+#
+#	(but it won't work with Microsoft's Make, which is brain-dead.
+#	There are several good public domain make utilities available
+#	for MS-DOS).
+#
+#	Microsoft Macro Assembler (or a compatible assembler) is also
+#	required.
+# history:
+#	STEVIE - ST Editor for VI Enthusiasts, Version 3.10
+#	Originally by Tim Thompson (twitch!tjt)
+#	Extensive modifications by Tony Andrews (onecom!wldrdg!tony)
+#	Heavily modified by Chris & John Downey
+#***
+
+#
+# Name of this file.
+#
+THISFILE=	makefile.msc
+
+MEMMODEL=	L
+CC=		cl
+CFLAGS=		-A$(MEMMODEL)
+AS=		masm
+ASFLAGS=	-Mx -DMEMMODEL=$(MEMMODEL) # -Zi
+LD=		link
+LDFLAGS=	/NOI /NOE /STACK:20480
+
+INC=		ascii.h param.h ptrfunc.h regexp.h regmagic.h xvi.h \
+		virtscr.h msdos.h ibmpc.h 8086mm.inc
+
+SRC=		defscr.c \
+		alloc.c ascii.c buffers.c cmdline.c cursor.c \
+		edit.c ex_cmds1.c ex_cmds2.c events.c fileio.c find.c \
+		flexbuf.c map.c mark.c misccmds.c mouse.c movement.c \
+		normal.c param.c pipe.c preserve.c ptrfunc.c \
+		regexp.c screen.c search.c startup.c status.c \
+		tags.c undo.c version.c windows.c \
+		yankput.c \
+		msdos_c.c msdos_a.asm ibmpc_a.asm ibmpc_c.c
+
+OBJ=		defscr.obj \
+		alloc.obj ascii.obj buffers.obj cmdline.obj cursor.obj \
+		edit.obj ex_cmds1.obj ex_cmds2.obj events.obj fileio.obj \
+		find.obj flexbuf.obj map.obj mark.obj misccmds.obj \
+		mouse.obj movement.obj \
+		normal.obj param.obj pipe.obj preserve.obj ptrfunc.obj \
+		regexp.obj screen.obj search.obj startup.obj status.obj \
+		tags.obj undo.obj version.obj windows.obj \
+		yankput.obj \
+		msdos_c.obj msdos_a.obj ibmpc_a.obj ibmpc_c.obj
+
+LINKFILE=	xvi.lnk
+
+all:		xvi.exe
+
+xvi.exe:	$(OBJ) $(LINKFILE) version.c
+		$(CC) $(CFLAGS) -c version.c
+		$(LD) @$(LINKFILE)
+
+$(LINKFILE):	$(THISFILE)
+		+echo defscr + >> $@
+		+echo alloc + ascii + buffers + cmdline + cursor + >> $@
+		+echo edit + ex_cmds1 + ex_cmds2 + events + fileio + >> $@
+		+echo find + flexbuf + map + mark + misccmds + mouse + >> $@
+		+echo movement + normal + param + pipe + preserve + >> $@
+		+echo ptrfunc + regexp + screen + search + startup + >> $@
+		+echo status + tags + undo + version + windows + >> $@
+		+echo yankput + >> $@
+		+echo msdos_c + msdos_a + ibmpc_a + ibmpc_c + >> $@
+		+echo $(LIB)\setargv >> $@
+		+echo xvi.exe $(LDFLAGS) ; >> $@
+
+.c.obj:
+		$(CC) $(CFLAGS) -Fo$@ -c $<
+
+.asm.obj:
+		$(AS) $(ASFLAGS) $* ;
+
+clean:
+		del *.obj
+		del $(LINKFILE)
+		del *.map

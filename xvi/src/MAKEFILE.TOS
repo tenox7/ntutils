@@ -1,0 +1,72 @@
+# Copyright (c) 1990,1991,1992 Chris and John Downey
+#***
+#
+# @(#)makefile.tos	2.2 (Chris & John Downey) 7/31/92
+#
+# program name:
+#	xvi
+# function:
+#	PD version of UNIX "vi" editor, with extensions.
+# module name:
+#	makefile.tos
+# module function:
+#	Makefile for the Atari ST - Megamax or Lattice 5.0 C compiler
+# history:
+#	STEVIE - ST Editor for VI Enthusiasts, Version 3.10
+#	Originally by Tim Thompson (twitch!tjt)
+#	Extensive modifications by Tony Andrews (onecom!wldrdg!tony)
+#	Heavily modified by Chris & John Downey
+#***
+
+# This for MegaMax:
+#CFLAGS=-DATARI -DMEGAMAX
+# This for Lattice:
+CFLAGS=	-ca -DATARI
+
+MACHOBJ=tos.o
+MACHSRC=tos.c
+
+INCLUDE=ascii.h param.h ptrfunc.h regexp.h regmagic.h xvi.h \
+	virtscr.h tos.h
+
+OBJ=	defscr.o \
+	alloc.o ascii.o buffers.o cmdline.o cursor.o \
+	edit.o ex_cmds1.o ex_cmds2.o events.o fileio.o \
+	find.o flexbuf.o map.o mark.o misccmds.o movement.o \
+	normal.o param.o pipe.o preserve.o ptrfunc.o \
+	regexp.o screen.o search.o signal.o startup.o status.o \
+	tags.o undo.o version.o windows.o yankput.o \
+	$(MACHOBJ)
+
+#	Megamax rule
+#.c.o:	$< $(INCLUDE) param.c
+#	mmcc $(CFLAGS) $<
+#	mmimp $*.o
+#	mmlib rv vi.lib $*.o
+
+# Megamax:
+#xvi.ttp : $(OBJ)
+#	$(LINKER) vi.lib $(LIBS) -o xvi.ttp
+
+# Lattice:
+xvi.ttp : $(OBJ) tos.lnk
+	clink with tos.lnk
+
+tos.lnk: makefile
+#
+# Suitable commands to create the link file need to go here; see
+# makefile.zc3 for an MS-DOS example.
+#
+	from c:\lib\c.o
+	alloc.o ascii.o buffers.o cmdline.o defscr.o
+	edit.o ex_cmds1.o ex_cmds2.o events.o
+	fileio.o find.o flexbuf.o
+	input.o startup.o mark.o misccmds.o movement.o normal.o param.o
+	preserve.o ptrfunc.o regexp.o screen.o search.o signal.o
+	status.o tos.o undo.o windows.o
+	yankput.o
+	lib c:\lib\lc.lib c:\lib\lcm.lib
+	to xvi.ttp
+	
+clean :
+	$(RM) $(OBJ) vi.lib

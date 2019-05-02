@@ -1,0 +1,147 @@
+# Copyright (c) 1990,1991,1992 Chris and John Downey
+#***
+#
+# @(#)makefile.386	2.2 (Chris & John Downey) 7/31/92
+#
+# program name:
+#	xvi
+# function:
+#	PD version of UNIX "vi" editor, with extensions.
+# module name:
+#	makefile.386
+# module function:
+#	Makefile for MS-DOS 386 protected mode version using Zortech
+#	C 3.00 & PharLap DOS extender.
+# history:
+#	STEVIE - ST Editor for VI Enthusiasts, Version 3.10
+#	Originally by Tim Thompson (twitch!tjt)
+#	Extensive modifications by Tony Andrews (onecom!wldrdg!tony)
+#	Heavily modified by Chris & John Downey
+#***
+
+#
+# Name of this file.
+#
+THISFILE=	makefile.386
+
+MEMMODEL=	p
+CC=		ztc
+LIBDIR=		$(LIB)
+PHARLAP=	d:\osu\pharlap
+OPTFLAGS=	-o+dc -o+li -o+loop
+DEBUGFLAGS=	-g
+CDEFS=		-DMSDOS -D__STDC__=1
+CFLAGS=		-m$(MEMMODEL) -bx $(CDEFS) $(OPTFLAGS)
+LD=		$(PHARLAP)\386linkp
+TARGET=		xvi
+
+INC=		ascii.h param.h ptrfunc.h regexp.h regmagic.h xvi.h \
+		virtscr.h msdos.h pc386.h
+
+SRC=		defscr.c \
+		alloc.c ascii.c buffers.c cmdline.c cursor.c \
+		edit.c ex_cmds1.c ex_cmds2.c events.c flexbuf.c \
+		fileio.c find.c map.c mark.c misccmds.c \
+		mouse.c movement.c normal.c param.c pipe.c \
+		preserve.c ptrfunc.c screen.c regexp.c \
+		search.c startup.c status.c \
+		tags.c undo.c version.c windows.c yankput.c \
+		msdos_c.c ibmpc_c.c pc386.c
+
+OBJ=		defscr.obj \
+		alloc.obj ascii.obj buffers.obj cmdline.obj cursor.obj \
+		edit.obj ex_cmds1.obj ex_cmds2.obj events.obj flexbuf.obj \
+		fileio.obj find.obj map.obj mark.obj misccmds.obj \
+		mouse.obj movement.obj normal.obj param.obj pipe.obj \
+		preserve.obj ptrfunc.obj screen.obj regexp.obj \
+		search.obj startup.obj status.obj \
+		tags.obj undo.obj version.obj windows.obj yankput.obj \
+		msdos_c.obj ibmpc_c.obj pc386.obj
+
+LINKFILE=	$(TARGET).lnk
+
+$(TARGET).exe:	$(TARGET).exp
+		$(PHARLAP)\bind386 $(PHARLAP)\run386b $(TARGET)
+
+$(TARGET).exp:	$(OBJ) $(LINKFILE) version.c
+		$(CC) $(CFLAGS) -c version.c
+		$(LD) @$(LINKFILE)
+
+$(LINKFILE):	$(THISFILE) echonl.com
+		+echo $(LIBDIR)\realmode > $@
+		# +echo $(LIBDIR)\int >> $@
+		+echo defscr >> $@
+		+echo alloc >> $@
+		+echo ascii >> $@
+		+echo buffers >> $@
+		+echo cmdline >> $@
+		+echo cursor >> $@
+		+echo edit >> $@
+		+echo ex_cmds1 >> $@
+		+echo ex_cmds2 >> $@
+		+echo events >> $@
+		+echo flexbuf >> $@
+		+echo fileio >> $@
+		+echo find >> $@
+		+echo map >> $@
+		+echo mark >> $@
+		+echo misccmds >> $@
+		+echo mouse >> $@
+		+echo movement >> $@
+		+echo normal >> $@
+		+echo param >> $@
+		+echo pipe >> $@
+		+echo preserve >> $@
+		+echo ptrfunc >> $@
+		+echo regexp >> $@
+		+echo screen >> $@
+		+echo search >> $@
+		+echo startup >> $@
+		+echo status >> $@
+		+echo tags >> $@
+		+echo undo >> $@
+		+echo version >> $@
+		+echo windows >> $@
+		+echo yankput >> $@
+		+echo msdos_c >> $@
+		+echo ibmpc_c >> $@
+		+echo pc386 >> $@
+		+echonl >> $@
+		+echo -lib $(LIBDIR)\zps.lib -tc -MAXREAL 4096 >> $@
+		+echo -exe $(TARGET).exp >> $@
+
+.c.obj:
+		$(CC) $(CFLAGS) -o$@ -c $<
+
+.asm.com:
+		@masm $* ;
+		@link $* ;
+		@del $*.obj
+		@exe2bin $*.exe $*.com
+		@del $*.exe
+
+echonl.com:	echonl.asm
+
+#
+# Generate program to output a single newline. This is needed to
+# generate the link file.
+#
+echonl.asm:	$(THISFILE)
+		+echo cseg segment > $@
+		+echo assume cs:cseg >> $@
+		+echo org 100h >> $@
+		+echo start: >> $@
+		+echo mov dx, offset crnl >> $@
+		+echo mov ah, 9 >> $@
+		+echo int 21h >> $@
+		+echo mov ax, 4c00h >> $@
+		+echo int 21h >> $@
+		+echo crnl db 0dh, 0ah, 024h >> $@
+		+echo cseg ends >> $@
+		+echo end start >> $@
+
+clean:
+		del *.obj
+		del $(LINKFILE)
+		del *.map
+		del echonl.com

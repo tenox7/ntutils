@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>ISearchForward - TDE 5.1v Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TDE 5.1v Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Alphabetical-List.html#Alphabetical-List" title="Alphabetical List">
+<link rel="prev" href="ISearchBackward.html#ISearchBackward" title="ISearchBackward">
+<link rel="next" href="JoinLine.html#JoinLine" title="JoinLine">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="ISearchForward"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="JoinLine.html#JoinLine">JoinLine</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="ISearchBackward.html#ISearchBackward">ISearchBackward</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Alphabetical-List.html#Alphabetical-List">Alphabetical List</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">ISearchForward</h3>
+
+<p><table summary=""><tr align="left"><td valign="top">Key:  </td><td valign="top"><kbd>Shift+Ctrl+S</kbd>
+<br></td></tr><tr align="left"><td valign="top">Menu: </td><td valign="top">Search &gt; ISearch &gt;
+<br></td></tr></table>
+
+   <p>Incremental (or interactive) searching finds the search string as it is typed
+in.  <acronym>TDE</acronym>'s isearch is based on Emacs.  The default keys are
+<kbd>Shift+Ctrl+S</kbd> for forward searching and <kbd>Shift+Ctrl+R</kbd> for backward;
+however, within isearch, <kbd>Ctrl+S</kbd> and <kbd>Ctrl+R</kbd> can be used.  Pressing
+these keys again will immediately start a search with the previous find string
+(not necessarily isearch); otherwise they will continue the search with the
+current string.  <code>LineUp</code> and <code>LineDown</code> will cycle through the find
+history.  <code>BackSpace</code> can be used to remove entered characters, returning
+to the previous position.  <code>CopyWord</code>, <code>WordRight</code>,
+<code>WordEndRight</code> and <kbd>Ctrl+W</kbd> will append the remainder of the word to
+the search string; likewise with the <code>String</code> functions and
+<kbd>Shift+Ctrl+W</kbd>.  If no search string has been entered, the complete word or
+string will be copied.  <code>ToggleSearchCase</code> will do the obvious.  <kbd>Esc</kbd>
+will stop the search at the current position; <code>AbortCommand</code> and
+<kbd>Ctrl+G</kbd> will restore the original position before the search was started. 
+<kbd>Enter</kbd>/<code>Rturn</code> will stop the search when entering characters or using
+the ISearch functions to continue it; otherwise the search will be continued. 
+The previous position is set to the original position, not to the last matching
+instance; if aborted, it is set to the aborted position.
+
+   </body></html>
+

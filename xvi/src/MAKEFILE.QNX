@@ -1,0 +1,61 @@
+# Copyright (c) 1990,1991,1992 Chris and John Downey
+#***
+#
+# @(#)makefile.qnx	2.2 (Chris & John Downey) 7/31/92
+#
+# program name:
+#	xvi
+# function:
+#	PD version of UNIX "vi" editor, with extensions.
+# module name:
+#	makefile.qnx
+# module function:
+#	Makefile for QNX, using the CII C86 ANSI Compiler.
+# history:
+#	STEVIE - ST Editor for VI Enthusiasts, Version 3.10
+#	Originally by Tim Thompson (twitch!tjt)
+#	Extensive modifications by Tony Andrews (onecom!wldrdg!tony)
+#	Heavily modified by Chris & John Downey
+#***
+
+MACHINE= qnx
+MACHSRC= $(MACHINE).c
+MACHOBJ= $(MACHINE).obj
+
+#DEBUGFLAGS=-Zf
+
+CQ= cq
+CQFLAGS= -DQNX -c -Za -Ze5 $(DEBUGFLAGS) -G0 -AL -EL
+COMPILE = $(CC) $(CFLAGS)
+LD=%sync; cq
+LDFLAGS= -Za -G0 -AL -F8000 $(DEBUGFLAGS)
+LIB=
+
+INCLUDE=ascii.h param.h ptrfunc.h regexp.h regmagic.h xvi.h \
+	virtscr.h qnx.h
+
+SRC=	defscr.c \
+	alloc.c ascii.c buffers.c cmdline.c cursor.c \
+	edit.c ex_cmds1.c ex_cmds2.c events.c fileio.c \
+	find.c flexbuf.c map.c mark.c misccmds.c movement.c \
+	normal.c param.c pipe.c preserve.c ptrfunc.c \
+	regexp.c screen.c search.c signal.c startup.c status.c \
+	tags.c undo.c version.c windows.c yankput.c \
+	$(MACHSRC)
+
+OBJ=	defscr.obj \
+	alloc.obj ascii.obj buffers.obj cmdline.obj cursor.obj \
+	edit.obj ex_cmds1.obj ex_cmds2.obj events.obj fileio.obj \
+	find.obj flexbuf.obj map.obj mark.obj misccmds.obj movement.obj \
+	normal.obj param.obj pipe.obj preserve.obj ptrfunc.obj \
+	regexp.obj screen.obj search.obj signal.obj startup.obj status.obj \
+	tags.obj undo.obj version.obj windows.obj yankput.obj \
+	$(MACHOBJ)
+
+xvi:	$(OBJ)
+	$(LD) -Fexvi $(LDFLAGS) $(OBJ)
+
+clean:
+	rm *.obj
+	rm *.lnk
+	rm xvi

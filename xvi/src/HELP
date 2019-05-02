@@ -1,0 +1,294 @@
+If you don't know how to use vi (or xvi) at all, you should not
+read through this help text; it is intended simply as a reminder
+for those who already know how to use the editor.
+
+To get out of xvi, type the following:
+        :q!
+and then press RETURN.
+
+The rest of this file contains a summary of xvi commands.
+If you remember the commands ^D (control-D) and ^U (control-U)
+then that will be enough to get you around this help file.
+
+Numeric Prefixes
+================
+
+Most commands can be prefixed with a number, which will alter
+their action. For instance, to go to line 37 of a file, you can
+type
+
+        37G
+
+but beware - the meaning of the prefix varies between commands.
+
+Cursor positioning
+==================
+
+        ^F      Move forward one screenful in file
+        ^B      Move backward one screenful
+        ^D      Scroll down half screen
+        ^U      Scroll up half screen
+        G       Goto line (defaults to end of file)
+        /re     Next occurence of regular expression 're'
+        ?re     Prior occurence of regular expression 're'
+        n       Repeat last / or ?
+        N       Reverse last / or ?
+        %       Find matching (, ), {, }, [, or ]
+        ]]      Start of next function
+        [[      Start of previous function
+        g       Go to next buffer window
+
+Adjusting the screen
+====================
+
+        ^L      Redraw the screen
+        ^E      Scroll window down 1 line
+        ^Y      Scroll window up 1 line
+
+        z<CR>   Redraw, current line at top
+        z-      ... at bottom
+        z.      ... at centre
+
+        ^T      Shrink current window by 1 line
+        ^W      Grow current window by 1 line
+        ^O      Grow current window to maximum size
+
+Character Positioning
+=====================
+
+        ^       First non-white on current line
+        0       Beginning of line
+        $       End of line
+        h       Left one character
+        l       Right one character
+        ^H      Same as 'h'
+        space   Same as 'l'
+        fx      Find 'x' forward in current line
+        Fx      Find 'x' backward in current line
+        tx      Go up to 'x' forward in current line
+        Tx      Go up to 'x' backward in current line
+        ;       Repeat last f, F, t, or T
+        ,       Repeat last f, F, t, or T, changing direction
+        |       Go to specified column in current line
+
+Line Positioning
+================
+
+        H       Go to home window line
+        L       Go to last window line
+        M       Go to middle window line
+        +       Go to next line, at first non-white
+        -       Go to previous line, at first non-white
+        CR      Same as +
+        j       Go down, staying in same column if possible
+        k       Go up, staying in same column if possible
+
+Words, sentences, paragraphs
+============================
+
+        w       Go to start of next word
+        b       Go to start of previous word
+        e       Go to end of current word
+        W       As w, but using blanks to delimit words
+        B       As b, but using blanks to delimit words
+        E       As e, but using blanks to delimit words
+        )       Go to start of next sentence (not yet implemented)
+        (       Go to start of previous sentence (not yet implemented)
+        }       Go to start of next paragraph
+        {       Go to start of previous paragraph
+
+Marking and Returning
+=====================
+
+        ``      Go to previous context position
+        ''      Go to previous context line
+        mx      Mark current position with letter 'x'
+        `x      Go to mark 'x'
+        'x      Go to mark 'x' at first non-white in line
+        :ka     Mark current line with letter 'a'
+        :7ka    Mark line 7 with letter 'a'
+
+Insert and Replace
+==================
+
+        a       Append after cursor
+        i       Insert before cursor
+        A       Append at end of current line
+        I       Insert before first non-blank on current line
+        o       Open line below current line
+        O       Open line above current line
+        rx      Replace single character with 'x'
+        R       Enter replace (overwrite) mode
+
+Operators (double to affect lines)
+==================================
+
+        d       Delete
+        c       Change
+        y       Yank to buffer (to be put back with 'p' or 'P')
+        <       Left shift (by no of spaces specified by "shiftwidth" parameter)
+        >       Right shift (ditto)
+                !               Pipe line range through specified system command
+
+Miscellaneous operations
+========================
+
+        C       Change rest of line
+        D       Delete rest of line
+        s       Substitute characters
+        S       As cc (unimplemented)
+        J       Join next line on to end of this line
+        x       Delete character
+        X       Delete character before cursor
+
+Yank and Put
+============
+
+	y	yank some text (see "operators")
+        Y       Yank current line
+        :y      Yank current line
+        :17y    Yank line 17
+        :3,5y   Yank lines from 3 to 5 inclusive
+
+        p       Put back text last yanked or deleted (see "operators")
+        P       As p, but before current position
+        :put    Put back text (same as 'p')
+        :5put   Put back text after line 5
+        :$put   Put back text at end of buffer
+        :0put   Put back text at start of buffer
+
+	"x	Prefix before any of 'yYpP', uses named buffer x to store text
+		Buffer name may be any lower-case letter, '@' (the default),
+		or ':' which normally stores the last colon command executed.
+	"xp	Inserts contents of named buffer x after current position
+
+	@x	Take contents of named yank buffer as command input
+	@@	Take last yanked or deleted text as input
+	@:	Redo last colon command
+
+Undo & Redo
+===========
+
+        u       Undo last change
+        U       Restore current line (not yet implemented)
+        .       Repeat last change
+
+Global Editing
+==============
+
+        :s/RE/SUB/      Change 1st RE in current line to SUB
+        :s/RE/SUB/g     Change all RE's in current line to SUB
+        :g/RE/p         Print all lines containing RE
+        :g/RE/d         Delete all lines containing RE
+        :g/RE/s/...     Perform 's' command on all lines containing RE
+	:&		Redo last substitution
+	:~		Substitute last SUB for last RE used	
+
+	Any of the above may be preceded by a line range, e.g. 12,15.
+
+	&		Redo last substitution (same as :&)
+
+	:x,yyank	Yank lines from x through y
+	:x,ydelete	Delete lines from x through y
+	:x,ycopyz	Copy lines from x through y to after line z
+	:x,ymovez	Move lines from x through y to after line z
+
+File and buffer manipulation
+============================
+
+        ZZ      Same as :x
+
+        :w      Write buffer to file
+        :w name Write buffer to file "name"
+        :wq     Write buffer to file and then quit
+        :x      Close window, if last window onto buffer then:
+                        Write buffer if modified, then close buffer
+        :cl     Close current window, closing buffer if only window onto it
+        :cl!    Close current window, discarding any changes
+        :q      Quit
+        :q!     Quit, discarding any changes
+        :b      Create new buffer and window
+        :b name Create new buffer and window, editing file "name"
+        :split  Create a new screen window onto the current buffer
+        :e name Edit file "name" in current buffer
+        :e!     Reedit current file, discarding any changes
+        :e #    Edit file which was last closed
+	^^	(Control-uparrow) Same as :e #
+        :n      Edit next file in arglist
+        :n args Specify new arglist
+        :wn     Write current file and edit next
+        :args   Show list of files being edited
+        :rew    Rewind arglist to start
+        :f      Show current file and lines
+        ^G      Same as :f
+        :f name Change current file name to "name"
+        :ta tag Find tag entry "tag" and go to it
+        ^]      :ta, current word is tag
+        :cd dir Change current directory
+        :so file
+                Read commands from file
+
+Displaying and Setting Parameters
+=================================
+
+        :set            Display parameters which have been set
+        :set all        Display values of all parameters
+        :set name       Set the boolean parameter "name"
+        :set noname     Unset the boolean parameter "name"
+        :set name=value Set the string or numeric parameter "name" to "value"
+
+Key Mapping
+===========
+
+        :map lhs rhs
+                Causes input of "lhs" to produce input "rhs" instead.
+        :map! lhs rhs
+                Like map, but works in insert mode instead.
+        :map    Display all current maps.
+        :set timeout=<num>
+                Re-set the number of milliseconds that the editor waits
+                for another character to be entered to complete a map.
+                Default value is 200, which is okay for fast typists.
+        :set remap
+                When "remap" is set, the result of a map is re-processed
+                through the map system. This option is extremely dangerous,
+                as it can cause uncontrolled recursion.
+
+Command line options
+====================
+
+        -s param=value  Set param to value before starting
+        -t tag          Edit file containing tag
+        +num            Start up editing file at line num
+        +/pat           Start up editing file at line containing pat
+
+Using the mouse (not implemented on all systems)
+================================================
+
+        Click mouse button on:
+
+        any line outside current window
+
+                Change current window to the one indicated by the mouse
+                        (can be used instead of 'g')
+
+        top line of current window
+
+                Scroll window downwards
+                        (same as '^Y')
+
+        bottom line of current window
+
+                Scroll window upwards
+                        (same as '^E')
+
+        any other line of current window
+        (or either line of a 2-line window)
+
+                Grow window by 1 line
+                        (same as '^W')
+
+        status line of current window
+
+                Show current file and lines
+                        (same as '^G')

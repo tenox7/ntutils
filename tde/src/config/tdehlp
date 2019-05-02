@@ -1,0 +1,51 @@
++==================================== HELP ====================================+
+|+--------------------------------+  +-------------+   +----------------------+|
+|| # = Shift   @ = Alt   ^ = Ctrl |  | ^\ for Menu |   | abort command     ^[ ||
+|+--------------------------------+  +-------------+   +----------------------+|
+|+------------------ Cursor Movement -----------------++--- Screen Movement --+|
+|| next line, first character                       - || pan left           - ||
+|| next line, first column                          - || pan right          - ||
+|+-------------------------+--------------------------+| pan up             - ||
+|| word left         #Left | word end left          - || pan down           - ||
+|| word right       #Right | word end right         - || scroll up          - ||
+|| full word left        - | full word end left     - || scroll down        - ||
+|| full word right       - | full word end right    - |+----------------------+|
+|+-------------------------+--------------------------++-------- Macro -------+|
+|| set marker    ^K! - ^K# | match () [] {} <> "   ^] || marker           ^Km ||
+|| goto marker   ^K1 - ^K3 | previous position      - || pause            ^Kp ||
+|+----------------------------------------------------++----------------------+|
+|+------------- Insert / Delete --------------++----------- Block ------------+|
+|| insert newline, match indentation    Enter || box                       ^B ||
+|| next tab, add spaces if insert         Tab || line                      ^L ||
+|| previous tab, delete if insert        #Tab || stream                    ^X ||
+|| delete, join lines if at eol             - || unmark / re-mark          ^^ +|
+|| delete word, previous word           ^T, - || adjust begin/end    ^Kb, ^Kk ||
+|| undo, redo                           ^U, - || move to begin/end ^K^B, ^K^K ||
+|+--------------------------------------------++------------------------------+|
++==============================================================================+
+<<<>>>
++================================ VIEWER HELP =================================+
+|                                                                              |
+|  +------- File -------+   +------- Location -------+   +----- Search -----+  |
+|  | next, prev   :n :p |   | top of file   '^ B     |   | define find  < > |  |
+|  | goto, first  :x :X |   | end of file   '$ F G   |   | repeat find  , . |  |
+|  | open         :e  E |   | goto line      g       |   | define regx  / ? |  |
+|  | close        :q  q |   | previous      '' `     |   | repeat regx  n N |  |
+|  | status       :f  = |   | set  marker   m1 m2 m3 |   +------------------+  |
+|  | exit viewer   v    |   | goto marker   '1 '2 '3 |                         |
+|  | exit TDE     :Q  Q |   +------------------------+                         |
+|  +--------------------+                                                      |
+|                                                                              |
+|  +------------- Window -----------+   +-- Screen --+   +- Miscellaneous -+   |
+|  | up     b       | half up     u |   | up     k y |   | shell         ! |   |
+|  | down   f space | half down   d |   | down   j e |   | user screen   s |   |
+|  | left   {       | half left   [ |   | left   h   |   | redraw        R |   |
+|  | right  }       | half right  ] |   | right  l   |   | repeat        r |   |
+|  +----------------+---------------+   +------------+   +-----------------+   |
+|                                                                              |
+|                                                                              |
+|                   +--------------------------------------+                   |
+|                   | Press F1 or H for other help screen. |                   |
+|                   +--------------------------------------+                   |
+|                                                                              |
++==============================================================================+

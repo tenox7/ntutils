@@ -1,0 +1,93 @@
+5.2:
+  Remove line limit (effectively, actually make it INT_MAX/2).
+  Modify all prompts/arrays to dynamic length.
+    Both the above will be done with struct Line { text_ptr text; int len }
+    and struct Line_buff { text_ptr text; int len, max }.
+  Change skip offsets to int, to accomodate longer search strings.
+  Searching for NUL as first char causes SIGSEGV.
+  Stop block expanding tabs when line becomes too long.
+  Copying block doesn't check for long line (see Frank's defect 4/9 msg).
+    Above three will be fixed with the Line changes.
+
+Should grep test if a file is already loaded?  Ignore loaded files?
+
+Toggle to remove current and dirty line colors?
+
+Make ruler part of the file, add tabs (smart = physical, fixed = logical).
+Incorporate cursor cross into ruler?  (Display optimisation.)
+
+SHL: Allow languages to have custom indent and margin (and other?) settings?
+      If so, allow definition of a language without highlighting.
+     Have language-specific context help?
+     Make "pattern" optional.
+     Add "lines" to highlight complete lines (modify regx).
+     Wild/regx keywords? Just expand sets (mov[bwl] -> movb movw movl)?
+     Tags setting (HTML: "Tags < >" "Tags </ >" "Tags a b font table").
+     Allow custom color keywords ("Prepro green" "Prepro isspace").
+     Display mismatched brackets in the bad colour?
+
+Startup/shutdown/"write-hook" macros?
+
+Undo!
+
+Tags ((Exuberant) ctags, Global).
+
+Add word sort (only sort letters/digits, ignore everything else).
+Option to remove duplicates (either key or entire line; option to match case).
+
+"Column" mode, for working with tab-delimited and CSV files (or any other
+delimiter character, possibly even specify column widths on the command line).
+Columns will be sized according to the largest value, (Back)Tab will move to the
+(previous or) next column. Deflate tabs for tab-delimited, but I guess CSV and
+others can still have tabs (no, maybe not).
+
+Non-US keyboards sometimes revert to using US keys (need more info).
+DR-DOS keyboard troubles?
+Linux: have another look at xterm keyboard, update help and config.
+
+Win32: use API to provide localisation defaults?
+       pipe output from another window into an existing TDE?
+
+Set left/right margins from current line?
+Have WordRight move to EOL/EOF if no next word?
+RemoveLines function (or option to ReplaceString) to search for text and
+ delete lines containing it?
+
+A recursive macro that defines a search should subsequently repeat the search.
+Allow macros to be named ("mymacro macro ..." "a+0 mymacro").
+Consider MacroMark in a different window.
+
+Global markers (sets file as well)?
+Should PreviousPosition sync (useful with diff)? Other markers?
+
+Window list should be able to sort by visibility (current first), hidden
+ (current last), read-only, scratch, modified, and path; initial order should
+ be internal list order.
+Window order function to arrange windows?
+Should SizeWindow only size necessary windows?  Option to size all?
+
+"Folding" lines - hide lines of matching indentation (cf. FED).
+Wrap long lines - lines will not go off-screen, but wrap to the next screen
+ line (cf. vi?, emacs?).
+
+Tweak error message (and cwd) display from dialogs?
+Display initial prompt in different color (to indicate it will be deleted)?
+
+Pretty print? (case insensitive languages convert keywords to the same case as
+ given in the syntax highlighting file).
+
+Recognise screen size changes after a shell/loading workspace.
+
+Block sum: should replace strtol with my own routine, handling decimals,
+            commas and suffixes (k = 1000, K = 1024, m = 1e6, M = 2e20).
+
+Reformat binary line length? (FormatText - use current; FormatParagraph - ask.)
+Hex mode?
+
+Regx: Improve speed? Add bounds ("r{min,max}")?
+      Fix potential replacement problems using '$', '>' and '>>'.
+      Fix potential stack overflow.
+
+Custom backup extension? Numbered backups?
+
+Mouse support?

@@ -1,0 +1,660 @@
+
+
+
+
+
+
+
+
+
+		 Summary of Differences between Vi and Xvi
+
+
+			       Chris Downey
+				John Downey
+
+
+
+	       Xvi (pronounced _e_c_k_s-_v_e_e-_e_y_e) is a free, portable,
+	  multi-window implementation of the popular UNIX|- editor
+	  vi.
+
+	  This document summarises the  differences  between  the
+	  ``real''  vi  and  xvi.   These differences are divided
+	  into three groups: _u_n_i_m_p_l_e_m_e_n_t_e_d _f_e_a_t_u_r_e_s,  _d_i_f_f_e_r_e_n_c_e_s
+	  and _e_n_h_a_n_c_e_m_e_n_t_s, and each of these is described in the
+	  following sections.
+
+
+
+     _1.  _U_n_i_m_p_l_e_m_e_n_t_e_d _F_e_a_t_u_r_e_s
+
+     _1._1.  _E_x _M_o_d_e
+
+     The main area in which xvi is lacking is vi's _e_x mode,  which  is
+     not implemented at all (and neither are edit, e, and open modes).
+     However, many of the ex commands are available in  xvi  as  colon
+     commands;  the  colon commands that have not been implemented are
+     mostly those which offer the same functionality as other commands
+     in vi mode.
+
+     Specifically, the following ex commands are not implemented,  and
+     probably never will be within xvi:
+
+	     _i_n_s_e_r_t         _u_n_d_o           _e_x
+	     _c_h_a_n_g_e         _o_p_e_n           |
+	     _a_p_p_e_n_d         _z
+
+     while these ex commands, although not currently implemented,  may
+     be added as colon commands at some time in the future:
+
+	     _a_b_b_r_e_v_i_a_t_e     _r_e_c_o_v_e_r        _w_r_i_t_e>>
+	     _u_n_a_b_b_r_e_v_i_a_t_e   _j_o_i_n
+
+
+
+
+
+
+     _________________________
+     |- UNIX is a trademark of Bell Laboratories.
+
+
+
+     _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2                                        _P_a_g_e _1
+
+
+
+
+
+     _2                       _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i
+
+
+     _1._2.  _V_i _c_o_m_m_a_n_d_s
+
+     The following vi mode  commands  are  not  implemented,  although
+     there is no real reason why they shouldn't be:
+
+	     _U              =
+
+     while this one is inappropriate in  the  context  of  xvi,  since
+     there is no _e_x mode:
+
+	     _Q
+
+
+     _1._3.  _P_a_r_a_m_e_t_e_r_s
+
+     The following parameters have not been implemented, and  probably
+     won't be:
+
+	     _a_d_a            _l_i_s_p           _r_e_d_r_a_w
+	     _a_d_a_p_a_t_h        _m_e_s_g           _s_l_o_w_o_p_e_n
+	     _a_u_t_o_p_r_i_n_t      _m_o_d_e_l_i_n_e       _t_e_r_m
+	     _b_e_a_u_t_i_f_y       _o_p_e_n           _t_e_r_s_e
+	     _d_i_r_e_c_t_o_r_y      _o_p_t_i_m_i_z_e       _t_t_y_t_y_p_e
+	     _e_d_c_o_m_p_a_t_i_b_l_e   _p_r_o_m_p_t         _w_i_n_d_o_w
+	     _h_a_r_d_t_a_b_s
+
+     while these parameters may well be implemented at some point:
+
+	     _a_u_t_o_w_r_i_t_e      _s_c_r_o_l_l         _w_a_r_n
+	     _e_r_r_o_r_b_e_l_l_s     _s_o_u_r_c_e_a_n_y      _w_r_i_t_e_a_n_y
+
+
+     _1._4.  _M_i_s_c_e_l_l_a_n_e_o_u_s
+
+     Some features of certain commands do not  work  as  they  should.
+     Specifically:
+
+     o+    Repeat counts before insertions don't work.
+
+     o+    Appending to named buffers is not yet implemented.
+
+     o+    Typing ^Q in input mode does not mean the  same  as  ^V;  it
+	  just  inserts  a `^Q', assuming it gets as far as the editor
+	  at all.
+
+     o+    Typing ^W in insert mode does not back up one word as in vi.
+
+     o+    It is not possible to  interrupt  the  editor  while  it  is
+	  performing  certain  operations.   If  you  start  off a big
+	  global command, you have to wait for it to finish.
+
+     o+    Flags and counts after colon commands are not supported.
+
+
+
+
+
+     _P_a_g_e _2                                        _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2
+
+
+
+
+
+     _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i                       _3
+
+
+
+     o+    It is not possible to read the output of  a  system  command
+	  using
+
+		  :r !_c_o_m_m_a_n_d
+
+	  or to write into a command using
+
+		  :w !_c_o_m_m_a_n_d
+
+
+     o+    The :substitute command does not support splitting of lines.
+
+     o+    Regular expressions, although  implemented  (see  later  for
+	  more  details), do not support the ~ character; also, the \u
+	  and \l escape sequences are not supported on the  right-hand
+	  side of a substitute replacement pattern.
+
+     o+    The :global command only supports the commands [lps&~d].
+
+     o+    Undo does not work properly when applied to macros (either @
+	  or  :map); it should undo all the changes made by the macro,
+	  but in fact only  the  last  command  within  the  macro  is
+	  undone.
+
+     _2.  _E_n_h_a_n_c_e_m_e_n_t_s
+
+     The following extensions are available in xvi.
+
+     _2._1.  _P_a_r_a_m_e_t_e_r _H_a_n_d_l_i_n_g
+
+     Xvi supports 5 types of  parameter:  as  well  as  vi's  _n_u_m_e_r_i_c,
+     _s_t_r_i_n_g  and  _b_o_o_l_e_a_n, it also has _e_n_u_m_e_r_a_t_e_d and _l_i_s_t types.  The
+     former is used for e.g. format and regextype, while the latter is
+     currently  only  used  for tags.  The advantage of the _e_n_u_m_e_r_a_t_e_d
+     type is that if you try to set  an  illegal  value,  the  set  of
+     correct  values  will  be  displayed, which is very useful if you
+     have forgotten what the values may be.  (Try :set preserve to see
+     an example of this.)
+
+     _2._2.  _W_i_n_d_o_w_s
+
+     Xvi supports multiple _b_u_f_f_e_r_s  and  _w_i_n_d_o_w_s.   A  _b_u_f_f_e_r  is  the
+     object which holds a file in memory, while a _w_i_n_d_o_w is an area of
+     the screen which shows part of a buffer.  Note that every  window
+     references a buffer, even if no file is being edited.
+
+     The following commands are available for operating on buffers and
+     windows:
+
+     :buffer   create a new buffer in a new window; can be followed by
+	       a filename, which will be edited in the new buffer.
+
+     :split    create  a  new  window  onto  the  current  buffer   by
+	       splitting   the   current  window  in  half.   The  two
+
+
+     _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2                                        _P_a_g_e _3
+
+
+
+
+
+     _4                       _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i
+
+
+	       resulting windows are similar  to  _v_i_e_w_p_o_r_t_s  on  to  a
+	       single  editing  buffer,  in  that  changes made in one
+	       window are reflected in the other one.
+
+     :close    close the current window; will also close the buffer if
+	       this is the last window onto it.
+
+     :x / ZZ   close only the current window.  If the  window  is  the
+	       only  one onto the buffer, the buffer will be closed as
+	       well, writing it first if it is modified.  Hence, for a
+	       single window, this command does the same as in vi.
+
+     g         move to the next window.  This is normally  the  window
+	       directly  below  the  current one on the screen, or the
+	       top window on the screen if the current window  is  the
+	       bottom one.
+
+     ^W        increase the size of the current window (may be given a
+	       numeric prefix, default is one line).
+
+     ^T        decrease the size of the current window (may be given a
+	       numeric prefix, default is one line).
+
+     ^O        make the current window as large as possible.
+
+     ^]        as  for  vi,  but  creates  a  new  buffer  window   if
+	       appropriate (and if autosplit allows).
+
+     Note that the :quit command quits out of the editor, not out of a
+     window.   The  :close command is thus the equivalent of :quit for
+     windows.  There is no equivalent  of  :x  or  ZZ  for  the  whole
+     editor; these have been hijacked for operations on windows.
+
+     Also the numeric autosplit parameter specifies the maximum number
+     of buffer windows that will be created automatically whenever you
+     either edit more than one file, or use tags to edit  a  different
+     file.
+
+     Undo works per buffer, as do marks;  yank/put  and  redo  (the  .
+     command)  work  over  all  buffers,  i.e. you can delete from one
+     buffer and put the text into a different buffer.
+
+     The minrows parameter specifies the minimum  number  of  rows  to
+     which  a  window  may  be shrunk, including the status line.  The
+     default value is 2; 0 and 1 may also be useful.
+
+     _2._3.  _N_a_m_e_d _B_u_f_f_e_r_s
+
+     As well as the normal named (conjugate) buffers, and the  default
+     one  named @, several extra buffers named :, /, ?  and !  contain
+     the last command lines entered for each of the command types.  So
+     for  instance,  @: will re-execute the last colon command, or you
+     can insert it into your buffer, edit it and  then  re-execute  it
+     (e.g. with _d_d@@).
+
+
+
+     _P_a_g_e _4                                        _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2
+
+
+
+
+
+     _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i                       _5
+
+
+
+     _2._4.  _F_i_l_e _F_o_r_m_a_t_s
+
+     Xvi will handle different file formats, via the format parameter,
+     which  may  be set to e.g.  "unix", "msdos", etc.  This means you
+     can edit MS-DOS files under UNIX, etc.
+
+     _2._5.  _R_e_g_u_l_a_r _E_x_p_r_e_s_s_i_o_n_s
+
+     Vi's magic parameter is  replaced  by  the  regextype  parameter,
+     which can take the following values:
+
+     tags      only ^ and $ are significant (used for tags).
+
+     grep      like _g_r_e_p(1), but with _\< and _\> added.
+
+     egrep     like _e_g_r_e_p(1), but with _\< and _\> added.
+
+     The default is _g_r_e_p.
+
+     The  sections  and  paragraphs  parameters   define   _e_g_r_e_p-style
+     patterns  to  search for, rather than _v_i's simplistic (and _t_r_o_f_f-
+     dependent) character pairs.
+
+     The sentences parameter is also implemented in this fashion,  but
+     this is not completely satisfactory at the moment.
+
+     Note that it is possible to set or unset the magic  parameter  as
+     in  vi;  this will simply result in the regextype parameter being
+     set as appropriate.
+
+     _2._6.  _C_o_l_o_u_r
+
+     Xvi has a minimal amount  of  support  for  colours.   Basically,
+     there  are  considered  to  be four settable colours, each with a
+     numeric parameter to say what its value is:
+
+     colour        colour used for text
+
+     statuscolour  colour used for status lines
+
+     roscolour     as statuscolour, but for readonly files
+
+     systemcolour  colour used for system  mode  (i.e.  subshells  and
+		   after termination).
+
+     The actual values of these parameters are system-dependent; on PC
+     versions,  they are hardware-dependent video attributes, while on
+     UNIX they are indexes into the entries ``c0'' to  ``c9''  in  the
+     _t_e_r_m_c_a_p(5)  database,  which  are  assumed  to  be colour-setting
+     escape sequences if they are present.  If they are  not  present,
+     "so"  (begin standout mode) and "se" (end standout mode) are used
+     instead.  Values of 0 and  1  give  normal  text,  2  to  9  give
+     standout mode.
+
+
+
+     _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2                                        _P_a_g_e _5
+
+
+
+
+
+     _6                       _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i
+
+
+     The default colour  for  the  roscolour  parameter  will  usually
+     involve red if colours are available; this is intended to provide
+     a warning to the user that writing the file may not be possible.
+
+     The colour values may be entered in decimal, octal or hexadecimal
+     form.   This  may be convenient for PC versions where the numbers
+     actually represent colour bitmaps; for example, on MS-DOS,
+
+	     :_s_e_t _c_o=_0_x_1_f
+
+     gives bright white text on a blue background.
+
+     _2._7.  _R_e_p_l_a_c_e _M_o_d_e
+
+     Xvi's  _r_e_p_l_a_c_e  mode  (entered  by  the  R  command)  acts   more
+     intelligently  when you press the return key - it leaves the rest
+     of the current line alone, and just starts replacing text on  the
+     next line, starting at the screen column where you first typed R.
+
+     _2._8.  _P_r_e_s_e_r_v_e
+
+     Rather than use vi's UNIX-specific method for  preservation,  xvi
+     does  periodic  preservation  of all files currently being edited
+     into a temporary file in the same directory.   Xvi  tries  to  do
+     this  when you are not typing, so that you won't notice the short
+     delay when the temporary file is written  out.   Obviously,  only
+     changed  files  are preserved in this way, and the temporary file
+     is normally removed once the  real  file  has  been  successfully
+     written.   As  an  additional  safety  measure,  when  a  file is
+     explicitly saved and  it  appears  not  to  have  been  preserved
+     recently,  it  is  normally  preserved first.  This ensures that,
+     even if the operating system crashes while the real file is being
+     created, there should always be at least one recent copy of it in
+     the filesystem.  The :preserve command is available as in  vi  to
+     preserve a specific buffer manually.
+
+     The level of safety provided by the preservation facility may  be
+     configured   by   changing   the   values  of  the  _p_r_e_s_e_r_v_e  and
+     _p_r_e_s_e_r_v_e_t_i_m_e parameters.  The following values are available  for
+     _p_r_e_s_e_r_v_e:
+
+     unsafe    Never preserve any  buffer  before  an  explicit  save.
+	       This  can  be useful on old, slow, floppy-only systems,
+	       but is not generally recommended.
+
+     standard  The default value.  Only preserve a  buffer  before  an
+	       explicit  save if it appears not to have been preserved
+	       recently.
+
+     safe      Always preserve buffers before they are written.
+
+     paranoid  As for safe, but the preserve file  is  never  removed,
+	       even after the file has been successfully written.
+
+     In all cases, all modified buffers  are  preserved  automatically
+
+
+     _P_a_g_e _6                                        _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2
+
+
+
+
+
+     _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i                       _7
+
+
+     after no user events have been received for _p_r_e_s_e_r_v_e_t_i_m_e seconds,
+     if a minimum number of events (currently 60) have  been  received
+     since  the  last  automatic  preservation.  This behaviour can be
+     more or less disabled by setting  _p_r_e_s_e_r_v_e_t_i_m_e  to  a  very  high
+     value.   (For  example,  one of the authors sets it to 600 on the
+     machine he uses at home, which is an 8088-based PC with  no  hard
+     disk;  by  way of contrast, on the SparcStation IPX which he uses
+     at work, he sets it to 2.)
+
+     The names given to preserve files are system-dependent,  but  are
+     generally  of  the  form  "_f_i_l_e_n_a_m_e.tmp",  or  "_f_i_l_e_n_a_m_e.001"  to
+     "_f_i_l_e_n_a_m_e.999".  If a preserve file already exists, it  will  not
+     be overwritten; instead, a new filename will be generated.
+
+     The -r command line option is not supported.
+
+     _2._9.  _H_e_l_p
+
+     A primitive help facility is available; the command  :help,  also
+     mapped  to  the HELP or F1 keys on many systems, simply creates a
+     new buffer window onto a standard help file.   The  name  of  the
+     file  which  is edited is given by the helpfile string parameter;
+     the default on Unix versions is "/usr/lib/xvi.help".
+
+     _2._1_0.  _S_c_r_o_l_l_i_n_g
+
+     The  _j_u_m_p_s_c_r_o_l_l  enumerated  parameter  controls   the   editor's
+     behaviour  when the cursor moves beyond the limits of the current
+     window.  If its value is _o_f_f,  and  the  new  position  is  still
+     reasonably  close  to  the  current  window,  the  window will be
+     scrolled so that the new cursor position is at the top or  bottom
+     of it.  Typically, the window will be scrolled one line at a time
+     as the cursor is moved up or down.  This behaviour may not always
+     be  desirable;  for  example,  terminals  without  real scrolling
+     regions may force the editor to do  a  lot  of  screen  updating,
+     possibly over a slow telephone line or overloaded network.  Also,
+     on LCD screens or other displays with a long  image  persistence,
+     it  may  make  the text more difficult to read.  If _j_u_m_p_s_c_r_o_l_l is
+     set to _o_n, scrolling behaviour is modified so that, whenever  the
+     cursor  moves beyond the limits of the current window, the window
+     is redrawn so as to place the cursor as centrally as possible  in
+     it;  thus,  the  window appears to _j_u_m_p to the new position.  The
+     default value for _j_u_m_p_s_c_r_o_l_l is auto, which causes the editor  to
+     jump  instead  of  scrolling only if it can't scroll the affected
+     window efficiently.
+
+     In all cases, if the distance from  the  top  or  bottom  of  the
+     window to the new position is more than half the window size, the
+     editor will jump instead of scrolling.
+
+     Explicit scroll commands  (e.g.  ^D)  are  not  affected  by  the
+     jumpscroll parameter.
+
+
+
+
+
+     _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2                                        _P_a_g_e _7
+
+
+
+
+
+     _8                       _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i
+
+
+
+     _2._1_1.  _8-_b_i_t _C_h_a_r_a_c_t_e_r_s
+
+     Characters with the top bit set may be displayed, although it  is
+     not yet possible to have null ('\0') bytes in a file buffer.  How
+     the characters are displayed varies  between  systems;  on  UNIX,
+     they  will be shown as an octal escape sequence, while on MS-DOS,
+     OS/2 and QNX they will be shown as the actual character in the PC
+     character  set.  This can be controlled by setting the cchars and
+     mchars variables; if  these  parameters  are  set,  control-  and
+     meta-characters (respectively) are shown directly, otherwise they
+     are shown as some sequence of printable characters.
+
+     You can use the ^_ (control-underscore) command to flip  the  top
+     bit  of  the  character  the cursor is on.  This may be useful on
+     systems  where  it  is  otherwise  impossible  to   enter   8-bit
+     characters.
+
+     Tabs are  normally  displayed  as  a  series  of  spaces  of  the
+     appropriate length (according to the tabstops parameter); setting
+     list mode will cause them to be displayed as a control character,
+     as  will  unsetting the tabs parameter.  How the tab character is
+     displayed is then under the control of the cchars parameter.
+
+     _2._1_2.  _M_o_u_s_e _S_u_p_p_o_r_t
+
+     Some mouse support  is  available  for  micro-based  systems  and
+     workstations.  Clicking the mouse button on:
+
+     any line outside current window
+	  changes current window to the one  indicated  by  the  mouse
+	  (can be used instead of g).
+
+     top line of any window
+	  scrolls window downwards (same as ^Y).
+
+     bottom line of any window
+	  scrolls window upwards (same as ^E).
+
+     status line of any window
+	  shows current file and lines (same as ^G).
+
+     any text line of any window
+	  moves text cursor as near as possible to mouse cursor.
+
+     Also, windows can be resized by "dragging" the appropriate status
+     line up or down with the mouse.
+
+     _2._1_3.  _M_i_s_c_e_l_l_a_n_e_o_u_s
+
+     o+    The :wn (write file and edit next) command is  provided,  as
+	  per PC-vi.
+
+     o+    There is no limit to the number or size of maps which may be
+	  defined, nor is there any fixed limit to the number of lines
+
+
+     _P_a_g_e _8                                        _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2
+
+
+
+
+
+     _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i                       _9
+
+
+	  in a buffer.
+
+     o+    The  edit  parameter  controls  whether  a  buffer  can   be
+	  modified.   This  may  be  used,  together with the _r_e_a_d_o_n_l_y
+	  parameter, to implement a nicer version of _v_i_e_w(1) than vi's
+	  version,  since it won't fool you into thinking that editing
+	  the buffer is in any way safe.  Be warned: once  having  set
+	  noedit,  it  is not possible to do a :set edit.  It's a one-
+	  way street.
+
+     o+    The timeout parameter is implemented  as  a  numeric  value,
+	  specifying  the number of milliseconds after which to assume
+	  that no further input is  available  to  continue  with  the
+	  parsing  of  a  map  sequence.   This  replaces vi's boolean
+	  parameter of the same name.
+
+     o+    The vbell parameter may be used to specify use of a  visual,
+	  rather than audible, bell, if this is available.
+
+     o+    The  :echo  command  is  available;  it  simply  echoes  its
+	  arguments, after expansion of % and # characters.
+
+     o+    In insert and replace modes, ^_A has the same meaning  as  ^@
+	  in  vi,  except  that it works at any time, not just for the
+	  first character.  Also, typing ^B_x, where _x is the name of a
+	  conjugate  buffer,  inserts the contents of that buffer into
+	  the input stream at that point.  The buffer named  <  always
+	  contains the last thing inserted, so that ^_B< is the same as
+	  ^_A.
+
+     _3.  _D_i_f_f_e_r_e_n_c_e_s
+
+     o+    Argument handling is somewhat different; for instance, -_R is
+	  not  supported,  but  "-s parameter=value" is, which is much
+	  more useful anyway.
+
+     o+    The _X_V_I_N_I_T environment variable is read instead  of  _E_X_I_N_I_T.
+	  Whilst no files are sourced automatically, users who wish to
+	  have a startup file can arrange it very  easily.   _s_h(1)  or
+	  _k_s_h(1) users should add this line to their $_H_O_M_E/._p_r_o_f_i_l_e:
+
+		  _X_V_I_N_I_T='_s_o_u_r_c_e _x_v_i-_s_t_a_r_t_u_p-_f_i_l_e'; _e_x_p_o_r_t _X_V_I_N_I_T
+
+	  _c_s_h(1) users should add this to their $_H_O_M_E/._l_o_g_i_n:
+
+		  _s_e_t_e_n_v _X_V_I_N_I_T '_s_o_u_r_c_e _x_v_i-_s_t_a_r_t_u_p-_f_i_l_e'
+
+	  and MS-DOS users should add this to their _a_u_t_o_e_x_e_c._b_a_t:
+
+		  _s_e_t _X_V_I_N_I_T=_s_o_u_r_c_e _x_v_i-_s_t_a_r_t_u_p-_f_i_l_e
+
+
+     o+    The tags parameter can be  used  to  specify  multiple  tags
+	  files;  these  can  be  separated  by either "\ " (backslash
+	  space) or "," (comma).
+
+
+     _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2                                        _P_a_g_e _9
+
+
+
+
+
+     _1_0                      _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i
+
+
+     o+    Alternate files are handled slightly differently,  owing  to
+	  the  presence  of  buffer and window handling.  Essentially,
+	  when you close a buffer, its filename is remembered  as  the
+	  alternate  file;  when  you  invoke the ^^ or :e # commands,
+	  this  filename  is  re-edited.   Note  that  ^^  edits   the
+	  alternate file in a new buffer window.
+
+     o+    Hitting the escape key while in the command  line  does  not
+	  terminate  input;  instead,  it cancels input, returning the
+	  prompt to the beginning of the line.  This applies to  input
+	  for :, /, ?  and !.
+
+     o+    Character-based  yanks  (or   deletes)   which   span   line
+	  boundaries are handled correctly (vi gets this wrong).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     _P_a_g_e _1_0                                       _2_5_t_h _S_e_p_t_e_m_b_e_r _1_9_9_2
+
+

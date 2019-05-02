@@ -1,0 +1,67 @@
+# Copyright (c) 1990,1991,1992 Chris and John Downey
+#***
+#
+# @(#)makefile.usg	2.2 (Chris & John Downey) 7/31/92
+#
+# program name:
+#	xvi
+# function:
+#	PD version of UNIX "vi" editor, with extensions.
+# module name:
+#	makefile.usg
+# module function:
+#	Makefile for System V UNIX.
+# history:
+#	STEVIE - ST Editor for VI Enthusiasts, Version 3.10
+#	Originally by Tim Thompson (twitch!tjt)
+#	Extensive modifications by Tony Andrews (onecom!wldrdg!tony)
+#	Heavily modified by Chris & John Downey
+#***
+
+SYSDEFS=	-DUNIX -DTERMIO
+INCDIRS=
+
+LIBS=		-ltermcap
+LDFLAGS=
+
+CFLAGS=		$(SYSDEFS) $(INCDIRS) -O
+LINTFLAGS=	$(SYSDEFS) $(INCDIRS) -ah
+
+MACHSRC=	unix.c termcap.c defscr.c
+MACHOBJ=	unix.o termcap.o defscr.o
+MACHINC=	unix.h termcap.h
+
+GENINC=		ascii.h param.h ptrfunc.h regexp.h regmagic.h xvi.h virtscr.h
+
+GENSRC=		alloc.c ascii.c buffers.c cmdline.c cursor.c \
+		edit.c ex_cmds1.c ex_cmds2.c events.c fileio.c \
+		find.c flexbuf.c map.c mark.c misccmds.c movement.c \
+		normal.c param.c pipe.c preserve.c ptrfunc.c \
+		regexp.c screen.c search.c signal.c startup.c status.c \
+		tags.c undo.c version.c windows.c yankput.c
+
+GENOBJ=		alloc.o ascii.o buffers.o cmdline.o cursor.o \
+		edit.o ex_cmds1.o ex_cmds2.o events.o fileio.o \
+		find.o flexbuf.o map.o mark.o misccmds.o movement.o \
+		normal.o param.o pipe.o preserve.o ptrfunc.o \
+		regexp.o screen.o search.o signal.o startup.o status.o \
+		tags.o undo.o version.o windows.o yankput.o
+
+all:		xvi
+
+xvi:		$(GENOBJ) $(MACHOBJ)
+		$(CC) $(CFLAGS) -o xvi $(GENOBJ) $(MACHOBJ) $(LIBS)
+
+.c.o:		$< $(GENINC) $(MACHINC) param.c
+		$(CC) $(CFLAGS) -c -o $@ $<
+
+lint:
+		lint $(LINTFLAGS) $(GENSRC) $(MACHSRC)
+
+tags:		$(GENSRC) $(MACHSRC)
+		ctags -t $(GENSRC) $(MACHSRC) $(GENINC) $(MACHINC)
+
+clean:
+		rm $(GENOBJ) $(MACHOBJ) xvi
+
+$(GENOBJ):	$(GENINC) $(MACHINC)

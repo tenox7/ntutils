@@ -1,0 +1,210 @@
+<html lang="en">
+<head>
+<title>Usage - TDE 5.1v Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TDE 5.1v Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Overview.html#Overview" title="Overview">
+<link rel="next" href="Screen-Layout.html#Screen-Layout" title="Screen Layout">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="Usage"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Screen-Layout.html#Screen-Layout">Screen Layout</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Overview.html#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Usage</h2>
+
+<p>The general format for running <acronym>TDE</acronym> is:
+
+<pre class="example">     tde [-v] [-i <var>config</var>] [-w [<var>workspace</var>]]
+         [options] [filename(s)] [options] [-f|F|g|G[=] <var>pattern</var> filename(s)]
+</pre>
+   <p class="noindent">Everything is optional &mdash; running without any parameters will either
+bring up a prompt to load a filename (or display the directory list for a
+pattern), or automatically load the workspace if <samp><span class="file">tde.wsp</span></samp> is present in
+the current directory (<samp><span class="file">.tdewsp</span></samp> in <acronym>UNIX</acronym>).  The three options
+<samp><span class="option">-v</span></samp>, <samp><span class="option">-i</span></samp> and <samp><span class="option">-w</span></samp> must be first, but can appear in any
+order amongst themselves.
+
+     <dl>
+<dt><code>-v</code><dd>
+  Enter viewer mode, where every file is loaded read-only.
+
+     <br><dt><code>-i</code><dd>
+  Read the specified configuration file (after reading the global and local
+files; see <a href="Configuration.html#Configuration">Configuration</a>).
+
+     <br><dt><code>-w</code><dd>
+  If this is used by itself, <acronym>TDE</acronym> will load the workspace from its home
+directory; if it doesn't exist the usual prompt is displayed.  If
+<var>workspace</var> is present, but no other options, <acronym>TDE</acronym> will load the
+given workspace.  When used with other options, <acronym>TDE</acronym> will load as
+normal, using <var>workspace</var> as the filename of the workspace.
+
+     <br><dt><code>-f</code><dt><code>-F</code><dt><code>-g</code><dt><code>-G</code><dd>
+  These options cause <acronym>TDE</acronym> to search files for <var>pattern</var>.  The
+lower case letter will ignore case, whilst the upper case letter will match it. 
+<samp><span class="option">F</span></samp> will perform a text-based search; <samp><span class="option">G</span></samp> will perform a regular
+expression search.  The normal operation is to load the first matching file,
+positioned at the first match; adding <samp><span class="option">=</span></samp> immediately after the letter
+will instead create a window containing the matching lines from all files. 
+If a directory is specified all files in that directory will be searched.
+
+   </dl>
+
+   <p>Filenames (and directories) can include wildcards (see <a href="DirList.html#DirList">DirList</a>,
+see <a href="DefineGrep.html#DefineGrep">DefineGrep</a>).  If a directory is specified, the directory list will be
+brought up for it.
+
+   <p>Options begin with either <samp><span class="option">-</span></samp> or <samp><span class="option">+</span></samp>.  An option starting with
+<samp><span class="option">-</span></samp> will apply to all following files; an option starting with <samp><span class="option">+</span></samp>
+will apply to only one file.  A lower case option letter will apply to the
+file(s) coming after it; an upper case letter will apply to the file before it
+(and possibly those after it).  For options that apply to following files, the
+normal behavior can be restored by adding <samp><span class="option">-</span></samp> after the letter.
+
+     <dl>
+<dt><code>a</code><dd>
+  Usually files are only loaded into the editor at the request of the user (by
+closing the current file or explicitly loading the next); this option will load
+all files into the editor immediately.
+
+     <br><dt><code>b[</code><var>n</var><code>]</code><dt><code>b!</code><dd>
+  Load files as binary, using <var>n</var> as the line length (default is 64); if
+<var>n</var> is zero, force loading files as text; if <var>n</var> is negative, load text
+files as normal and use the positive value of <var>n</var> as the line length for
+binary files (without prompting).  Alternatively, skip binary files altogether.
+
+     <br><dt><code>c </code><var>title</var><dd>
+  Name the window <var>title</var>; use `<samp><span class="samp">.</span></samp>' for the filename (which won't be
+split like it usually is).  This option always applies to only one file.
+
+     <br><dt><code>e </code><var>macro</var><dd>
+  Execute <var>macro</var> after loading each file.  If <var>macro</var> refers to an
+existing file, it will be read as a macro file.
+
+     <br><dt><code>l[</code><var>lang</var><code>]</code><dd>
+  If <var>lang</var> is absent, syntax highlighting will be disabled; otherwise it
+will be used as the language, overriding the filename test.
+
+     <br><dt><code>n</code><dd>
+  Create a new (scratch) window.
+
+     <br><dt><code>r</code><dd>
+  Load files as read-only.
+
+     <br><dt><code>s</code><dd>
+  Set the scratch flag for files.
+
+     <br><dt><code>t[</code><var>n</var><code>]</code><dd>
+  Use a physical tab size of <var>n</var> (default is 8; 0 will deflate tabs).
+
+     <br><dt><code>[</code><var>line</var><code>][:</code><var>col</var><code>]</code><dd>
+  Start at the specified position.  If <var>line</var> is negative it will be taken
+from the end of the file (i.e. `<samp><span class="samp">-1</span></samp>' is the last line, `<samp><span class="samp">-2</span></samp>' is the
+second last, etc.).  If <var>col</var> is negative it will be taken from the end of
+the line (i.e. `<samp><span class="samp">0</span></samp>' is <acronym>EOL</acronym>, `<samp><span class="samp">-1</span></samp>' is the last character,
+`<samp><span class="samp">-2</span></samp>' is the second last, etc.).  This option always applies to only one
+file &mdash; start with <samp><span class="option">+</span></samp> for the next file, <samp><span class="option">-</span></samp> for the previous
+(sic).
+
+     <br><dt><code>+</code><var>offset</var><dd>
+  Move to the specified offset (prefix with `<samp><span class="samp">0x</span></samp>' for hexadecimal) in the
+file.  It can be used with text files, but <var>offset</var> is not the same as the
+file offset, since line endings are not counted.  This option always applies to
+only one file, as above.
+
+   </dl>
+
+   <p>There are also a number of help options.  These options must be the only
+argument present.
+
+     <dl>
+<dt><code>/?</code><dt><code>-?</code><dt><code>--help</code><dd>
+  Display a (long) help screen, including version and contact information.
+
+     <br><dt><code>--version</code><dd>
+  Just display the current version and release date.
+
+     <br><dt><code>-g?</code><dt><code>-G?</code><dd>
+  Display the regular expression help screen.
+
+     <br><dt><code>-??</code><dd>
+  Display the wildcard help screen.
+
+   </dl>
+
+   <p>Finally, <acronym>TDE</acronym> can be used as a filter, where it reads from standard
+input and writes to standard output.  In this instance, input is treated as an
+implicit (scratch) file after the command, so it is always read first and the
+upper case version of options is required.
+
+<h3 class="unnumberedsec">Examples</h3>
+
+<pre class="example">     tde -b <var>file1</var> -b- <var>file2</var>
+     tde <var>file1</var> +B <var>file2</var>
+</pre>
+   <p>Both load <var>file1</var> as binary (using the default line length of 64) and
+auto-detect the type of <var>file2</var>.
+
+<pre class="example">     dir | tde &gt;dir.lst
+</pre>
+   <p>Pipe the output of <samp><span class="command">dir</span></samp> into <acronym>TDE</acronym> and save its output into
+<samp><span class="file">dir.lst</span></samp>.
+
+<pre class="example">     unzip -c tde51ss | tdv -Lc
+</pre>
+   <p>View <acronym>TDE</acronym>'s source using C syntax highlighting (<samp><span class="command">tdv</span></samp> is
+equivalent to `<samp><span class="samp">tde -v</span></samp>').
+
+<pre class="example">     tde -lpascal file.c file.bat -l file.for -l- file.cbl
+</pre>
+   <p>This will load <samp><span class="file">file.c</span></samp> and <samp><span class="file">file.bat</span></samp> using Pascal syntax
+highlighting, disable syntax highlighting for <samp><span class="file">file.for</span></samp> and use the
+filename to determine if <samp><span class="file">file.cbl</span></samp> should have it.
+
+<pre class="example">     tdv -b! ...
+</pre>
+   <p>View every text file in the current directory and all subdirectories.
+
+<pre class="example">     tde -F s_output .;[dwu]*/*.[ch]
+</pre>
+   <p>Do a case-sensitive, text-based search for `<samp><span class="samp">s_output</span></samp>', in all the
+<samp><span class="file">.c</span></samp> and <samp><span class="file">.h</span></samp> files in the current directory and the subdirectories
+starting with <samp><span class="file">d</span></samp>, <samp><span class="file">w</span></samp> and <samp><span class="file">u</span></samp>.  <acronym>UNIX</acronym> users can use
+`<samp><span class="samp">:</span></samp>' instead of `<samp><span class="samp">;</span></samp>'.
+
+<pre class="example">     tde -e "JumpToPosition \"-1:0\" Rturn LineDown BottomLine LineUp" <var>file</var>
+</pre>
+   <p>Load <var>file</var>, moving to <acronym>EOL</acronym> of the last line, with <acronym>EOF</acronym>
+at the bottom of the window.
+
+   </body></html>
+

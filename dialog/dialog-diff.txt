@@ -1,0 +1,222 @@
+*diff -r dialog-1.1-20100119-before-hammering/arrows.c dialog-1.1-20100119/arrows.c*
+*65c65*
+<     chtype save = getattrs(win);
+---
+>     //chtype save = getattrs(win);
+*109c109*
+<     wattrset(win, save);
+---
+>     //wattrset(win, save);
+*130c130*
+<     chtype save = getattrs(win);
+---
+>     //chtype save = getattrs(win);
+*171c171*
+<               wattrset(win, save);
+---
+>               //wattrset(win, save);
+*195c195*
+<     wattrset(win, save);
+---
+>     //wattrset(win, save);
+*diff -r dialog-1.1-20100119-before-hammering/buttons.c dialog-1.1-20100119/buttons.c*
+*255c255*
+<     chtype save = getattrs(win);
+---
+>     //chtype save = getattrs(win);
+*313c313*
+<     wattrset(win, save);
+---
+>     //wattrset(win, save);
+*diff -r dialog-1.1-20100119-before-hammering/checklist.c dialog-1.1-20100119/checklist.c*
+*76c76*
+<     chtype save = getattrs(win);
+---
+>     //chtype save = getattrs(win);
+*129c129*
+<     wattrset(win, save);
+---
+>     //wattrset(win, save);
+Only in dialog-1.1-20100119/: config.log
+Only in dialog-1.1-20100119/: config.status
+Only in dialog-1.1-20100119/: dialog-config
+Only in dialog-1.1-20100119/: dlg_config.h
+Only in dialog-1.1-20100119/: headers-sh
+*diff -r dialog-1.1-20100119-before-hammering/inputstr.c dialog-1.1-20100119/inputstr.c*
+*601,603c601,603*
+<       case ERR:
+<           edit = 0;
+<           break;
+---
+>       //case ERR:
+>       //    edit = 0;
+>       //    break;
+Only in dialog-1.1-20100119/: makefile
+*diff -r dialog-1.1-20100119-before-hammering/menubox.c dialog-1.1-20100119/menubox.c*
+*120c120*
+<     chtype save = getattrs(win);
+---
+>     //chtype save = getattrs(win);
+*179c179*
+<     wattrset(win, save);
+---
+>     //wattrset(win, save);
+*191c191*
+<     chtype save = getattrs(win);
+---
+>     //chtype save = getattrs(win);
+*228c228*
+<     wattrset(win, save);
+---
+>     //wattrset(win, save);
+*diff -r dialog-1.1-20100119-before-hammering/mixedgauge.c dialog-1.1-20100119/mixedgauge.c*
+*194c194*
+<       chtype save2 = getattrs(win);
+---
+>       //chtype save2 = getattrs(win);
+*198c198*
+<       wattrset(win, save2);
+---
+>       //wattrset(win, save2);
+Only in dialog-1.1-20100119/samples/install: makefile
+Only in dialog-1.1-20100119/samples: listing.out
+*diff -r dialog-1.1-20100119-before-hammering/ui_getc.c dialog-1.1-20100119/ui_getc.c*
+*26a27,28*
+> #include <winsock.h>
+> 
+*215c217*
+<       if ((result = fcntl(fd, F_GETFL, 0)) >= 0) {
+---
+>       //if ((result = fcntl(fd, F_GETFL, 0)) >= 0) {
+*217c219*
+<       }
+---
+>       //}
+*403,422c405*
+< dlg_killall_bg(int *retval)
+< {
+<     DIALOG_CALLBACK *cb;
+<     int pid;
+< #ifdef HAVE_TYPE_UNIONWAIT
+<     union wait wstatus;
+< #else
+<     int wstatus;
+< #endif
+< 
+<     if ((cb = dialog_state.getc_callbacks) != 0) {
+<       while (cb != 0) {
+<           if (cb->keep_bg) {
+<               cb = cb->next;
+<           } else {
+<               dlg_remove_callback(cb);
+<               cb = dialog_state.getc_callbacks;
+<           }
+<       }
+<       if (dialog_state.getc_callbacks != 0) {
+---
+> dlg_killall_bg(int *retval){ }
+*424,475d406*
+<           refresh();
+<           fflush(stdout);
+<           fflush(stderr);
+<           reset_shell_mode();
+<           if ((pid = fork()) != 0) {
+<               _exit(pid > 0 ? DLG_EXIT_OK : DLG_EXIT_ERROR);
+<           } else if (pid == 0) {      /* child */
+<               if ((pid = fork()) != 0) {
+<                   /*
+<                    * Echo the process-id of the grandchild so a shell script
+<                    * can read that, and kill that process.  We'll wait around
+<                    * until then.  Our parent has already left, leaving us
+<                    * temporarily orphaned.
+<                    */
+<                   if (pid > 0) {      /* parent */
+<                       fprintf(stderr, "%d\n", pid);
+<                       fflush(stderr);
+<                   }
+<                   /* wait for child */
+< #ifdef HAVE_WAITPID
+<                   while (-1 == waitpid(pid, &wstatus, 0)) {
+< #ifdef EINTR
+<                       if (errno == EINTR)
+<                           continue;
+< #endif /* EINTR */
+< #ifdef ERESTARTSYS
+<                       if (errno == ERESTARTSYS)
+<                           continue;
+< #endif /* ERESTARTSYS */
+<                       break;
+<                   }
+< #else
+<                   while (wait(&wstatus) != pid)       /* do nothing */
+<                       ;
+< #endif
+<                   _exit(WEXITSTATUS(wstatus));
+<               } else if (pid == 0) {
+<                   if (!dialog_vars.cant_kill)
+<                       (void) signal(SIGHUP, finish_bg);
+<                   (void) signal(SIGINT, finish_bg);
+<                   (void) signal(SIGQUIT, finish_bg);
+<                   (void) signal(SIGSEGV, finish_bg);
+<                   while (dialog_state.getc_callbacks != 0) {
+<                       int fkey = 0;
+<                       dlg_getc_callbacks(ERR, fkey, retval);
+<                       napms(1000);
+<                   }
+<               }
+<           }
+<       }
+<     }
+< }
+*diff -r dialog-1.1-20100119-before-hammering/util.c dialog-1.1-20100119/util.c*
+*181a182*
+> /*
+*191a193*
+> */
+*439c441*
+<     chtype attrs = getattrs(win);
+---
+>     //chtype attrs = getattrs(win);
+*443,446c445,448*
+<     if ((pair = PAIR_NUMBER(attrs)) != 0
+<       && pair_content(pair, &fg, &bg) != ERR) {
+<       background = bg;
+<     } else {
+---
+>     //if ((pair = PAIR_NUMBER(attrs)) != 0
+> //    && pair_content(pair, &fg, &bg) != ERR) {
+> //    background = bg;
+>   //  } else {
+*448c450*
+<     }
+---
+>     //}
+*1145c1147*
+<     chtype save = getattrs(win);
+---
+>     //chtype save = getattrs(win);
+*1170c1172*
+<     wattrset(win, save);
+---
+>     //wattrset(win, save);
+*1182c1184*
+<       chtype save = getattrs(parent);
+---
+>       //chtype save = getattrs(parent);
+*1189c1191*
+<       wattrset(parent, save);
+---
+>       //wattrset(parent, save);
+*1512c1514*
+<       chtype save = getattrs(win);
+---
+>       //chtype save = getattrs(win);
+*1518c1520*
+<       wattrset(win, save);
+---
+>       //wattrset(win, save);
+*1661c1663*
+<           (void) wresize(win, height, width);
+---
+>           //(void) wresize(win, height, width);
+

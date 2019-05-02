@@ -1,0 +1,864 @@
+January 22, 1999: correct LFN new file bug in djgpp/port.c
+February 11/13, 1999: Linux corrections (David Sanderson <dws@sgi.net>):
+                        simple syntax errors and incorrect var. names;
+                        remove graphic_char in get_block_border_style();
+                        restoration of my_ltoa();
+                        use of tzname in stamp_format();
+                        get_current_directory() arguments;
+                        access() to (stat() && S_ISDIR()) in my_findfirst();
+February 13, 1999: don't read config file when . and .exe are same dir;
+                   turn off error message when reading TimeStamp in config.c;
+                   add e-mail to some signal info;
+                   properly recognize CursorStyle config setting;
+                   proper restoration of original cursor on exit;
+                   three new keys: a+grey*, a+grey+ & a+grey-.
+February 14, 1999: make break-point work with recursive macros/infinite repeat;
+                   added mode settings to syntax highlight.
+April 3, 1999: tidied Intel SHL language, added coprocessor instructions.
+April 4, 1999: added mark paragraph;
+               added additional cursor size, modified cursor setting functions.
+April 8, 1999: modified current character display code;
+               made hex_digit static;
+               added base offset (line:col+ofs) to indicate horizontal scroll;
+               added VERSION and DATE strings to help.c.
+April 10, 1999: changed play_back to loop while !ERROR rather than while OK;
+                added Status function.
+April 12, 1999: added letter and number short-cut access to the menu.
+April 13, 1999: prevent selection of the current menu (undoc);
+                added lines to status_screen (undoc).
+April 14, 1999: clear screen to text color.
+                leave editor residue on page 1 (DOS).
+April 18, 1999: recognized a few more keys.
+April 21, 1999: allow color names to be used;
+                corrected copy_word() bug (when cursor was beyond eol);
+                corrected restore_marked_block() bug (when last line was marked
+                 and deleted).
+April 24, 1999: added history to file, find, stamp, border, line number, grep
+                 (not from command line) and language functions.
+April 25, 1999: binary option again works with all following files, until "-b-"
+                 is seen; "-b" always uses DEFAULT_BIN_LENGTH, not the previous
+                 value of "-b";
+                add filename to status screen;
+                added filename completion to get_name() (if using file history).
+April 26, 1999: corrected getkey() bug that disabled Shift+GreyEnter;
+                corrected syntax macro bug introduced with new color parser;
+                allocated the language name as part of the structure (intro-
+                 ducing some other undoc. far -> near changes).
+April 28/29, 1999: files can be toggled read-only, allowing normal keys to be
+                    used as functions. New option "-r" to load following files
+                    as read-only, "-r-" to load as read/write. If the first
+                    option is "-v", all files will be loaded read-only (viewer
+                    mode). If input is redirected and output not, pipe is read-
+                    only by default.
+April 30, 1999: changed TREE structure - removed the union.
+                modified help screen format, added viewer help.
+May 1, 1999: changed tabs to be file specific (took all day, damn it!).
+May 2, 1999: added new function GotoWindow to select a window by number or
+              filename; as a consequence, removed the two verify_ functions in
+              diff.c and added a window history. Also removed the two _hidden_-
+              window functions, incorporating them into the other two.
+             in EditFile, made "=" synonymous with the current file.
+             removed the macro mode aliases.
+May 3, 1999: added file and memory sizes to the status.
+May 4, 1999: NextLine will match indentation if the line is blank and indent.
+             corrected djgpp eol_clear() bug.
+             tde16 changed to the large model.
+May 5, 1999: made filenames unconditionally case sensitive in UNIX and case
+              insensitive in DOS.
+             allowed get_name() to edit strings longer than the display.
+             added WordDelete, WordDeleteBack and Transpose to get_name().
+May 7, 1999: the get_name() word deletes delete groups of whitespace or non-
+              whitespace, but not both.
+             added the ability to determine if a function is executed in
+              succession; used this to modify MarkBox (mark word, full-word and
+              paragraph), MarkLine (mark indented, mark an additional two lines,
+              mark paragraph) and MarkStream (mark paragraph).
+September 9, 1999: added 4DOS .btm and AT&T syntax highlighting.
+September 15, 1999: renamed FindRegX to RegXForward, added RegXBackward,
+                     renamed RepeatFindRegX to RepeatRegXForward,
+                     renamed RepeatFindRegXBackward to RepeatRegXBackward;
+                    added BlockInvertCase;
+                    added " =EOL" when cursor is at end-of-line.
+September 23, 1999: can move to column/offset as well as line, renamed
+                     JumpToLine to JumpToPosition, "Line: " to "Position: ".
+                    corrected offset bug in goto_line() and show_line_col()
+                     when using tabs;
+                    renamed ShowStatus to Status.
+October 3, 1999: fixed block/read-only problems.
+October 4, 1999: next smart tab will use next fixed tab when on last word;
+                 corrected backspace indent with real tabs bug;
+                 recognize real tabs when indenting line blocks and tabbing.
+October 10, 1999: block search and block replace.
+October 12, 1999: when marking indented lines, include "nested" indents.
+October 14, 1999: made a more file-oriented block (what rather than where).
+October 18, 1999: use real tabs when replacing (file or line block).
+October 20, 1999: added Shift+Alt+Backspace;
+                  draw an optional shadow around messages;
+                  allow custom menu/directory list frame style;
+                  proper drawing mode.
+October 21, 1999: draw an optional space before and after frames;
+                  created the status screen on the fly.
+October 25, 1999: TopLine and BottomLine to complement CenterLine;
+                  new "Move" menu;
+                  corrected a bug with the default macros;
+                  centered the directory list; use 15 lines if display > 30.
+October 26, 1999: corrected a bug with DOS critical error;
+                  "corrected" syntax highlighting problems with radix 16;
+                  indenting 0 spaces will line up all lines with the first;
+                  overlay LINE blocks;
+                  corrected DOS stream block end-line display error.
+October 27, 1999: corrected a bug with a macro playing another macro in
+                   succession (false recursive);
+                  moved update_line() to utils.c since I removed all the
+                   display code; new */console.c function display_line().
+October 28, 1999: swapping blocks ask for a region.
+October 31, 1999: corrected InsertFile crash when file doesn't exist.
+November 1, 1999: only display credit screen if asking for file.
+November 3, 1999: variable width/line box swaps.
+November 4, 1999: moved HorizontalScreen* out of help and onto the menu;
+                  renamed DosShell to Shell, DosScreen to UserScreen.
+
+Uploaded 5.1 pre-release 1.
+
+November 8, 1999: two help messages for the two BOX SWAP cases;
+                  reduce the block in an overlapped LINE OVERLAY;
+                  constant line number display.
+November 9, 1999: SplitHorizontal uses the current line as the new header.
+November 10, 1999: combining lines with WordDelete removes leading spaces.
+                   [src] replaced all the "top_line + ruler" with "top_line",
+                         added "top" for the header; similarly, "start_col" is
+                         beginning of text, "left" is beginning of window (for
+                         the line numbers);
+                         ruler_line is global;
+                         removed g_display.line_length.
+                   fixed a macro recording bug (one key recurse);
+                   added character set display.
+November 11, 1999: added line ending to status (file size);
+                   recognize the EndOfLineStyle setting, added Native/Binary;
+                   corrected bug where CO80_* would be recognized as mono;
+                   added mono names: Normal, Bold, Reverse, Standout, Underline.
+November 12, 1999: added SumBlock function (signed long decimal).
+
+Uploaded 5.1 pre-release 2.
+
+November 19, 1999: started work on undo.
+November 20, 1999: corrected "(pipe)" filename bug in Status.
+November 21, 1999: AbortCommand does nothing in the editor itself;
+                   created execute() function to run editor functions;
+                   moved a few functions from ed.c to movement.c.
+November 23, 1999: LineDown no longer scrolls;
+                   corrected djgpp/port.c get_current_directory() bug when
+                    get_full_path() fails (append slash after).
+November 24, 1999: combined {next,prev}_dirty_line() into find_dirty_line();
+                   renamed goto_line() to goto_position();
+                   set previous position for the diff.
+November 25, 1999: corrected bug with two-character matching (infinite loop);
+                   added "<>" as a pair.
+November 26, 1999: pass tab display (mode.show_eol) as a parameter to tab_out();
+                   include window info in Status memory size;
+                   display time-stamp if RO or on EOF;
+                   shift other windows' rline in adjust_windows_cursor().
+November 27, 1999: corrected bug with last valid menu selection.
+November 28, 1999: don't pass the minor choice as a parameter for the menu.
+
+November 28, 1999: corrected bugs with menu (last valid selection), Status
+                    (display "(pipe)"), djgpp/port.c get_current_directory()
+                    (call get_full_path() before appending slash) and failing
+                    to match a two-character pair.
+
+Uploaded 5.1 pre-release 3.
+
+December 2, 1999: removed tdeasm.c: moved ptoul() to dos/port.c; moved tabout()
+                   to tab.c.
+
+June 4, 2000: corrected bug when WordDelete joined with a blank line.
+
+May 17, 2001: [src] renamed indent/blank to indent_{on,off}.
+May 20, 2001: fixed bug when summing blocks (forgot extra NUL for strtol).
+May 21, 2001: renamed UndoLine to RestoreLine, UndoDelete to RetrieveLine;
+              RestoreLine toggles between original and changed lines;
+              treat EOF & ESC as text when testing for binary;
+              fixed bug with copy_word() not copying when it was first;
+              corrected memory problems when unable to load a file;
+              corrected binary offset after block operations.
+May 22, 2001: cancel loading of a binary file if length entry was aborted;
+              store an "unlimited" number of lines in line undo stack for djgpp
+               and Linux/UNIX;
+              moved tab options from "Toggles" menu to "Word" menu.
+May 28, 2001: added "tdv" as link to "tde -v"; removed default r/o pipe;
+              added "-t" option to specify tab size/no tabs;
+              added help messages when the editor doesn't start;
+              added help screen ("-?" or "--help" as the only option).
+June 1, 2001: added special pseudo-macros for HTML ("<tag" --> "<tag></tag>").
+June 4, 2001: [src] added unixify() function to DOS16;
+              append ".bak" in UNIX and djgpp with LFN;
+              help files are based on config files (trailing "cfg" -> "hlp");
+              prompt for a configuration file in ReadConfig.
+June 5, 2001: [src] removed remaining sig structures.
+              added "-i config" option to load configuration file "config" (in
+               addition to global and local config files);
+              added syntax highlighting to Status display;
+              added Statistics function (Alt+GreyEnter; File|Statistics);
+              moved file and memory sizes from Status to Statistics;
+              take EOF marker into account for file size.
+June 7, 2001: removed extra keypress at viewer help.
+June 17, 2001: corrected time-stamp bug with "%%".
+June 21, 2001: fixed word-count bug with justify_right_margin().
+June 24, 2001: added alignment to month and day names in the timestamp;
+               fixed unwanted movement with FormatParagraph caused by my
+                modified adjust_windows_cursor();
+               added BlockCapitalise (for each word, uppercase first letter,
+                lowercase rest) and tweaked all the functions;
+               added pop-out menus.
+June 26, 2001: played around with the menus.
+
+Uploaded 5.1d.
+
+July 4, 2001: fixed regx_forward_search() bug when on TOF;
+              ToggleSearchCase will rebuild NFA (regx).
+November 21, 2001: fixed case conversion bug when block started beyond EOL;
+                   added ", = whitespace" to regx help screen;
+                   fixed bug with regx '?' followed by bracketed alternatives
+                    (eg. "jn?(e|z)" wouldn't match "jnz").
+November 22, 2001: renamed "full word" to "string";
+                   allow CRLF help files in UNIX;
+                   allow two each comments for syntax highlighting, with four
+                    characters each (pair matching still only uses two).
+December 2, 2001: use my own memory manager.
+December 3, 2001: don't update the memory display when uncopying a line if the
+                   window is invisible - speeds up block operations.
+
+Uploaded 5.1e.
+
+June 23, 2002: fixed a bug in recognizing the second line comment.
+June 30, 2002: allow escape to abort the overwrite/append block write prompt;
+               return the correct code for BlockToFile (macros didn't work);
+               allow multiple letters in the directory list.
+July 21, 2002: fixed apparent Win2K/XP (or 9X) bug with trailing slash in argv0
+                (courtesy of David Hughes);
+               recognize djgpp /dev/ paths in get_full_path().
+July 22, 2002: store full path when renaming;
+               added SaveWorkspace function; load workspace when no parameters.
+July 23, 2002: auto-detect binary files within the editor (disable -b).
+July 27, 2002: modified djgpp's get_full_path() for LFN; should work better in
+                NT/2K/XP now.
+July 30, 2002: fixed window page size bug after resizing and new hidden win.
+August 2, 2002: -w workspace command line option.
+
+Uploaded 5.1f.
+
+August 12, 2002: diff: made ignore end of line default to no (ie: EOL is
+                        significant);
+                       changed macros so semi-colon had to be added (djh);
+                       fixed a bug in (not) ignore blank line (found by djh);
+                       rewrote it a bit.
+August 15, 2002: corrected stream block COPY/KOPY first/last line being
+                  modified (found by djh);
+                 corrected some ruler update problems (found by billyc);
+                 made appropriate stream block lines dirty;
+                 fixed bug with stream destination line after eol.
+August 16, 2002: [src] totally rewrote keyboard processing.
+August 17, 2002: don't crash with missing -w argument and use a signature to
+                  determine valid workspace files.
+August 19, 2002: fix some problems with extended character pseudo-macros;
+                 correct apparent Borland bug in generating tdm filename.
+August 21, 2002: fixed comment bug when reloading a derived language;
+                 fixed bug with tde16 workspace (increased stack).
+August 23, 2002: renamed SetFileAttributes to FileAttributes to avoid Win32
+                  function conflict;
+                 SplitHorizontal moves up a line to prevent the scroll (and
+                  makes it similar to SplitVertical moving back a column);
+                 make the directory list go to the first file if there is no
+                  matching directory.
+                 Finished initial Win32 port. Yay!
+
+Uploaded 5.1g.
+
+August 26, 2002: added Windows clipboard support (djgpp and Win32 only):
+                   Ctrl+Insert: CopyToClipboard
+                   Shift+Ctrl+Insert: KopyToClipboard
+                   Shift+Insert: PasteFromClipboard
+                   Shift+Delete: CutToClipboard
+                   (moved InsertFile to Shift+Alt+Insert);
+                 fixed box case convert bug when ec was at EOL.
+August 27, 2002: fixed the (djgpp) single-character recursive macro recording
+                  bug I introduced in 5.1g.
+August 28, 2002: fixed Win32 dirlist bug;
+                 fixed Win32 (NT?) argv[0] path.
+August 31, 2002: added KeyName config setting to customize menu key strings.
+September 3, 2002: modified keyboard handling to better handle non-US keyboards;
+                   added Scancode config setting to swap keys around;
+                   viewer keys are actual keys, not characters. s+ is now
+                    required (ie: "s+1", not "!"); also keypad won't work, but
+                    neither will capslock affect them.
+September 4, 2002: [src] added cfg_key[] to write the macros.
+September 6, 2002: fixed Win32 single character file finding bug;
+                   removed Horizontal from HorizontalScreen(Left|Right) (and
+                    renamed the functions, as well);
+                   added HalfScreen(Up|Down|Left|Right);
+September 8, 2002: made viewer '[' & ']' use the half-screen functions;
+                   fixed Ctrl+Enter default assignment;
+                   updated Linux port with the new keyboard handling.
+September 9, 2002: [unix] added PC_CHARS define to (not) use PC ROM characters
+                    (so you can use CP437 with graphics characters, or your
+                     current charset with ASCII graphics).
+
+Uploaded 5.1h.
+
+September 10, 2002: fixed config problem (forgot to reorder FileAttributes);
+                    fixed config/tde.cfg - forgot to change ':' to 's+:'.
+September 11, 2002: hide the cursor in the directory list;
+                    added DelBegOfLine (delete from before the cursor to the
+                     first character, then BOL; s+a+-) & EraseBegOfLine (fill
+                     the line with blanks from BOL up to the cursor; s+c+-);
+                    modified WordDeleteBack to join with the previous line;
+                    added AutoSaveWorkspace config setting to automatically
+                     save the workspace in FileAll and QuitAll if TDE was
+                     started via the workspace (default is ON);
+                    [src] renamed mode defines to be the same as the config str.
+                    made s+a+f8/9/10 the default block justify keys.
+September 13, 2002: fixed bug in help screens;
+                    insert/overwrite the tab character properly;
+                    handle tabs better when pasting from the clipboard;
+                    use a successive stream block to mark a line; the third
+                     will now mark a paragraph.
+September 23, 2002: recognise the Menu key as PullDown (not Unix);
+                    allow CopyWord/String as aliases for (Beg)NextLine;
+                    use bright background colors and SpecialMode color instead
+                     of a blinking ModeLine color;
+                    [src] created func_str[] globally, in cfgfile.c.
+September 24, 2002: [src] made FTYPE.fname a pointer instead of array;
+                          strip trailing (back)slash in DOS get_fattr();
+                    made two-keys use keys, rather than characters.
+
+Uploaded 5.1i.
+
+October 7, 2002: fixed blank-line bug with BlockEmailReply (found by djh).
+October 8, 2002: config: renamed keys backspace and tab to bkspace and tabkey.
+October 11, 2002: fixed DelBegOfLine bugs (beyond EOL, blank lines, real tabs);
+                  restore column position after a RestoreLine.
+October 12, 2002: maintain the current position when formatting paragraphs;
+                  Win32: better support for non-US keyboards, hopefully.
+October 19, 2002: Win32: handle AltGr+Left\ better ("<>|" on German keyboard);
+                  dirlister: allow drive selection (":<letter>" or "<letter>:");
+                             display full path initially;
+                             disallow selection of an empty directory.
+October 20, 2002: replaced hw_fattrib() with file_exists() in file.c; also
+                   moved change_mode() into file.c and process_fattr() directly
+                   into change_fattr(); added str_fattr() function;
+                  read-only files are marked as read-only;
+                  allow block appending to read-only files.
+October 21, 2002: allow clipboard functions in prompts;
+                  TrackPath config setting and SetDirectory function
+                   (Shift+Alt+=; File|Set directory) to set cwd to current file;
+                  relocated SaveWorkspace menu item (with the exit functions);
+                  generate a new backup name after SaveAs;
+                  load all command line files relative to starting dir.
+October 23, 2002: allow read-only files (both marked and attribute) to be saved;
+                  [src] added console_{init,suspend,resume,exit} functions and
+                         moved stuff around to take advantage of them.
+                  added -e option to execute a "startup" macro.
+October 24, 2002: modified handling of command line options - can now use
+                   options prior to grep;
+                  if loading files with a specified workspace, auto-save it;
+                  with the advent of -e, and since I have Quit/FileAll, remove
+                   the grep prompt after closing a file;
+                  removed the directory prompt after the file name prompt, when
+                   started with no parameters;
+                  option -G? to display regx help;
+                  [src] made config line_in & line_out arrays.
+October 26, 2002: improved djgpp (tde.exe) & lcc (tde32.exe) signal handling -
+                   can now actually continue or exit with/out traceback.
+October 28, 2002: made filename completion complete prefix before cycling;
+                  made c+home/end Top/EndOfFile, c+pgup/dn Top/BotOfScreen;
+                  added incremental search forward/backward (Shift+Ctrl+S/R;
+                   Search|ISearch >/<);
+                  as a result of above, moved Search|Dirty Line to Move;
+                  made -t default to tab size of 8; allow tabs up to 520;
+                   SetTabs up to screen width (rather than half);
+                  markers will remember the current screen line (cline).
+October 29, 2002: added histories to the workspace;
+                  added basic history completion (using Tab);
+                  disable a previous macro mark when recording a new macro.
+October 31, 2002: added global workspace (automatically save workspace with
+                   FileAll/QuitAll if no workspace was loaded and auto-save
+                   is on; use "tde -w" to load it);
+                  [src] added join_strings() macro to combine two strings;
+                        removed FATAL message;
+                        added SAVE_LINE() and RESTORE_LINE() macros to go
+                         with the DISPLAY_BUFF macro;
+                  [src] replace fgets() with my own read_line().
+November 1, 2002: [src] modified file loading in load_file().
+November 2, 2002: fixed display bug with Statistics, when line length exceeded
+                   number of lines.
+November 3, 2002: fixed bug writing first/last line of a stream block with tabs
+                   (if within a tab, the tab is written, not the spaces);
+                  [src] made the CEH DOS16 only.
+November 4, 2002: should finally have Win32 non-US keyboard working.
+November 5, 2002: improved filename truncation in the header and dirlister;
+                  made the header attr, crlf & length relative to right edge;
+                  display full paths in the header as "name - path";
+                  fixed bug when moving through the history with long prompts;
+                  made maximum tab size 80 (defined as MAX_TAB_SIZE).
+November 6, 2002: [src] use line_out for error messages, taking care not to
+                         exceed screen width;
+                        added get_number() to prompt for numerical values.
+
+Uploaded 5.1j.
+
+December 10, 2002: fixed first page block marker bug;
+                   fixed WordDeleteBack bug on blank lines;
+                   fixed workspace bug loading removed/externally edited file;
+                   have recursive macros successfully end (to allow other
+                    macros to call them and continue);
+                   moving to an off-screen column will move to the end of the
+                    window, instead of the beginning.
+December 11, 2002: isearch backward will leave cursor at start;
+                   allow isearch backward/forward to move to begin/end match.
+February 24, 2003: fixed swap line move down after up display bug;
+                   fixed first page previous position bug;
+                   sort line blocks.
+February 25, 2003: RestoreLine resets modified flag, when appropriate.
+February 26, 2003: added DisplayCWD (cfg) & ToggleCWD (func) to display the
+                    current directory at the top of the screen;
+                   added ScratchWindow function which creates a new window that
+                    doesn't prompt to abandon;
+                   [src] added non_file[] for "(pipe)" and "(scratch)" names.
+February 27, 2003: added NewHorizontal and NewVertical functions to load the
+                    next file instead of splitting the current;
+                   [src] added new_line() and new_line_text() functions to
+                          create a new line structure (with text).
+
+Uploaded 5.1k.
+
+March 1, 2003: [src] tweaked the keyword hashing function;
+               now RestoreLine really resets the modified flag.
+March 2, 2003: added BlockBlockComment, BlockLineComment and BlockUnComment
+                functions (s+c+c, s+c+l, s+c+e);
+               added StreamCharLeft & Right functions (s+left/right);
+               RestoreLine resets the dirty line flag.
+March 3, 2003: added EndNextLine function (and rewrote help to accomodate it
+                and the stream functions; s+c+enter);
+               added -n option to create a scratch window or load the pipe as a
+                scratch window.
+               [src] added cmdline flag to update arg in attempt_edit_display;
+March 4, 2003: added DynamicTabSize (s+c+tabkey) to interactively choose it;
+               check syntax highlighting after indenting.
+March 5, 2003: fixed real tab Tab and BackTab after RestoreLine;
+               added FillBlockDown (duplicates the first line; s+c+f) and
+                FillBlockPattern (fills with a repeating string; c+a+f);
+               added BorderBlockEx (multiple characters, optional; c+a+b);
+               added warning if the box block isn't big enough for at least the
+                corners of the border.
+
+Uploaded 5.1l.
+
+March 11, 2003: diff: treat a longer file as a difference;
+                allow EOF as a valid command line line number.
+March 16, 2003: [src] get_name() returns the length of the answer;
+                recognise DelEndOfLine and DelBegOfLine in prompts.
+March 17, 2003: fixed bug sorting line blocks.
+March 18, 2003: [src] added BRIEF option to the makefiles (comment it to see
+                       the compiler commands);
+                      made no PC_CHARS the default;
+                SaveTo: save the file to a new name, keep current name in TDE
+                        (s+c+f2);
+                SaveUntouched: preserve the timestamp when saving (s+a+f2);
+                backup files preserve the timestamp;
+                Revert: discard current changes and reload file (s+a+f4).
+March 20, 2003: removed time from Statistics and added file time to Status.
+March 21, 2003: [src] removed all FAR references.
+March 22, 2003: [src] removed some redundant strings and made some vars static;
+                      a bit more MSC-friendly;
+                fixed bug with -r not loading the pipe read-only.
+March 23, 2003: display read-only '!' beside the modified flag;
+                use '#' to indicate a scratch window;
+                renamed NewHorizontal/Vertical to Make... - it now resizes the
+                 current window with any other hidden window;
+                added SplitHalfHorizontal, et al, to split the window in half,
+                 irrespective of cursor position.
+March 24, 2003: SplitHorizontal preserves the top and bottom lines;
+                zooming and closing windows will keep screen pos, if possible.
+March 25, 2003: SplitVertical preserves the left and right columns;
+                [src] added some "const correctness";
+                      removed obsolete/duplicated prompts;
+                fixed bug when zooming one-line windows with the ruler.
+March 26, 2003: fixed non-English bug in caseless searches.
+March 27, 2003: [src] added check_cline() to update & ensure cline's integrity;
+                      added first_line() to move to line 1;
+                only move to marker's cline if rline is off-screen;
+                fixed marker ruler bug.
+March 29, 2003: [src] removed parameter from show_{file,window}_count();
+                      fixed bug with Statistics using wrong pointers.
+March 30, 2003: [src] fixed bug with update_line() (wrong pointer; thanks
+                       to Arnold Wiegert for pointing it out);
+                corrected position of binary offset (for other than 80 cols).
+March 31, 2003: [src] added text_t typedef;
+                      removed tof & eof from mode_infos, added to prompts;
+                the pipe is always scratch;
+                added numbered scratch windows;
+                added TitleWindow function (c+`) and -c command line option to
+                 allow user-defined window names.
+April 1, 2003: fixed bug with loading workspaces.
+April 3, 2003: Linux: made Latin-1 character definitions - sort might be wrong;
+               [src] moved sort_order from global.c to prompts.c;
+               prevent repeating the currently recording macro.
+
+Uploaded 5.1m.
+
+April 5, 2003: fixed bug displaying BIN offset (5.1m refresh).
+April 11, 2003: fixed bug with shl string/character spanning.
+July 11, 2003: fixed bug with regx classes not ignoring case.
+July 18, 2003: "spanline" will complain if nothing is after it;
+               fixed bug reloading a language;
+               fixed bug when completing long names.
+July 30, 2003: added "-s" option to load a file as scratch (prompts to save,
+                not to abandon);
+               [src] added option_infos structure to store some command line
+                      options;
+               modified command line options to handle "one-off" options and
+                apply to previous file; options for the pipe must use the
+                previous style (uppercase or -<pos>);
+               fixed bug with JoinLine not updating syntax.
+
+Uploaded 5.1n.
+
+August 20, 2003: fixed bug with empty command line arguments ("") causing
+                  tde{,32} to hang (infinitely read from stdin) (pointed out
+                  by David J Hughes).
+22 September, 2003: treat backspace as a text character in binary testing.
+October 26, 2003: fixed -e to have local and global macros;
+                  added Execute function (s+a+e; Other|Execute) to run commands;
+                  fixed bug with DelBegOfLine not scrolling;
+                  RestoreLine should finally restore the modified flag properly;
+                  fixed bug with config tab setting if no files given.
+October 27, 2003: ignore invalid command line filenames on all systems;
+                  inserting into a file with shl tested one line too many;
+                  fixed long-standing bug with replace when the first match was
+                   found after wrapping;
+                  added colors for: menu header, selected menu, menu, menu item,
+                   dialog, swap, break point and CWD.
+                  [src] changed order of colors.
+October 28, 2003: [src] added relative_path() function to utils.c;
+                  if the relative path is more than one subdirectory from the
+                   current directory use the split form; use drive letter;
+                  [src] removed the colors from g_display, instead using a
+                         pointer into the colours array, with macros;
+                  fixed bug with -s applying to files loaded within the editor;
+October 29, 2003: reload a file if time is different (not just newer);
+                  search highlight.
+October 30, 2003: slight speed improvement in finding regx ^ operator;
+                  fixed crash caused by workspace scratch as current window;
+                  fixed bug with -v -r- not loading file as read-write;
+                  fixed bug with DelBegOfLine beyond EOL not matching indent.
+
+Uploaded 5.1o.
+
+November 14, 2003: (Back)Tab set modified flag immediately;
+                   RestoreLine works a bit better (making changes after
+                    restoring will correctly restore the original);
+                   StreamCharLeft will treat beyond EOL as EOL;
+                   NextLine: corrected problem with FW mode;
+                   recording Pause in a prompt will indicate as such;
+                   don't display halt message when recording Pause.
+November 15, 2003: replaced prompt Tab history completion with Ctrl+Up/Down;
+                   allow filename completion with Execute;
+                   added dialogs;
+                   replace individual margin functions with SetMargins.
+November 16, 2003: fixed some problems with BorderBlockEx;
+                   added zero fill option to NumberBlock;
+                   Execute with a blank command will run the shell;
+                   added regx search/text replace;
+                   [src] removed g_status.pattern (use found_len instead);
+                         insert_node increases file's length;
+                   added search results (DefineSearch and the grep functions
+                    will create a window containing all matching lines);
+                   tweaked the grep functions error message;
+                   added h_fill for FillBlockPattern;
+                   Next/PrevBrowse (c+f7/8) functions to browse output/results.
+November 17, 2003: finding a window without a letter will find first (visible)
+                    window (using new function find_file_window);
+                   [src] made ptoul local to memory.c.
+November 18, 2003: [src] added c_repeat function to output a char many times;
+                         moved (window_)eol_clear to hwind.c.
+November 19, 2003: [src] added n_output function to display a number;
+                         added create_frame function to create/display border;
+                   added base option to NumberBlock;
+                   using (Stream)DeleteChar first in the prompt will clear the
+                    previous answer.
+November 20, 2003: fixed bug with backward isearch copying word;
+                   corrected tab problems with isearch & search highlight;
+                   replace the match at the cursor first, not last;
+                   fixed replace wrap problems I introduced last version.
+November 21, 2003: fixed SplitHorizontal on EOF and SplitHalfHorizontal on
+                    small files and all splits on a modified line.
+November 23, 2003: ignore FileAttributes on non-file scratch windows;
+                   fixed some more long prompt problems;
+                   Linux: restore cursor after ToggleGraphicChars.
+November 25, 2003: Linux: better handling of keys in xterm (no curses_to_tde);
+                          added bright background and overscan color (console
+                           mode and root privileges);
+                   restore overscan color for shell/user screen.
+November 26, 2003: search/replace across all files (ignoring non-files);
+                   fixed display bug with prompted replace and wrap/exit.
+November 28, 2003: fixed replace tab problems;
+                   removed DefineRegXGrep (added RegX option to DefineGrep).
+November 29, 2003: (Back)Tab will work in read-only mode (move the cursor);
+                   added User menu, created by UserMenu config/syntax setting;
+                   disable menu items that don't apply;
+                   [src] renamed read_only_func to func_flag, modified meaning.
+November 30, 2003: ReadConfig will now update the menu;
+                   DefineDiff will warn if windows are identical;
+                   fixed regx error message output for other than normal find.
+December 2, 2003: reloading a language resets all its information;
+                  place line number from the command line in center of window;
+                  free memory used by grep;
+                  added file time to directory list and displayed hidden and
+                   system files in the disabled dialog color; left and right
+                   will wrap similar to up and down.
+December 3, 2003: restore overscan color for signal exit;
+                  press Tab in the dir list to select a new path/pattern;
+                  fixed {Word,String}(End)Left problems beyond EOL.
+
+Uploaded 5.1p.
+
+December 11, 2003: fixed Win32 wildcard searching.
+December 13, 2003: fixed copying a stream block;
+                   history completion will display original case when ignoring;
+                   history completion will match current line if only match;
+                   display cwd in a dialog at the bottom of the screen;
+                   fixed grep display bug if match was on first page (since j).
+
+Refreshed 5.1p.
+
+December 15, 2003: fixed menu when function has no key.
+July 14, 2004: fixed "not defined" bug with initial regx DefineSearch/Replace;
+               fixed search results duplicating current match (first & last);
+               fixed macro not removing search highlight;
+               fixed StreamCharLeft beyond EOL on blank lines;
+               Status will display nothing for file time of new files;
+               allow browsing a results window from a non-file or name w/spaces.
+July 15, 2004: QuitAll no longer auto-saves the workspace;
+               added SaveAll function, to save all files (not scratch or ro);
+               modified default file location: *all* systems will now use:
+                 TDEHOME environment variable;
+                 HOME environment variable;
+                 or path of executable;
+               recognise "/?" as help;
+               -a option to load all files immediately.
+July 16, 2004: stopped grep prompting when using EditNextFile;
+               added "Load all" option to DefineGrep;
+               recognise -s-;
+               SaveTo can append to existing file;
+               fixed command line grep changing path;
+               fixed cwd display when loading next file after closing last.
+
+Uploaded 5.1q.
+
+August 2, 2004: fix shelling on the NT family when TDE32 is redirected;
+                changed regx help from "predefined macro" to "predefined
+                 character set".
+July 5, 2005: fixed grep crashing on inaccessible files found via wildcard;
+              Win32: fixed Ctrl+C et al after shelling;
+              close find handle after filename completion;
+              added default keys: s+c+m ClearAllMacros
+                                  s+c+i ToggleSmartTabs
+                                  c+space PseudoMacro
+              Win32: display filename as console title;
+                     different method for shelling, so history works;
+                     recognise shutdown and close.
+July 6, 2005: Win32: preserve cwd across drive changes;
+              replacing then quitting at wrap would leave cursor wrong;
+              stopped results search wrapping when starting from line 1;
+              fixed replacing a regx pattern ending in '>'.
+July 7, 2005: fixed my fix to regx '?';
+              fixed backspace beyond EOL using up/down cursor direction;
+              prevent DeleteChar beyond EOL from saying file is modified;
+              fixed diff not ignoring trailing space when ignoring all space;
+              stopped -F and -G applying to previous file.
+              remove search highlight from grep when loading all;
+              stop infinite loop when formatting paragraph terminated by EOF;
+              stop infinite loop when formatting paragraph with line too long;
+              fixed backspace sometimes not matching indent (tab/len problem);
+              fixed block comment/indent not updating binary offset.
+July 8, 2005: Workspace: don't detect binary files;
+                         set stamp format;
+                         restore scratch windows and files;
+              fixed the make window menu not updating availability;
+              don't display base offset (+ofs) if it means truncating line.
+July 9, 2005: fixed bin offset when replacing from TOF;
+              macro: fixed function keys in dialogs;
+                     fixed writing pseudomacros triggered by semicolon or quote;
+                     config no longer converts key to function (for dialogs);
+                     recursive macros are written using PlayBack;
+                     ReplaceString only ERRORs on control-break;
+                     flags: Wrap: searches can wrap;
+                            NoWrap: searches stop at EOF;
+                            NoWarn: don't display warnings;
+                            NeedBlock: abort if no block is marked;
+                            NeedBox/Line/Stream: abort if not block type;
+                            UsesBlock: preserve current block;
+              double line block can mark a group of blank lines.
+July 10, 2005: a twokey can be defined with '^' to indicate both normal and
+                control keys are accepted (eg: c+k ^a is both c+k a & c+k c+a);
+               Pause an entire dialog, not just the current edit field;
+               increase maximum help screen size to 100x50;
+               End functions really move to end, not last character
+               added Help menu;
+               new functions: About displays credits (no key, on Help menu);
+                              MoveMark moves block mark to cursor (s+c+m);
+                              StartOfLine moves to first column (s+home);
+                              ContextHelp provides a help window (s+c+f1);
+                              PopupRuler is a movable ruler (c+=).
+July 11, 2005: removed config/tdefunc.cfg;
+               copying a word with syntax highlighting will use inword setting;
+               DOS & Windows will only use HOME if tde.cfg exists in it.
+July 14, 2005: isearch: fixed highlight after backspace;
+                        backwards will match current string;
+               using MarkLine after MarkStream will mark a STREAM block using
+                the entire line;
+               added block size to Status.
+July 15, 2005: fixed single-line STREAM search/replace and BOX regx replace;
+               fixed STREAM copy when source and dest were on the same line.
+July 18, 2005: Regx: fixed "<r|s" not matching correctly (& not just for '<').
+July 21, 2005: GotoMark<n> will move to the <n>th edit field in a dialog;
+               UsesDialog macro flag will stop dialog resetting itself;
+               added config/wordstar.cfg (and its help) by Eric Pement;
+               added menucua.c to the source distribution, also by Eric.
+July 22, 2005: all menus are customisable.
+July 24, 2005: added config/cua.cfg to the distribution;
+               new fn: BalanceHorizontal to make all windows with same
+                        left/right as current the same height (s+c+h).
+July 26, 2005: new fn: BalanceVertical to make all windows with same
+                        top/bottom as current the same width (s+c+v).
+July 27, 2005: new fn: CloseWindow to close the window, not necessarily the file
+                        (zoomed) or hide the window (split) (s+c+f3).
+July 28, 2005: fixed problem with workspace when language couldn't be found.
+July 29, 2005: fixed menu items running out of letters;
+               Win32: fixed shell when redirecting output;
+               regx replacement now recognises backslashed escapes: normal C
+                escapes and '+' to upcase, '-' to locase and '^' to capitalise
+                the first 9 bracketed expressions or & for the entire match.
+                Eg: pattern = ^.*$, replacement = "\+&", will add quotes around
+                every line and make it uppercase.
+July 30, 2005: regx: added nine backreferences. eg: "(abc|def)\1" will match
+                      "abcabc" or "defdef" but not "abcdef".
+July 31, 2005: wildcards can have alternatives (*.txt;*.doc) and exclusions
+                (!*.exe;*.com); UNIX can use ':' as separator.
+August 1, 2005: allow top window to be resized;
+                regx: predefined sets use uppercase to match if not in set.
+August 3, 2005: regx: ',' is space & tab (POSIX [:blank:], but "\:b" is space
+                 and chars 9 to 13 (POSIX [:space:]).
+August 7, 2005: directory wildcards and subdirectory scanning (using "..." as
+                 path, eg: ".../*.c").
+August 10, 2005: [src] added my_strdup;
+                 display "changed" when browse loads a file.
+August 11, 2005: regx: added "<<" and ">>" for beginning and end of string;
+                       allow C escapes in sets;
+                       don't match the empty string if a character is present
+                        (ie: effectively makes "c*" "c+" and "c?" "c").
+August 15, 2005: improved pasting from clipboard.
+August 16, 2005: -b! will ignore binary files, -ve number will not prompt;
+                 slightly different test for binary;
+                 fixed wordwrap bug when wrapping first word of paragraph.
+August 17, 2005: highlight label of current edit field (co80_EditLabel);
+                 regx: added closing lookahead assertion.
+August 19, 2005: added wildcard help (for grep & "-??");
+                 added "--version".
+September 8, 2005: fixed HTML pseudo-macro cursor position when window scrolls.
+September 9, 2005: regx: allow predefined character sets in classes;
+                         operators are greedy by default, use following '?' for
+                          not greedy (eg: "<.*?>").
+September 18, 2005: specifying a directory on the command line will bring up
+                     the file list for that directory;
+                    EditFile displays warning for an invalid filename/path;
+                    prompts using file history will expand leading "~/" (or "~\"
+                     if not UNIX) to TDE's home directory.
+September 22, 2005: don't disable ZoomWindow on the menu;
+                    don't update dialog items if the dialog's not yet drawn;
+                    fixed certain prompts from displaying in macros (via new
+                     prompt_key function).
+
+Uploaded 5.1r.
+
+October 15, 2005: Win32: mouse in editor window can move cursor (left-click),
+                          move & mark block (left-click + Alt=Box, Ctrl=Line,
+                          Shift=Stream), PasteFromClipboard (right-click);
+October 17, 2005: DOS: fixed DR-DOS compatibility issue (truename didn't like
+                        trailing slash, stuffed up directory list).
+October 18, 2005: fixed ancient bug replacing tabs in inflate mode;
+                  fixed prompted replacement when pattern not found (tab issue);
+                  fixed search results in scratch window occasionally crashing
+                   (problem with relative_path not having filename);
+                  regx will again find empty matches, which can be replaced;
+                  DOS/Win: assume trailing quote in last command line argument
+                            should be a backslash (`"dir\"' == `dir\' ! `dir"');
+                  fixed dialogs and prompts started from single-key macros;
+                  treat single-key macros as keys, not macros.
+October 19, 2005: don't prompt for filename when command line had an invalid
+                   filename or directory list was cancelled;
+                  Binary checkbox for DefineGrep to include binary files (auto-
+                   load using value of -b);
+                  command line grep will recognise -b option;
+                  fixed -b! & -b-N applying to files loaded within the editor;
+                  fixed -b-N not actually using N;
+                  fixed "~/" from sometimes bringing up the directory list.
+
+Uploaded 5.1s.
+
+October 27, 2005: stopped binary length always defaulting to 64 from EditFile;
+                  Win32: fixed mouse on piped input.
+November 3, 2005: fixed some Linux compile issues.
+November 29, 2005: replaced quicksort with merge sort;
+                   stopped grep from preventing EditFile working;
+                   fixed RepeatGrep not properly defining the regx grep;
+                   fixed block uncomment when start & end were the same;
+                   fixed more tab replacement problems.
+December 17, 2005: make checkboxes work when function keys are macros;
+                   fixed instance of "wrapped" being displayed with NoWrap.
+December 22, 2005: fixed more block uncomment problems (single-line stream;
+                    end comment incorrectly found as part of begin);
+                   write a macro literal straight after its presumed function;
+                   split a macro literal at "\n".
+
+Uploaded 5.1t.
+
+January 2, 2006: fixed empty replacement at start of line in tab mode.
+February 19, 2006: Win32: function ToggleQuickEdit (c+a+q, no menu) & config
+                           QuickEdit (on/off) to control QuickEdit mode;
+                          mouse can change window.
+August 27, 2006: make BlockTrimTrailing and BlockExpandTabs work better;
+                 sorting will no longer corrupt tabs.
+August 28, 2006: allow macros to continue after infinite repeat;
+                 Win32: icon and version information;
+                        [src] VC project file, thanks to David Hughes;
+                 fix recording a recursive single-key macro;
+                 fix repeating a recursive macro;
+                 fix macro that repeats a macro.
+August 29, 2006: GotoWindow ignores case when matching name (except for Unix)
+                  and will match the current name;
+                 Directory list: use "File name" instead of "Selected file";
+                 GotoWindow with empty answer will bring up window list;
+                 [src] hacked the directory list to use as the window list.
+September 13, 2006: SyntaxSelect with empty answer will bring up language list;
+                    [src] more hacking of the directory list.
+September 14, 2006: DelBegOfLine didn't update syntax when it scrolled.
+September 15, 2006: added InflateTabs, PTabSize & LTabSize settings to syntax.
+
+Uploaded 5.1u.
+
+September 19, 2006: fixed potential problem closing hidden windows (VC-compiled
+                     version crashes).
+September 20, 2006: fixed macros that ask to wrap.
+April 1, 2007: fixed SuSE/KDE keyboard problems (more escape sequences).
+April 22, 2007: Win32: fixed Ctrl+C on Win9X.
+April 30, 2007: always say the backup succeeded, to avoid a deadlock.
+May 1, 2007: pad search results line numbers to current file length and column
+              numbers to two digits;
+             browser can handle "filename(line)" and "filename [line]";
+             corrected scratch numbering (due to closing out of order);
+             fixed potential problem when closing a split browser window;
+             adjust (visible) window letters after closing;
+             display a message when globbing "...".
+
+Uploaded 5.1v.

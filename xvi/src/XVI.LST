@@ -1,0 +1,528 @@
+
+
+
+XVI(1)                   USER COMMANDS                     XVI(1)
+
+
+
+NAME
+     xvi - multi-file text editor
+
+SYNOPSIS
+     xvi { -s  _p_a_r_a_m_e_t_e_r-_a_s_s_i_g_n_m_e_n_t  }  [  -t  _t_a_g  |  +_n_u_m_b_e_r  |
+     +/_p_a_t_t_e_r_n ] { _f_i_l_e_n_a_m_e ...  }
+
+DESCRIPTION
+     Xvi (pronounced _e_c_k_s-_v_e_e-_e_y_e) is a  free,  portable,  multi-
+     window  implementation  of the popular vi(1) editor.  It has
+     some useful enhancements, although, as described below,  not
+     all  of  vi's  features  have been implemented yet, and some
+     things work differently from vi.
+
+OPTIONS
+     The following command-line options are available:
+
+     -s _p_a_r_a_m_e_t_e_r-_a_s_s_i_g_n_m_e_n_t
+	  Set the value of the specified  parameter  at  startup.
+	  The  assignment  has  the same form as when given as an
+	  editor command, i.e:
+
+	  _n_a_m_e=_s_t_r_i_n_g
+	       for string parameters
+
+	  _n_a_m_e=_n_u_m_b_e_r
+	       for numeric parameters
+
+	  _n_a_m_e to turn a Boolean parameter on
+
+	  no_n_a_m_e
+	       to turn a Boolean parameter off
+
+     -t _t_a_g
+	  Edit the file containing the  definition  specified  as
+	  _t_a_g, at the start of the definition (as per vi).
+
+     +_n_u_m_b_e_r
+	  Go to the specified  line  number  of  the  file  being
+	  edited.
+
+     +/_p_a_t_t_e_r_n
+	  Go to the first occurrence  of  the  specified  _p_a_t_t_e_r_n
+	  within the file being edited.
+
+     The -r command line option is not supported.
+
+ENHANCEMENTS
+  Multiple buffers and windows
+     A _b_u_f_f_e_r is the  internal  object  which  holds  a  file  in
+     memory,  while a _w_i_n_d_o_w is an area of the screen which shows
+     part of a buffer.  Every window references a buffer, even if
+
+
+
+Unix                 Last change: 19/6/1992                     1
+
+
+
+
+
+
+XVI(1)                   USER COMMANDS                     XVI(1)
+
+
+
+     no  file  is  being  edited.   The  following  commands  are
+     available for operating on buffers and windows:
+
+     :buffer
+	  create a new buffer in a new window; can be followed by
+	  a filename, which will be edited in the new buffer.
+
+     :split
+	  create a  new  window  on  to  the  current  buffer  by
+	  splitting   the   current  window  in  half.   The  two
+	  resulting windows are similar  to  _v_i_e_w_p_o_r_t_s  on  to  a
+	  single  editing  buffer,  in  that  changes made in one
+	  window are reflected in the other one.
+
+     :close
+	  close the current window; will also close the buffer if
+	  this is the last window on to it.
+
+     :x / ZZ
+	  close only the current window.  If the  window  is  the
+	  only one on to the buffer, the buffer will be closed as
+	  well, writing it first if it is modified.
+
+     g    move to the next window.
+
+     ^W   increase the size of the current window (may be given a
+	  numeric prefix, default is one line).
+
+     ^T   decrease the size of the current window (may be given a
+	  numeric prefix, default is one line).
+
+     ^O   make the current window as large as possible.
+
+     ^]   as  for  vi,  but  create  a  new  buffer   window   if
+	  appropriate (and if autosplit allows).
+
+     Note that the :quit command quits out of the editor, not out
+     of  a  window.  The :close command is thus the equivalent of
+     :quit for windows.  There is no equivalent of :x or  ZZ  for
+     the whole editor; these have been hijacked for operations on
+     windows.
+
+     The numeric autosplit parameter specifies the maximum number
+     of   buffer  windows  that  will  be  created  automatically
+     whenever you either edit more than one file, or use tags  to
+     edit a different file.
+
+     Undo works per buffer, as do marks; yank/put and redo (the .
+     command) work over all buffers, i.e. you can delete from one
+     buffer and put the text into a different buffer.
+
+
+
+
+
+Unix                 Last change: 19/6/1992                     2
+
+
+
+
+
+
+XVI(1)                   USER COMMANDS                     XVI(1)
+
+
+
+  File preservation
+     Rather than use vi's Unix-specific method for  preservation,
+     xvi  does periodic preservation of all files currently being
+     edited into temporary files in the same directory.  It tries
+     to  do this when you aren't typing, so that you won't notice
+     the short delay when the  temporary  file  is  written  out.
+     Obviously, only changed files are preserved in this way, and
+     the temporary file is removed once the real  file  has  been
+     successfully written.
+
+  8-bit character support
+     Characters with the top bit set are accepted by xvi, but  it
+     is  not  yet  possible  to  have null ('\0') bytes in a file
+     buffer.  How characters are displayed can be  controlled  by
+     the  cchars  and  mchars  parameters,  which,  if set, cause
+     control  and  meta-characters  respectively  to  be   output
+     unchanged;   otherwise   they  are  shown  as  sequences  of
+     printable characters.
+
+     Tabs are normally displayed as a series  of  spaces  of  the
+     appropriate  length  (according  to the tabstops parameter);
+     setting list mode will cause them to be displayed as control
+     characters,  as  will unsetting the tabs parameter.  How the
+     tab character is displayed is then under the control of  the
+     cchars parameter.
+
+     You can use the ^_ (control-underscore) command to flip  the
+     top  bit  of  the  character  the cursor is on.  This may be
+     useful on systems where it is otherwise impossible to  enter
+     8-bit characters.
+
+  File formats
+     Xvi can read and write text files in non-Unix formats.   The
+     current   format  is  given  by  the  value  of  the  format
+     parameter, which may be set to "unix", "msdos", etc.  To see
+     a list of available formats, type
+
+	  :se fmt=?
+
+  Extended regular expressions
+     vi's  magic  parameter  is  superseded  by   the   regextype
+     parameter, which can take the following values:
+
+     tags only ^ and $ are significant (used for tags)
+
+     grep like grep(1), but with \< and \> added
+
+     egrep
+	  like egrep(1), but with \< and \> added
+
+     The default is grep.
+
+
+
+
+Unix                 Last change: 19/6/1992                     3
+
+
+
+
+
+
+XVI(1)                   USER COMMANDS                     XVI(1)
+
+
+
+     Note that it is still possible to set or unset magic  as  in
+     vi;  this  will  simply  result  in  regextype  being set as
+     appropriate.
+
+     The sections and paragraphs  parameters  define  egrep-style
+     patterns  to  search  for,  rather than vi's simplistic (and
+     troff-dependent) character pairs.
+
+  Improved replace mode
+     The R command acts more intelligently when you press  return
+     -  it  leaves  the  rest of the current line alone, and just
+     starts replacing text on the  next  line,  starting  at  the
+     screen column where you first typed R.
+
+  Command re-execution
+     As well as the normal named  (conjugate)  buffers,  and  the
+     default  one (named @), there exist several extra ones named
+     :, /, ? and !, which contain the last command lines typed to
+     each  of  the  given commands.  So for instance, @: will re-
+     execute the last ex command, or you can insert it into  your
+     buffer, edit it and then re-execute it (e.g. with dd@@).
+
+  Jumpscroll
+     When multiple windows are used, xvi normally has to be  able
+     to  scroll  individual  windows  without scrolling the whole
+     screen.  This can be very inefficient on  terminals  without
+     scrolling  regions,  so the jumpscroll parameter is provided
+     to control the editor's scrolling behaviour.  It can be  set
+     to one of:
+
+     off  When the cursor moves outside  a  window's  boundaries,
+	  and  the  new  position is near enough, the window will
+	  scroll to the new position.
+
+     on   When the cursor moves outside  a  window's  boundaries,
+	  the window will always jump to the new position.
+
+     auto A window will scroll only if it can do so  efficiently;
+	  otherwise it will jump.
+
+     The default value is auto.
+
+     On  ISA-type  systems  which  have  memory-mapped  displays,
+     hardware    character   generators   and   reasonably   fast
+     processors, jumpscroll  should  generally  be  set  to  off;
+     however,  on LCD screens or other displays with a long image
+     persistence, this may actually make the text more  difficult
+     to  read,  and  many  users  may be more comfortable with it
+     turned on.
+
+     Explicit scroll commands (e.g.  ^D and ^E) are not  affected
+     by the jumpscroll parameter.
+
+
+
+Unix                 Last change: 19/6/1992                     4
+
+
+
+
+
+
+XVI(1)                   USER COMMANDS                     XVI(1)
+
+
+
+  Colour
+     There are four new parameters to control screen colours:
+
+     colour      colour used for text
+
+     statuscolourcolour used for status lines
+
+     roscolour   as statuscolour, but for readonly files
+
+     systemcolourcolour used for system mode (i.e. subshells  and
+     after termination)
+
+     These parameters are numeric, and the value means  different
+     things  on  different  operating systems.  On Unix, it is an
+     index into the termcap(5) entries "c0" to  "c9",  which  are
+     assumed  to  be  colour-setting escape sequences if they are
+     present.  If they are  not  present,  "so"  (begin  standout
+     mode) and "se" (end standout mode) are used instead.  Values
+     of 0 and 1 give  normal  text,  whereas  2  and  above  give
+     standout mode.
+
+     The  default  colour  for  the  roscolour   parameter   will
+     generally  involve  red  if  colours  are available; this is
+     intended to provide a warning to the user that  writing  the
+     file may not be possible.
+
+  On-line help
+     A primitive help facility is available;  the  :help  command
+     simply  creates  a  new  buffer window on to a standard help
+     file.  The name of the file which is edited is given by  the
+     helpfile  string  parameter; the default on Unix versions is
+     "/usr/lib/xvi.help".  Note that the help file buffer will be
+     marked  "not  editable"  when  it is created, which prevents
+     accidental overwriting of the help file even when  the  file
+     permissions would allow it.
+
+  Miscellaneous
+     The command :wn (write file and edit next) is  provided,  as
+     in PC-vi.
+
+     The new edit parameter controls  whether  a  buffer  can  be
+     modified.   This may be used to implement a nicer version of
+     view(1) than the standard vi version, since  it  won't  fool
+     you  into  thinking  that  editing  the buffer is in any way
+     safe.  Be warned: once having set noedit, it is not possible
+     to do a :set edit any more.  It's a one-way street.
+
+     In insert and replace modes, ^A has the same meaning  as  ^@
+     in  vi,  except  that it works at any time, not just for the
+     first character.  Also, typing ^B_x where _x is the name of  a
+     conjugate  buffer,  inserts the contents of that buffer into
+     the input stream at that point.  The buffer named  <  always
+
+
+
+Unix                 Last change: 19/6/1992                     5
+
+
+
+
+
+
+XVI(1)                   USER COMMANDS                     XVI(1)
+
+
+
+     contains the last thing inserted, so that ^B< is the same as
+     ^A.
+
+LIMITATIONS
+  Ex mode
+     The main area in which xvi is lacking is vi's ex mode, which
+     is  not implemented at all (and neither are edit, e, or open
+     modes).  However, many of the ex commands are  available  in
+     vi  mode as colon commands; the colon commands that have not
+     been implemented are  mostly  those  which  offer  the  same
+     functionality as other commands in vi mode.
+
+     In particular, abbreviate, append, change, ex, insert, join,
+     open, recover, unabbreviate, undo, write>>, z and | have not
+     been implemented as colon commands yet.
+
+  Vi mode
+     In vi mode, the  U  and  =  commands  are  not  implemented,
+     although  there  is  no  real  reason why they shouldn't be,
+     whilst Q is inappropriate in the context of xvi, since there
+     is no ex mode.
+
+  Parameters
+     Many of vi's  parameters  have  not  been  implemented;  the
+     command  :se all gives a complete list, with current values,
+     of those that have been.
+
+  Miscellaneous
+     Repeat counts before insertions don't work.
+
+     Appending to named buffers is not yet implemented.
+
+     Typing ^Q in input mode does not mean the  same  as  ^V;  it
+     just  inserts  a `^Q', assuming it gets as far as the editor
+     at all.
+
+     Typing ^W in insert mode does not back up one word as in vi.
+
+     It is not possible to  interrupt  the  editor  while  it  is
+     performing  certain  operations.   If  you  start  off a big
+     global command, you have to wait for it to finish.
+
+     Flags and counts after ex mode commands are not supported.
+
+     It is not possible to read the output of  a  system  command
+     using
+
+	  :r !_c_o_m_m_a_n_d
+
+     or to write into a command using
+
+	  :w !_c_o_m_m_a_n_d.
+
+
+
+Unix                 Last change: 19/6/1992                     6
+
+
+
+
+
+
+XVI(1)                   USER COMMANDS                     XVI(1)
+
+
+
+     Regular expressions, although implemented  (see  above),  do
+     not  support the ~ metacharacter; also, the \u and \l escape
+     sequences  are  not  supported  in  substitute   replacement
+     patterns.   Newlines  included  on  the right hand side of a
+     substitution do not currently cause the line  to  be  split;
+     the newline character is literally inserted into the line.
+
+     The :global command only supports the commands [lps&~d].
+
+OTHER DIFFERENCES FROM VI
+     The XVINIT environment variable is read instead  of  EXINIT.
+     Whilst no files are sourced automatically, users who wish to
+     have a startup file can arrange it very  easily.   sh(1)  or
+     ksh(1) users should add this line to their $HOME/.profile:
+
+	  XVINIT='source _x_v_i-_s_t_a_r_t_u_p-_f_i_l_e'; export XVINIT
+
+     csh(1) users should add this to their $HOME/.login:
+
+	  setenv XVINIT 'source _x_v_i-_s_t_a_r_t_u_p-_f_i_l_e'
+
+     The tags parameter can be  used  to  specify  multiple  tags
+     files;  these  can  be separated by either ``\ '' (backslash
+     space) or ``,'' (comma).
+
+     Alternate files are handled slightly differently,  owing  to
+     the  presence  of  buffer and window handling.  Essentially,
+     when you close a buffer, its filename is remembered  as  the
+     alternate  file;  when  you  invoke the ^^ or :e # commands,
+     this file is re-edited.  Note that ^^  edits  the  alternate
+     file in a new buffer window, if autosplit allows.
+
+     Hitting the escape key while in the command  line  does  not
+     terminate  input;  instead,  it cancels input, returning the
+     prompt to the beginning of the line.  This applies to  input
+     for :, /, ? and !.
+
+FILES
+     /usr/lib/xvi.helpDefault help file.
+
+SEE ALSO
+     ex(1), vi(1), termcap(5).
+     _S_u_m_m_a_r_y _o_f _D_i_f_f_e_r_e_n_c_e_s _b_e_t_w_e_e_n _V_i _a_n_d _X_v_i.
+
+BUGS
+     o+    When the cursor is on the last word of  a  buffer,  the
+	  command  dw  leaves  the  last  character  of  the word
+	  undeleted.
+
+     o+    Some screen updates do  not  get  shown  properly  when
+	  buffers  are  split, and certain commands (e.g.  x) are
+	  executed.
+
+
+
+Unix                 Last change: 19/6/1992                     7
+
+
+
+
+
+
+XVI(1)                   USER COMMANDS                     XVI(1)
+
+
+
+     o+    If you do something like cf.WORD<_e_s_c> and then redo it,
+	  and  the  f.  fails,  then  the WORD<_e_s_c> gets taken as
+	  normal input.  The rest of the input should  really  be
+	  cancelled when part of a redo fails.
+
+     o+    A command of the form :/pat/;+1m. will not work because
+	  the  editor  incorrectly  detects  a  conflict  between
+	  source and destination.
+
+     o+    The editor in its present form is very  inefficient  in
+	  terms of CPU cycles.
+
+     o+    Most termcap(5) terminal descriptions are  only  tested
+	  with  vi(1)  (and possibly rogue(6)).  Since xvi is, in
+	  some ways, more demanding than vi in its use of termcap
+	  capabilities, it sometimes exposes bugs or inadequacies
+	  in  termcap  entries.   This  applies   especially   to
+	  scrolling regions.
+
+AVAILABILITY
+     Xvi has been ported to MS-DOS, OS/2, QNX and many  different
+     versions  of  Unix.   Source  code  is  available  from  the
+     authors.
+
+AUTHORS
+     Chris and John Downey.
+
+     Derived from  STEVIE,  written  by  Tim  Thompson  and  Tony
+     Andrews.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Unix                 Last change: 19/6/1992                     8
+
+
+

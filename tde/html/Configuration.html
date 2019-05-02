@@ -1,0 +1,212 @@
+<html lang="en">
+<head>
+<title>Configuration - TDE 5.1v Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TDE 5.1v Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Screen-Layout.html#Screen-Layout" title="Screen Layout">
+<link rel="next" href="Alphabetical-List.html#Alphabetical-List" title="Alphabetical List">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="Configuration"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Alphabetical-List.html#Alphabetical-List">Alphabetical List</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Screen-Layout.html#Screen-Layout">Screen Layout</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Configuration</h2>
+
+<p><acronym>TDE</acronym> uses three external files: <samp><span class="file">tde.cfg</span></samp>, <samp><span class="file">tde.hlp</span></samp> and
+<samp><span class="file">tde.shl</span></samp> (in <acronym>UNIX</acronym> the dot is at the front).  These files are
+read from the home directory (the <dfn>global</dfn> file) and/or the current
+directory (the <dfn>local</dfn> file).  The home directory is determined by the
+environment variables <samp><span class="env">TDEHOME</span></samp> or <samp><span class="env">HOME</span></samp>, or the same path as
+<acronym>TDE</acronym> itself, whichever exists first (however, in order for <samp><span class="env">HOME</span></samp>
+to be used in <acronym>DOS</acronym> or Windows, <samp><span class="file">tde.cfg</span></samp> must already exist in
+it).  The default <samp><span class="file">tde.cfg</span></samp> and <samp><span class="file">tde.hlp</span></samp> files can be found in the
+<samp><span class="file">config</span></samp> directory (without any dot for <acronym>UNIX</acronym>); the default
+<samp><span class="file">tde.shl</span></samp> is called <samp><span class="file">tdedist.shl</span></samp> in the source distribution (its
+<samp><span class="file">tde.shl</span></samp> includes <acronym>TDE</acronym>'s own highlighting).
+
+     <dl>
+<dt><samp><span class="file">tde.cfg</span></samp><dd>
+  This file defines what key performs what function (including macros) and the
+initial state of the editor (mode settings and colors).  It can also define
+upper and lower case letters and the sort sequence.  Please see the default file
+for more information.  It is loaded globally first and then locally (i.e. both
+locations, not one or the other).
+
+     <br><dt><samp><span class="file">tde.hlp</span></samp><dd>
+  This file contains the screen(s) displayed when <a href="Help.html#Help">Help</a> is pressed.  It is
+at most 50 lines, with at most 100 characters per line; any more than this will
+be ignored.  Lines need not be the same length, as all lines will be
+space-padded to the length of the longest.  Two screens are present, one for the
+normal help and another for read-only files; separate the two with a
+`<samp><span class="samp">&lt;&lt;&lt;&gt;&gt;&gt;</span></samp>' sequence.  If <samp><span class="file">tde.hlp</span></samp> doesn't exist locally it will be read
+globally.  A local file need only define one type of screen; the other will
+still be read globally.
+
+     <br><dt><samp><span class="file">tde.shl</span></samp><dd>
+  This file supplies the colors used for syntax highlighting and the information
+required to assign those colors to a particular file.  It searches for the
+language locally first and then tries globally.  Note that when a local language
+is found, all the patterns are prefixed with the current directory.
+
+   </dl>
+
+<h3 class="unnumberedsec">Syntax Highlighting</h3>
+
+<p>The colors always come first in the file.  They are global for all languages. 
+Colors are defined in the same manner as in the configuration file (see
+<samp><span class="file">config/tde.cfg</span></samp>).  Following are all the recognized colors, with their
+default color in brackets.
+
+     <dl>
+<dt><code>background</code><dd>
+  The default background color for all the following (blue).
+
+     <br><dt><code>normal</code><dd>
+  The color for any text that is not explicitly highlighted (yellow).
+
+     <br><dt><code>bad</code><dd>
+  The color for invalid components, such as malformed numbers, character
+literals containing too many characters, or unterminated string and character
+literals (bright red).
+
+     <br><dt><code>keyword</code><dd>
+  The color of keywords (white).
+
+     <br><dt><code>comment</code><dd>
+  The color of comments (grey).
+
+     <br><dt><code>function</code><dd>
+  The color of function names (bright green).
+
+     <br><dt><code>string</code><dd>
+  The color of string literals (bright cyan).
+
+     <br><dt><code>character</code><dd>
+  The color of character literals (bright cyan).
+
+     <br><dt><code>integer</code><dd>
+  The color of numbers (in decimal, without a point; bright cyan).
+
+     <br><dt><code>binary</code><dd>
+  The color of binary (base 2) numbers (bright cyan).
+
+     <br><dt><code>octal</code><dd>
+  The color of octal (base 8) numbers (bright cyan).
+
+     <br><dt><code>hex</code><dd>
+  The color of hexadecimal (base 16) numbers (bright cyan).
+
+     <br><dt><code>real</code><dd>
+  The color of numbers with a decimal point (bright cyan).
+
+     <br><dt><code>preprocessor</code><dd>
+  The color of preprocessor statements (cyan).
+
+     <br><dt><code>symbol</code><dd>
+  The color of any non-alphanumeric that is otherwise unrecognized (white).
+
+   </dl>
+
+   <p>The language definitions follow the colors.  Each definition is started with
+<code>language</code> and continues until the next <code>language</code> or <acronym>EOF</acronym>. 
+The following keywords can be used to define a language (where `<samp><span class="samp">[]</span></samp>'
+indicates an optional component and `<samp><span class="samp">|</span></samp>' indicates one or the other):
+
+     <dl>
+<dt><code>language </code><var>name</var><code> [from] </code><var>parent</var><dd>
+  Associates <var>name</var> with the syntax highlighting information.  This is what
+is used to select a particular syntax highlight (see <a href="SyntaxSelect.html#SyntaxSelect">SyntaxSelect</a>).  If
+<var>parent</var> exists, this language will inherit all of <var>parent</var>'s language
+definitions.
+
+     <br><dt><code>pattern </code><var>wildcards</var><dd>
+  Must follow immediately after <code>language</code>.  It is a space-separated list
+of wildcards to identify a language from a file's extension (or name, or even
+path).
+
+     <br><dt><code>case match | ignore</code><dd>
+  Determines if keywords will be case sensitive or insensitive.  The default is
+<samp><span class="option">match</span></samp>.
+
+     <br><dt><code>startword </code><var>list</var><dt><code>inword    </code><var>list</var><dt><code>innumber  </code><var>list</var><dd>
+  A list (or range) of characters that may start a word (or, more correctly, an
+identifier), be found within a word and be found within numbers.
+
+     <br><dt><code>comment </code><var>string</var><dt><code>comment </code><var>string1</var> <var>string2</var><dd>
+  Indicates <var>string</var> will begin a line comment (stops at the end of the
+line), or that <var>string1</var> and <var>string2</var> will begin and end a block
+comment (can extend across multiple lines).  Each string can be up to four
+characters and there can be two of each type of comment.
+
+     <br><dt><code>function </code><var>char</var><dd>
+  Identifiers that are followed by <var>char</var> (allowing for whitespace, but
+not across line boundaries) are given the <code>function</code> color.
+
+     <br><dt><code>preprocessor </code><var>char2</var><code> [spanline </code><var>char</var><code>]</code><dd>
+  Lines that begin with <var>char2</var> (one or two characters) are given the
+<code>preprocessor</code> color.  If the line ends in <var>char</var>, the preprocessor
+will continue on the next line.
+
+     <br><dt><code>binary </code><var>char2</var><code>- | -</code><var>char2</var><dt><code>octal  </code><var>char2</var><code>- | -</code><var>char2</var><dt><code>hex    </code><var>char2</var><code>- | -</code><var>char2</var><dd>
+  Define the format of binary, octal and hexadecimal numbers.  The first form
+indicates a prefix (such as C's `<samp><span class="samp">0x123</span></samp>'), the second a suffix (such as
+assembly's `<samp><span class="samp">123h</span></samp>').
+
+     <br><dt><code>string    </code><var>c1</var><code> [</code><var>c2</var><code>]       [spanline </code><var>char</var><code>] [newline]</code><dt><code>character </code><var>c1</var><code> [</code><var>c2</var><code>] [</code><var>num</var><code>] [spanline </code><var>char</var><code>] [newline]</code><dd>
+  Define the starting and closing characters of string and character literals. 
+If <var>c2</var> is missing, it is taken the same as <var>c1</var>.  <samp><span class="option">spanline</span></samp>
+indicates the literal will continue onto the next line if this line
+ends in <var>char</var>; <samp><span class="option">newline</span></samp> indicates that it will continue onto the
+next line, regardless.  <var>num</var> is the maximum number of characters permitted
+in a character literal.  The default is one; if it is zero, <code>character</code>
+functions identically to <code>string</code>.
+
+     <br><dt><code>escape </code><var>char</var><dd>
+  When <var>char</var> is encountered within a string or character literal, the
+following character is skipped over.
+
+     <br><dt><code>keyword </code><var>list</var><dd>
+  The words in <var>list</var> will be displayed in the <code>keyword</code> color.  Note
+that all of the color keywords can be used in this fashion (when <var>list</var>
+starts with a character from <code>startword</code>).
+
+     <br><dt><var>color</var> <var>list</var><dd>
+  Use <var>color</var> to display the words in <var>list</var>.
+
+     <br><dt><code>InflateTabs</code><dt><code>LTabSize</code><dt><code>Macro</code><dt><code>PseudoMacro</code><dt><code>PTabSize</code><dt><code>UserMenu</code><dd>
+  The same as the configuration file, although macros must be defined using a
+two-key combination.
+
+   </dl>
+
+   </body></html>
+

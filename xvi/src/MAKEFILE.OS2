@@ -1,0 +1,192 @@
+# Copyright (c) 1990,1991,1992 Chris and John Downey
+#***
+#
+# @(#)makefile.os2	2.2 (Chris & John Downey) 7/31/92
+#
+# program name:
+#	xvi
+# function:
+#	PD version of UNIX "vi" editor, with extensions.
+# module name:
+#	makefile.os2
+# module function:
+#	Makefile for OS/2
+#
+#	This is for Microsoft's make, which is the stupidest make
+#	ever.
+# history:
+#	STEVIE - ST Editor for VI Enthusiasts, Version 3.10
+#	Originally by Tim Thompson (twitch!tjt)
+#	Extensive modifications by Tony Andrews (onecom!wldrdg!tony)
+#	Heavily modified by Chris & John Downey
+#***
+
+#
+# Name of this file.
+#
+THISFILE=	makefile.os2
+
+#
+# Microsoft C directory for OS/2.
+#
+MSCOS2=		d:\msc5.1\os2
+
+#
+# Microsoft C directory for MS-DOS.
+#
+MSCMSDOS=	d:\msc5.1\msdos
+
+#
+# Directory for PMSDK executables.
+#
+PMSDKBIN=	d:\pmsdk\bin
+
+CC=		$(MSCOS2)\pbin\cl
+MODEL=		-AL
+DEBUGFLAG=
+INCDIRS=	-I$(MSCMSDOS)\include -I$(MSCOS2)\include
+CFLAGS=		-DOS2 $(DEBUGFLAG) $(MODEL) $(INCDIRS)
+AS=		c:\bin\masm
+ASFLAGS=	-Ml
+LD=		$(MSCOS2)\pbin\link
+LDFLAGS=	/STACK:45056 /NOE /MAP
+MARKEXE=	$(PMSDKBIN)\markexe
+EXEFLAG=	WINDOWCOMPAT
+
+MACHOBJ=	os2vio.obj
+MACHSRC=	os2vio.c
+
+INC=		ascii.h param.h ptrfunc.h regexp.h regmagic.h xvi.h \
+		virtscr.h os2vio.h
+
+OBJ=		defscr.obj \
+		alloc.obj ascii.obj buffers.obj cmdline.obj cursor.obj \
+		edit.obj ex_cmds1.obj ex_cmds2.obj events.obj fileio.obj \
+		find.obj flexbuf.obj map.obj mark.obj misccmds.obj \
+		movement.obj normal.obj param.obj pipe.obj preserve.obj \
+		ptrfunc.obj regexp.obj screen.obj search.obj signal.obj \
+		startup.obj status.obj tags.obj undo.obj \
+		windows.obj yankput.obj \
+		$(MACHOBJ) i286.obj $(LIB)\setargv.obj
+
+defscr.obj:	defscr.c $(INC) param.c
+		$(CC) -c $(CFLAGS) defscr.c
+
+alloc.obj:	alloc.c $(INC) param.c
+		$(CC) -c $(CFLAGS) alloc.c
+
+ascii.obj:	ascii.c $(INC) param.c
+		$(CC) -c $(CFLAGS) ascii.c
+
+buffers.obj:	buffers.c $(INC) param.c
+		$(CC) -c $(CFLAGS) buffers.c
+
+cmdline.obj:	cmdline.c $(INC) param.c
+		$(CC) -c $(CFLAGS) cmdline.c
+
+cursor.obj:	cursor.c $(INC) param.c
+		$(CC) -c $(CFLAGS) cursor.c
+
+edit.obj:	edit.c $(INC) param.c
+		$(CC) -c $(CFLAGS) edit.c
+
+ex_cmds1.obj:	ex_cmds1.c $(INC) param.c
+		$(CC) -c $(CFLAGS) ex_cmds1.c
+
+ex_cmds2.obj:	ex_cmds2.c $(INC) param.c
+		$(CC) -c $(CFLAGS) ex_cmds2.c
+
+events.obj:	events.c $(INC) param.c
+		$(CC) -c $(CFLAGS) events.c
+
+fileio.obj:	fileio.c $(INC) param.c
+		$(CC) -c $(CFLAGS) fileio.c
+
+find.obj:	find.c $(INC) param.c
+		$(CC) -c $(CFLAGS) find.c
+
+flexbuf.obj:	flexbuf.c $(INC) param.c
+		$(CC) -c $(CFLAGS) flexbuf.c
+
+map.obj:	map.c $(INC) param.c
+		$(CC) -c $(CFLAGS) map.c
+
+mark.obj:	mark.c $(INC) param.c
+		$(CC) -c $(CFLAGS) mark.c
+
+misccmds.obj:	misccmds.c $(INC) param.c
+		$(CC) -c $(CFLAGS) misccmds.c
+
+movement.obj:	movement.c $(INC) param.c
+		$(CC) -c $(CFLAGS) movement.c
+
+normal.obj:	normal.c $(INC) param.c
+		$(CC) -c $(CFLAGS) normal.c
+
+param.obj:	param.c $(INC)
+		$(CC) -c $(CFLAGS) param.c
+
+pipe.obj:	pipe.c $(INC) param.c
+		$(CC) -c $(CFLAGS) pipe.c
+
+preserve.obj:	preserve.c $(INC) param.c
+		$(CC) -c $(CFLAGS) preserve.c
+
+ptrfunc.obj:	ptrfunc.c $(INC) param.c
+		$(CC) -c $(CFLAGS) ptrfunc.c
+
+regexp.obj:	regexp.c $(INC)
+		$(CC) -c $(CFLAGS) -Fo$@ regexp.c
+
+screen.obj:	screen.c $(INC) param.c
+		$(CC) -c $(CFLAGS) screen.c
+
+search.obj:	search.c $(INC) param.c
+		$(CC) -c $(CFLAGS) search.c
+
+signal.obj:	signal.c $(INC) param.c
+		$(CC) -c $(CFLAGS) signal.c
+
+startup.obj:	startup.c $(INC) param.c
+		$(CC) -c $(CFLAGS) startup.c
+
+status.obj:	status.c $(INC) param.c
+		$(CC) -c $(CFLAGS) status.c
+
+tags.obj:	tags.c $(INC) param.c
+		$(CC) -c $(CFLAGS) tags.c
+
+undo.obj:	undo.c $(INC) param.c
+		$(CC) -c $(CFLAGS) undo.c
+
+windows.obj:	windows.c $(INC) param.c
+		$(CC) -c $(CFLAGS) windows.c
+
+yankput.obj:	yankput.c $(INC) param.c
+		$(CC) -c $(CFLAGS) yankput.c
+
+i286.obj:	i286.asm
+		$(AS) $(ASFLAGS) i286.asm ;
+
+$(MACHOBJ):	$(MACHSRC) $(INC)
+		$(CC) -c $(CFLAGS) $(MACHSRC)
+
+BASENAM=	xvi
+LINKFILE=	$(BASENAM).lnk
+
+$(LINKFILE):	$(THISFILE)
+		echo defscr + > $@
+		echo alloc + ascii + buffers + cmdline + cursor + >> $@
+		echo edit + ex_cmds1 + ex_cmds2 + events + fileio + find + >> $@
+		echo flexbuf + map + mark + misccmds + movement + >> $@
+		echo normal + param + pipe + preserve + ptrfunc + >> $@
+		echo regexp + screen + search + signal + startup + >> $@
+		echo status + tags + undo + version + >> $@
+		echo windows + yankput + >> $@
+		echo $(MACHOBJ) + i286 + $(LIB)\setargv >> $@
+		echo $(BASENAM).exe $(LDFLAGS) ;  >> $@
+
+$(BASENAM).exe: $(OBJ) $(LINKFILE) version.c
+		$(CC) $(CFLAGS) -c version.c
+		$(LD) @$(LINKFILE)
+		$(MARKEXE) $(EXEFLAG) $@

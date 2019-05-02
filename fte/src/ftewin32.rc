@@ -1,0 +1,3 @@
+#include <windows.h>
+
+FTE ICON "icons\\ftewin32.ico"

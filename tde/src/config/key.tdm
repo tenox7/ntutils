@@ -1,0 +1,700 @@
+; This file contains all the function keys recognized by TDE 5.1k. Not all keys
+; are actually available. Pressing a key will display its config string. The
+; only exception is Escape, since there needs to be a way to exit.
+
+esc             Quit
+
+WordWrapMode       FixedWrap
+
+;
+; Viewer keys. Load a file with "-r" or "-v", or use tdv, to test these.
+; Even though both characters are displayed, only one should be used (eg:
+; use "1" or "!", NOT "1!"). It's also not necessary to use the named key,
+; just place the character in quotes (eg: 'semicolon' can be '";"').
+; These keys can also help you determine differences between your keyboard
+; and TDE. Eg: if pressing Y on your keyboard generates z, you should add
+; a "Scancode Z Y" to your config file.
+;
+`               Macro ToggleReadOnly "`~ " ToggleReadOnly
+1               Macro ToggleReadOnly "1! " ToggleReadOnly
+2               Macro ToggleReadOnly "2@ " ToggleReadOnly
+3               Macro ToggleReadOnly "3# " ToggleReadOnly
+4               Macro ToggleReadOnly "4$ " ToggleReadOnly
+5               Macro ToggleReadOnly "5% " ToggleReadOnly
+6               Macro ToggleReadOnly "6^ " ToggleReadOnly
+7               Macro ToggleReadOnly "7& " ToggleReadOnly
+8               Macro ToggleReadOnly "8* " ToggleReadOnly
+9               Macro ToggleReadOnly "9( " ToggleReadOnly
+0               Macro ToggleReadOnly "0) " ToggleReadOnly
+-               Macro ToggleReadOnly "-_ " ToggleReadOnly
+=               Macro ToggleReadOnly "=+ " ToggleReadOnly
+[               Macro ToggleReadOnly "[{ " ToggleReadOnly
+\               Macro ToggleReadOnly "\\| " ToggleReadOnly
+]               Macro ToggleReadOnly "]} " ToggleReadOnly
+semicolon       Macro ToggleReadOnly "semicolon: " ToggleReadOnly
+'               Macro ToggleReadOnly "'quote " ToggleReadOnly
+,               Macro ToggleReadOnly ",< " ToggleReadOnly
+.               Macro ToggleReadOnly ".> " ToggleReadOnly
+/               Macro ToggleReadOnly "/? " ToggleReadOnly
+left\           Macro ToggleReadOnly "left\| " ToggleReadOnly
+a               Macro ToggleReadOnly "a " ToggleReadOnly
+b               Macro ToggleReadOnly "b " ToggleReadOnly
+c               Macro ToggleReadOnly "c " ToggleReadOnly
+d               Macro ToggleReadOnly "d " ToggleReadOnly
+e               Macro ToggleReadOnly "e " ToggleReadOnly
+f               Macro ToggleReadOnly "f " ToggleReadOnly
+g               Macro ToggleReadOnly "g " ToggleReadOnly
+h               Macro ToggleReadOnly "h " ToggleReadOnly
+i               Macro ToggleReadOnly "i " ToggleReadOnly
+j               Macro ToggleReadOnly "j " ToggleReadOnly
+k               Macro ToggleReadOnly "k " ToggleReadOnly
+l               Macro ToggleReadOnly "l " ToggleReadOnly
+m               Macro ToggleReadOnly "m " ToggleReadOnly
+n               Macro ToggleReadOnly "n " ToggleReadOnly
+o               Macro ToggleReadOnly "o " ToggleReadOnly
+p               Macro ToggleReadOnly "p " ToggleReadOnly
+q               Macro ToggleReadOnly "q " ToggleReadOnly
+r               Macro ToggleReadOnly "r " ToggleReadOnly
+s               Macro ToggleReadOnly "s " ToggleReadOnly
+t               Macro ToggleReadOnly "t " ToggleReadOnly
+u               Macro ToggleReadOnly "u " ToggleReadOnly
+v               Macro ToggleReadOnly "v " ToggleReadOnly
+w               Macro ToggleReadOnly "w " ToggleReadOnly
+x               Macro ToggleReadOnly "x " ToggleReadOnly
+y               Macro ToggleReadOnly "y " ToggleReadOnly
+z               Macro ToggleReadOnly "z " ToggleReadOnly
+space           Macro ToggleReadOnly "space " ToggleReadOnly
+
+s+`             Macro ToggleReadOnly "s+`~ " ToggleReadOnly
+s+1             Macro ToggleReadOnly "s+1! " ToggleReadOnly
+s+2             Macro ToggleReadOnly "s+2@ " ToggleReadOnly
+s+3             Macro ToggleReadOnly "s+3# " ToggleReadOnly
+s+4             Macro ToggleReadOnly "s+4$ " ToggleReadOnly
+s+5             Macro ToggleReadOnly "s+5% " ToggleReadOnly
+s+6             Macro ToggleReadOnly "s+6^ " ToggleReadOnly
+s+7             Macro ToggleReadOnly "s+7& " ToggleReadOnly
+s+8             Macro ToggleReadOnly "s+8* " ToggleReadOnly
+s+9             Macro ToggleReadOnly "s+9( " ToggleReadOnly
+s+0             Macro ToggleReadOnly "s+0) " ToggleReadOnly
+s+-             Macro ToggleReadOnly "s+-_ " ToggleReadOnly
+s+=             Macro ToggleReadOnly "s+=+ " ToggleReadOnly
+s+[             Macro ToggleReadOnly "s+[{ " ToggleReadOnly
+s+\             Macro ToggleReadOnly "s+\\| " ToggleReadOnly
+s+]             Macro ToggleReadOnly "s+]} " ToggleReadOnly
+s+semicolon     Macro ToggleReadOnly "s+semicolon: " ToggleReadOnly
+s+'             Macro ToggleReadOnly "s+'quote " ToggleReadOnly
+s+,             Macro ToggleReadOnly "s+,< " ToggleReadOnly
+s+.             Macro ToggleReadOnly "s+.> " ToggleReadOnly
+s+/             Macro ToggleReadOnly "s+/? " ToggleReadOnly
+s+left\         Macro ToggleReadOnly "s+left\| " ToggleReadOnly
+s+a             Macro ToggleReadOnly "s+a " ToggleReadOnly
+s+b             Macro ToggleReadOnly "s+b " ToggleReadOnly
+s+c             Macro ToggleReadOnly "s+c " ToggleReadOnly
+s+d             Macro ToggleReadOnly "s+d " ToggleReadOnly
+s+e             Macro ToggleReadOnly "s+e " ToggleReadOnly
+s+f             Macro ToggleReadOnly "s+f " ToggleReadOnly
+s+g             Macro ToggleReadOnly "s+g " ToggleReadOnly
+s+h             Macro ToggleReadOnly "s+h " ToggleReadOnly
+s+i             Macro ToggleReadOnly "s+i " ToggleReadOnly
+s+j             Macro ToggleReadOnly "s+j " ToggleReadOnly
+s+k             Macro ToggleReadOnly "s+k " ToggleReadOnly
+s+l             Macro ToggleReadOnly "s+l " ToggleReadOnly
+s+m             Macro ToggleReadOnly "s+m " ToggleReadOnly
+s+n             Macro ToggleReadOnly "s+n " ToggleReadOnly
+s+o             Macro ToggleReadOnly "s+o " ToggleReadOnly
+s+p             Macro ToggleReadOnly "s+p " ToggleReadOnly
+s+q             Macro ToggleReadOnly "s+q " ToggleReadOnly
+s+r             Macro ToggleReadOnly "s+r " ToggleReadOnly
+s+s             Macro ToggleReadOnly "s+s " ToggleReadOnly
+s+t             Macro ToggleReadOnly "s+t " ToggleReadOnly
+s+u             Macro ToggleReadOnly "s+u " ToggleReadOnly
+s+v             Macro ToggleReadOnly "s+v " ToggleReadOnly
+s+w             Macro ToggleReadOnly "s+w " ToggleReadOnly
+s+x             Macro ToggleReadOnly "s+x " ToggleReadOnly
+s+y             Macro ToggleReadOnly "s+y " ToggleReadOnly
+s+z             Macro ToggleReadOnly "s+z " ToggleReadOnly
+s+space         Macro ToggleReadOnly "s+space " ToggleReadOnly
+
+;
+; Function keys.
+;
+bkspace         Macro "bkspace "
+center          Macro "center "
+del             Macro "del "
+down            Macro "down "
+end             Macro "end "
+enter           Macro "enter "
+f1              Macro "f1 "
+f10             Macro "f10 "
+f11             Macro "f11 "
+f12             Macro "f12 "
+f2              Macro "f2 "
+f3              Macro "f3 "
+f4              Macro "f4 "
+f5              Macro "f5 "
+f6              Macro "f6 "
+f7              Macro "f7 "
+f8              Macro "f8 "
+f9              Macro "f9 "
+grey*           Macro "grey* "
+grey+           Macro "grey+ "
+grey-           Macro "grey- "
+grey/           Macro "grey/ "
+greyenter       Macro "greyenter "
+home            Macro "home "
+ins             Macro "ins "
+left            Macro "left "
+pgdn            Macro "pgdn "
+pgup            Macro "pgup "
+prtsc           Macro "prtsc "
+right           Macro "right "
+tabkey          Macro "tabkey "
+up              Macro "up "
+
+;
+; The shifted function keys.
+;
+s+bkspace       Macro "s+bkspace "
+s+enter         Macro "s+enter "
+s+esc           Macro "s+esc "
+s+f1            Macro "s+f1 "
+s+f10           Macro "s+f10 "
+s+f11           Macro "s+f11 "
+s+f12           Macro "s+f12 "
+s+f2            Macro "s+f2 "
+s+f3            Macro "s+f3 "
+s+f4            Macro "s+f4 "
+s+f5            Macro "s+f5 "
+s+f6            Macro "s+f6 "
+s+f7            Macro "s+f7 "
+s+f8            Macro "s+f8 "
+s+f9            Macro "s+f9 "
+s+greydel       Macro "s+greydel "
+s+greydown      Macro "s+greydown "
+s+greyend       Macro "s+greyend "
+s+greyenter     Macro "s+greyenter "
+s+greyhome      Macro "s+greyhome "
+s+greyins       Macro "s+greyins "
+s+greyleft      Macro "s+greyleft "
+s+greypgdn      Macro "s+greypgdn "
+s+greypgup      Macro "s+greypgup "
+s+greyright     Macro "s+greyright "
+s+greyup        Macro "s+greyup "
+s+prtsc         Macro "s+prtsc "
+s+tabkey        Macro "s+tabkey "
+
+;
+; Control keys
+;
+c+`             Macro "c+` "
+c+1             Macro "c+1 "
+c+2             Macro "c+2 "
+c+3             Macro "c+3 "
+c+4             Macro "c+4 "
+c+5             Macro "c+5 "
+c+6             Macro "c+6 "
+c+7             Macro "c+7 "
+c+8             Macro "c+8 "
+c+9             Macro "c+9 "
+c+0             Macro "c+0 "
+c+-             Macro "c+- "
+c+=             Macro "c+= "
+c+[             Macro "c+[ "
+c+\             Macro "c+\\ "
+c+]             Macro "c+] "
+c+semicolon     Macro "c+semicolon "
+c+'             Macro "c+' "
+c+,             Macro "c+, "
+c+.             Macro "c+. "
+c+/             Macro "c+/ "
+c+a             Macro "c+a "
+c+b             Macro "c+b "
+c+bkspace       Macro "c+bkspace "
+c+c             Macro "c+c "
+c+center        Macro "c+center "
+c+d             Macro "c+d "
+c+del           Macro "c+del "
+c+down          Macro "c+down "
+c+e             Macro "c+e "
+c+end           Macro "c+end "
+c+enter         Macro "c+enter "
+c+esc           Macro "c+esc "
+c+f             Macro "c+f "
+c+f1            Macro "c+f1 "
+c+f10           Macro "c+f10 "
+c+f11           Macro "c+f11 "
+c+f12           Macro "c+f12 "
+c+f2            Macro "c+f2 "
+c+f3            Macro "c+f3 "
+c+f4            Macro "c+f4 "
+c+f5            Macro "c+f5 "
+c+f6            Macro "c+f6 "
+c+f7            Macro "c+f7 "
+c+f8            Macro "c+f8 "
+c+f9            Macro "c+f9 "
+c+g             Macro "c+g "
+c+grey*         Macro "c+grey* "
+c+grey+         Macro "c+grey+ "
+c+grey-         Macro "c+grey- "
+c+grey/         Macro "c+grey/ "
+c+greyenter     Macro "c+greyenter "
+c+h             Macro "c+h "
+c+home          Macro "c+home "
+c+i             Macro "c+i "
+c+ins           Macro "c+ins "
+c+j             Macro "c+j "
+c+k             Macro "c+k "
+c+l             Macro "c+l "
+c+left          Macro "c+left "
+c+left\         Macro "c+left\\ "
+c+m             Macro "c+m "
+c+n             Macro "c+n "
+c+o             Macro "c+o "
+c+p             Macro "c+p "
+c+pgdn          Macro "c+pgdn "
+c+pgup          Macro "c+pgup "
+c+prtsc         Macro "c+prtsc "
+c+q             Macro "c+q "
+c+r             Macro "c+r "
+c+right         Macro "c+right "
+c+s             Macro "c+s "
+c+space         Macro "c+space "
+c+t             Macro "c+t "
+c+tabkey        Macro "c+tabkey "
+c+u             Macro "c+u "
+c+up            Macro "c+up "
+c+v             Macro "c+v "
+c+w             Macro "c+w "
+c+x             Macro "c+x "
+c+y             Macro "c+y "
+c+z             Macro "c+z "
+
+;
+; Shift+Control keys
+;
+s+c+`           Macro "s+c+` "
+s+c+1           Macro "s+c+1 "
+s+c+2           Macro "s+c+2 "
+s+c+3           Macro "s+c+3 "
+s+c+4           Macro "s+c+4 "
+s+c+5           Macro "s+c+5 "
+s+c+6           Macro "s+c+6 "
+s+c+7           Macro "s+c+7 "
+s+c+8           Macro "s+c+8 "
+s+c+9           Macro "s+c+9 "
+s+c+0           Macro "s+c+0 "
+s+c+-           Macro "s+c+- "
+s+c+=           Macro "s+c+= "
+s+c+[           Macro "s+c+[ "
+s+c+\           Macro "s+c+\\ "
+s+c+]           Macro "s+c+] "
+s+c+semicolon   Macro "s+c+semicolon "
+s+c+'           Macro "s+c+' "
+s+c+,           Macro "s+c+, "
+s+c+.           Macro "s+c+. "
+s+c+/           Macro "s+c+/ "
+s+c+a           Macro "s+c+a "
+s+c+b           Macro "s+c+b "
+s+c+bkspace     Macro "s+c+bkspace "
+s+c+c           Macro "s+c+c "
+s+c+center      Macro "s+c+center "
+s+c+d           Macro "s+c+d "
+s+c+del         Macro "s+c+del "
+s+c+down        Macro "s+c+down "
+s+c+e           Macro "s+c+e "
+s+c+end         Macro "s+c+end "
+s+c+enter       Macro "s+c+enter "
+s+c+esc         Macro "s+c+esc "
+s+c+f           Macro "s+c+f "
+s+c+f1          Macro "s+c+f1 "
+s+c+f10         Macro "s+c+f10 "
+s+c+f11         Macro "s+c+f11 "
+s+c+f12         Macro "s+c+f12 "
+s+c+f2          Macro "s+c+f2 "
+s+c+f3          Macro "s+c+f3 "
+s+c+f4          Macro "s+c+f4 "
+s+c+f5          Macro "s+c+f5 "
+s+c+f6          Macro "s+c+f6 "
+s+c+f7          Macro "s+c+f7 "
+s+c+f8          Macro "s+c+f8 "
+s+c+f9          Macro "s+c+f9 "
+s+c+g           Macro "s+c+g "
+s+c+grey*       Macro "s+c+grey* "
+s+c+grey+       Macro "s+c+grey+ "
+s+c+grey-       Macro "s+c+grey- "
+s+c+grey/       Macro "s+c+grey/ "
+s+c+greyenter   Macro "s+c+greyenter "
+s+c+h           Macro "s+c+h "
+s+c+home        Macro "s+c+home "
+s+c+i           Macro "s+c+i "
+s+c+ins         Macro "s+c+ins "
+s+c+j           Macro "s+c+j "
+s+c+k           Macro "s+c+k "
+s+c+l           Macro "s+c+l "
+s+c+left        Macro "s+c+left "
+s+c+left\       Macro "s+c+left\\ "
+s+c+m           Macro "s+c+m "
+s+c+n           Macro "s+c+n "
+s+c+o           Macro "s+c+o "
+s+c+p           Macro "s+c+p "
+s+c+pgdn        Macro "s+c+pgdn "
+s+c+pgup        Macro "s+c+pgup "
+s+c+prtsc       Macro "s+c+prtsc "
+s+c+q           Macro "s+c+q "
+s+c+r           Macro "s+c+r "
+s+c+right       Macro "s+c+right "
+s+c+s           Macro "s+c+s "
+s+c+space       Macro "s+c+space "
+s+c+t           Macro "s+c+t "
+s+c+tabkey      Macro "s+c+tabkey "
+s+c+u           Macro "s+c+u "
+s+c+up          Macro "s+c+up "
+s+c+v           Macro "s+c+v "
+s+c+w           Macro "s+c+w "
+s+c+x           Macro "s+c+x "
+s+c+y           Macro "s+c+y "
+s+c+z           Macro "s+c+z "
+
+;
+; Alt keys
+;
+a+`             Macro "a+` "
+a+0             Macro "a+0 "
+a+1             Macro "a+1 "
+a+2             Macro "a+2 "
+a+3             Macro "a+3 "
+a+4             Macro "a+4 "
+a+5             Macro "a+5 "
+a+6             Macro "a+6 "
+a+7             Macro "a+7 "
+a+8             Macro "a+8 "
+a+9             Macro "a+9 "
+a+-             Macro "a+- "
+a+=             Macro "a+= "
+a+semicolon     Macro "a+semicolon "
+a+'             Macro "a+' "
+a+,             Macro "a+, "
+a+.             Macro "a+. "
+a+/             Macro "a+/ "
+a+[             Macro "a+[ "
+a+\             Macro "a+\\ "
+a+]             Macro "a+] "
+a+a             Macro "a+a "
+a+b             Macro "a+b "
+a+bkspace       Macro "a+bkspace "
+a+c             Macro "a+c "
+a+center        Macro "a+center "
+a+d             Macro "a+d "
+a+e             Macro "a+e "
+a+enter         Macro "a+enter "
+a+esc           Macro "a+esc "
+a+f             Macro "a+f "
+a+f1            Macro "a+f1 "
+a+f10           Macro "a+f10 "
+a+f11           Macro "a+f11 "
+a+f12           Macro "a+f12 "
+a+f2            Macro "a+f2 "
+a+f3            Macro "a+f3 "
+a+f4            Macro "a+f4 "
+a+f5            Macro "a+f5 "
+a+f6            Macro "a+f6 "
+a+f7            Macro "a+f7 "
+a+f8            Macro "a+f8 "
+a+f9            Macro "a+f9 "
+a+g             Macro "a+g "
+a+grey*         Macro "a+grey* "
+a+grey+         Macro "a+grey+ "
+a+grey-         Macro "a+grey- "
+a+grey/         Macro "a+grey/ "
+a+greydel       Macro "a+greydel "
+a+greydown      Macro "a+greydown "
+a+greyend       Macro "a+greyend "
+a+greyenter     Macro "a+greyenter "
+a+greyhome      Macro "a+greyhome "
+a+greyins       Macro "a+greyins "
+a+greyleft      Macro "a+greyleft "
+a+greypgdn      Macro "a+greypgdn "
+a+greypgup      Macro "a+greypgup "
+a+greyright     Macro "a+greyright "
+a+greyup        Macro "a+greyup "
+a+h             Macro "a+h "
+a+i             Macro "a+i "
+a+j             Macro "a+j "
+a+k             Macro "a+k "
+a+l             Macro "a+l "
+a+left\         Macro "a+left\\ "
+a+m             Macro "a+m "
+a+n             Macro "a+n "
+a+o             Macro "a+o "
+a+p             Macro "a+p "
+a+prtsc         Macro "a+prtsc "
+a+q             Macro "a+q "
+a+r             Macro "a+r "
+a+s             Macro "a+s "
+a+space         Macro "a+space "
+a+t             Macro "a+t "
+a+tabkey        Macro "a+tabkey "
+a+u             Macro "a+u "
+a+v             Macro "a+v "
+a+w             Macro "a+w "
+a+x             Macro "a+x "
+a+y             Macro "a+y "
+a+z             Macro "a+z "
+
+;
+; Shift+Alt keys
+;
+s+a+`           Macro "s+a+` "
+s+a+0           Macro "s+a+0 "
+s+a+1           Macro "s+a+1 "
+s+a+2           Macro "s+a+2 "
+s+a+3           Macro "s+a+3 "
+s+a+4           Macro "s+a+4 "
+s+a+5           Macro "s+a+5 "
+s+a+6           Macro "s+a+6 "
+s+a+7           Macro "s+a+7 "
+s+a+8           Macro "s+a+8 "
+s+a+9           Macro "s+a+9 "
+s+a+-           Macro "s+a+- "
+s+a+=           Macro "s+a+= "
+s+a+semicolon   Macro "s+a+semicolon "
+s+a+'           Macro "s+a+' "
+s+a+,           Macro "s+a+, "
+s+a+.           Macro "s+a+. "
+s+a+/           Macro "s+a+/ "
+s+a+[           Macro "s+a+[ "
+s+a+\           Macro "s+a+\\ "
+s+a+]           Macro "s+a+] "
+s+a+a           Macro "s+a+a "
+s+a+b           Macro "s+a+b "
+s+a+bkspace     Macro "s+a+bkspace "
+s+a+c           Macro "s+a+c "
+s+a+center      Macro "s+a+center "
+s+a+d           Macro "s+a+d "
+s+a+e           Macro "s+a+e "
+s+a+enter       Macro "s+a+enter "
+s+a+esc         Macro "s+a+esc "
+s+a+f           Macro "s+a+f "
+s+a+f1          Macro "s+a+f1 "
+s+a+f10         Macro "s+a+f10 "
+s+a+f11         Macro "s+a+f11 "
+s+a+f12         Macro "s+a+f12 "
+s+a+f2          Macro "s+a+f2 "
+s+a+f3          Macro "s+a+f3 "
+s+a+f4          Macro "s+a+f4 "
+s+a+f5          Macro "s+a+f5 "
+s+a+f6          Macro "s+a+f6 "
+s+a+f7          Macro "s+a+f7 "
+s+a+f8          Macro "s+a+f8 "
+s+a+f9          Macro "s+a+f9 "
+s+a+g           Macro "s+a+g "
+s+a+grey*       Macro "s+a+grey* "
+s+a+grey+       Macro "s+a+grey+ "
+s+a+grey-       Macro "s+a+grey- "
+s+a+grey/       Macro "s+a+grey/ "
+s+a+greydel     Macro "s+a+greydel "
+s+a+greydown    Macro "s+a+greydown "
+s+a+greyend     Macro "s+a+greyend "
+s+a+greyenter   Macro "s+a+greyenter "
+s+a+greyhome    Macro "s+a+greyhome "
+s+a+greyins     Macro "s+a+greyins "
+s+a+greyleft    Macro "s+a+greyleft "
+s+a+greypgdn    Macro "s+a+greypgdn "
+s+a+greypgup    Macro "s+a+greypgup "
+s+a+greyright   Macro "s+a+greyright "
+s+a+greyup      Macro "s+a+greyup "
+s+a+h           Macro "s+a+h "
+s+a+i           Macro "s+a+i "
+s+a+j           Macro "s+a+j "
+s+a+k           Macro "s+a+k "
+s+a+l           Macro "s+a+l "
+s+a+left\       Macro "s+a+left\\ "
+s+a+m           Macro "s+a+m "
+s+a+n           Macro "s+a+n "
+s+a+o           Macro "s+a+o "
+s+a+p           Macro "s+a+p "
+s+a+prtsc       Macro "s+a+prtsc "
+s+a+q           Macro "s+a+q "
+s+a+r           Macro "s+a+r "
+s+a+s           Macro "s+a+s "
+s+a+space       Macro "s+a+space "
+s+a+t           Macro "s+a+t "
+s+a+tabkey      Macro "s+a+tabkey "
+s+a+u           Macro "s+a+u "
+s+a+v           Macro "s+a+v "
+s+a+w           Macro "s+a+w "
+s+a+x           Macro "s+a+x "
+s+a+y           Macro "s+a+y "
+s+a+z           Macro "s+a+z "
+
+;
+; Control+Alt keys
+;
+c+a+`           Macro "c+a+` "
+c+a+0           Macro "c+a+0 "
+c+a+1           Macro "c+a+1 "
+c+a+2           Macro "c+a+2 "
+c+a+3           Macro "c+a+3 "
+c+a+4           Macro "c+a+4 "
+c+a+5           Macro "c+a+5 "
+c+a+6           Macro "c+a+6 "
+c+a+7           Macro "c+a+7 "
+c+a+8           Macro "c+a+8 "
+c+a+9           Macro "c+a+9 "
+c+a+-           Macro "c+a+- "
+c+a+=           Macro "c+a+= "
+c+a+semicolon   Macro "c+a+semicolon "
+c+a+'           Macro "c+a+' "
+c+a+,           Macro "c+a+, "
+c+a+.           Macro "c+a+. "
+c+a+/           Macro "c+a+/ "
+c+a+[           Macro "c+a+[ "
+c+a+\           Macro "c+a+\\ "
+c+a+]           Macro "c+a+] "
+c+a+a           Macro "c+a+a "
+c+a+b           Macro "c+a+b "
+c+a+bkspace     Macro "c+a+bkspace "
+c+a+c           Macro "c+a+c "
+c+a+center      Macro "c+a+center "
+c+a+d           Macro "c+a+d "
+c+a+e           Macro "c+a+e "
+c+a+enter       Macro "c+a+enter "
+c+a+esc         Macro "c+a+esc "
+c+a+f           Macro "c+a+f "
+c+a+f1          Macro "c+a+f1 "
+c+a+f10         Macro "c+a+f10 "
+c+a+f11         Macro "c+a+f11 "
+c+a+f12         Macro "c+a+f12 "
+c+a+f2          Macro "c+a+f2 "
+c+a+f3          Macro "c+a+f3 "
+c+a+f4          Macro "c+a+f4 "
+c+a+f5          Macro "c+a+f5 "
+c+a+f6          Macro "c+a+f6 "
+c+a+f7          Macro "c+a+f7 "
+c+a+f8          Macro "c+a+f8 "
+c+a+f9          Macro "c+a+f9 "
+c+a+g           Macro "c+a+g "
+c+a+grey*       Macro "c+a+grey* "
+c+a+grey+       Macro "c+a+grey+ "
+c+a+grey-       Macro "c+a+grey- "
+c+a+grey/       Macro "c+a+grey/ "
+c+a+greydel     Macro "c+a+greydel "
+c+a+greydown    Macro "c+a+greydown "
+c+a+greyend     Macro "c+a+greyend "
+c+a+greyenter   Macro "c+a+greyenter "
+c+a+greyhome    Macro "c+a+greyhome "
+c+a+greyins     Macro "c+a+greyins "
+c+a+greyleft    Macro "c+a+greyleft "
+c+a+greypgdn    Macro "c+a+greypgdn "
+c+a+greypgup    Macro "c+a+greypgup "
+c+a+greyright   Macro "c+a+greyright "
+c+a+greyup      Macro "c+a+greyup "
+c+a+h           Macro "c+a+h "
+c+a+i           Macro "c+a+i "
+c+a+j           Macro "c+a+j "
+c+a+k           Macro "c+a+k "
+c+a+l           Macro "c+a+l "
+c+a+left\       Macro "c+a+left\\ "
+c+a+m           Macro "c+a+m "
+c+a+n           Macro "c+a+n "
+c+a+o           Macro "c+a+o "
+c+a+p           Macro "c+a+p "
+c+a+prtsc       Macro "c+a+prtsc "
+c+a+q           Macro "c+a+q "
+c+a+r           Macro "c+a+r "
+c+a+s           Macro "c+a+s "
+c+a+space       Macro "c+a+space "
+c+a+t           Macro "c+a+t "
+c+a+tabkey      Macro "c+a+tabkey "
+c+a+u           Macro "c+a+u "
+c+a+v           Macro "c+a+v "
+c+a+w           Macro "c+a+w "
+c+a+x           Macro "c+a+x "
+c+a+y           Macro "c+a+y "
+c+a+z           Macro "c+a+z "
+
+;
+; Shift+Control+Alt keys
+;
+s+c+a+`         Macro "s+c+a+` "
+s+c+a+0         Macro "s+c+a+0 "
+s+c+a+1         Macro "s+c+a+1 "
+s+c+a+2         Macro "s+c+a+2 "
+s+c+a+3         Macro "s+c+a+3 "
+s+c+a+4         Macro "s+c+a+4 "
+s+c+a+5         Macro "s+c+a+5 "
+s+c+a+6         Macro "s+c+a+6 "
+s+c+a+7         Macro "s+c+a+7 "
+s+c+a+8         Macro "s+c+a+8 "
+s+c+a+9         Macro "s+c+a+9 "
+s+c+a+-         Macro "s+c+a+- "
+s+c+a+=         Macro "s+c+a+= "
+s+c+a+semicolon Macro "s+c+a+semicolon "
+s+c+a+'         Macro "s+c+a+' "
+s+c+a+,         Macro "s+c+a+, "
+s+c+a+.         Macro "s+c+a+. "
+s+c+a+/         Macro "s+c+a+/ "
+s+c+a+[         Macro "s+c+a+[ "
+s+c+a+\         Macro "s+c+a+\\ "
+s+c+a+]         Macro "s+c+a+] "
+s+c+a+a         Macro "s+c+a+a "
+s+c+a+b         Macro "s+c+a+b "
+s+c+a+bkspace   Macro "s+c+a+bkspace "
+s+c+a+c         Macro "s+c+a+c "
+s+c+a+center    Macro "s+c+a+center "
+s+c+a+d         Macro "s+c+a+d "
+s+c+a+e         Macro "s+c+a+e "
+s+c+a+enter     Macro "s+c+a+enter "
+s+c+a+esc       Macro "s+c+a+esc "
+s+c+a+f         Macro "s+c+a+f "
+s+c+a+f1        Macro "s+c+a+f1 "
+s+c+a+f10       Macro "s+c+a+f10 "
+s+c+a+f11       Macro "s+c+a+f11 "
+s+c+a+f12       Macro "s+c+a+f12 "
+s+c+a+f2        Macro "s+c+a+f2 "
+s+c+a+f3        Macro "s+c+a+f3 "
+s+c+a+f4        Macro "s+c+a+f4 "
+s+c+a+f5        Macro "s+c+a+f5 "
+s+c+a+f6        Macro "s+c+a+f6 "
+s+c+a+f7        Macro "s+c+a+f7 "
+s+c+a+f8        Macro "s+c+a+f8 "
+s+c+a+f9        Macro "s+c+a+f9 "
+s+c+a+g         Macro "s+c+a+g "
+s+c+a+grey*     Macro "s+c+a+grey* "
+s+c+a+grey+     Macro "s+c+a+grey+ "
+s+c+a+grey-     Macro "s+c+a+grey- "
+s+c+a+grey/     Macro "s+c+a+grey/ "
+s+c+a+greydel   Macro "s+c+a+greydel "
+s+c+a+greydown  Macro "s+c+a+greydown "
+s+c+a+greyend   Macro "s+c+a+greyend "
+s+c+a+greyenter Macro "s+c+a+greyenter "
+s+c+a+greyhome  Macro "s+c+a+greyhome "
+s+c+a+greyins   Macro "s+c+a+greyins "
+s+c+a+greyleft  Macro "s+c+a+greyleft "
+s+c+a+greypgdn  Macro "s+c+a+greypgdn "
+s+c+a+greypgup  Macro "s+c+a+greypgup "
+s+c+a+greyright Macro "s+c+a+greyright "
+s+c+a+greyup    Macro "s+c+a+greyup "
+s+c+a+h         Macro "s+c+a+h "
+s+c+a+i         Macro "s+c+a+i "
+s+c+a+j         Macro "s+c+a+j "
+s+c+a+k         Macro "s+c+a+k "
+s+c+a+l         Macro "s+c+a+l "
+s+c+a+left\     Macro "s+c+a+left\\ "
+s+c+a+m         Macro "s+c+a+m "
+s+c+a+n         Macro "s+c+a+n "
+s+c+a+o         Macro "s+c+a+o "
+s+c+a+p         Macro "s+c+a+p "
+s+c+a+prtsc     Macro "s+c+a+prtsc "
+s+c+a+q         Macro "s+c+a+q "
+s+c+a+r         Macro "s+c+a+r "
+s+c+a+s         Macro "s+c+a+s "
+s+c+a+space     Macro "s+c+a+space "
+s+c+a+t         Macro "s+c+a+t "
+s+c+a+tabkey    Macro "s+c+a+tabkey "
+s+c+a+u         Macro "s+c+a+u "
+s+c+a+v         Macro "s+c+a+v "
+s+c+a+w         Macro "s+c+a+w "
+s+c+a+x         Macro "s+c+a+x "
+s+c+a+y         Macro "s+c+a+y "
+s+c+a+z         Macro "s+c+a+z "

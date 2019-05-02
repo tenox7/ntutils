@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+<title>Dialogs &amp; Prompts - TDE 5.1v Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TDE 5.1v Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="Alphabetical-List.html#Alphabetical-List" title="Alphabetical List">
+<link rel="next" href="Issues.html#Issues" title="Issues">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="Dialogs-%26-Prompts"></a>
+<a name="Dialogs-_0026-Prompts"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Issues.html#Issues">Issues</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Alphabetical-List.html#Alphabetical-List">Alphabetical List</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+<h2 class="unnumbered">Dialogs &amp; Prompts</h2>
+
+<h3 class="unnumberedsec">Dialogs</h3>
+
+<p>Dialogs in <acronym>TDE</acronym> are quite simple, consisting only of edit fields and
+check boxes.  Use <kbd>Tab</kbd>/<kbd>PgDn</kbd> and <kbd>Shift+Tab</kbd>/<kbd>PgUp</kbd> to switch
+between edit fields and the function keys to toggle check boxes;
+<code>GotoMark&lt;N&gt;</code> will move to the &lt;N&gt;th edit field.  To accept the values
+press <kbd>Enter</kbd>; <kbd>Esc</kbd> will cancel the dialog.  Cancelling a dialog will
+<em>not</em> necessarily restore the original values (for example, turning on
+<samp><span class="option">RegX</span></samp> in <code>DefineSearch</code>, then cancelling, will still leave the
+<samp><span class="option">RegX</span></samp> option on the next time).
+
+   <p>When a dialog is opened from a macro (either recording or playing), all the
+check boxes will be cleared and the focus will be set to the first edit field
+(however, a macro definition can include the flag <samp><span class="option">UsesDialog</span></samp> to prevent
+this).
+
+<h3 class="unnumberedsec">Prompts</h3>
+
+<p>Prompts (and edit fields) can be edited in much the same way as any text in
+the editor.  If the first key is a character, <code>DeleteChar</code> or
+<code>StreamDeleteChar</code>, the initial answer will be erased.  The following
+functions have the same meaning as their main editor counterpart:
+
+   <blockquote>
+        <p><table summary=""><tr align="left"><td valign="top" width="30%"><code>BackSpace</code>    </td><td valign="top" width="40%"><code>EndOfLine</code>        </td><td valign="top" width="30%"><code>Transpose</code>
+<br></td></tr><tr align="left"><td valign="top" width="30%"><code>BegOfLine</code>    </td><td valign="top" width="40%"><code>SetDirectory</code>     </td><td valign="top" width="30%"><code>WordDelete</code>
+<br></td></tr><tr align="left"><td valign="top" width="30%"><code>CharLeft</code>     </td><td valign="top" width="40%"><code>StreamCharLeft</code>   </td><td valign="top" width="30%"><code>WordDeleteBack</code>
+<br></td></tr><tr align="left"><td valign="top" width="30%"><code>CharRight</code>    </td><td valign="top" width="40%"><code>StreamCharRight</code>  </td><td valign="top" width="30%"><code>WordLeft</code>
+<br></td></tr><tr align="left"><td valign="top" width="30%"><code>DelBegOfLine</code> </td><td valign="top" width="40%"><code>StreamDeleteChar</code> </td><td valign="top" width="30%"><code>WordRight</code>
+<br></td></tr><tr align="left"><td valign="top" width="30%"><code>DelEndOfLine</code> </td><td valign="top" width="40%"><code>ToggleOverWrite</code>
+<br></td></tr><tr align="left"><td valign="top" width="30%"><code>DeleteChar</code>   </td><td valign="top" width="40%"><code>ToggleSearchCase</code>
+        <br></td></tr></table>
+</blockquote>
+
+<p class="noindent">The following functions are also available:
+
+   <blockquote>
+        <p><table summary=""><tr align="left"><td valign="top" width="31%"><code>AbortCommand</code>       </td><td valign="top" width="69%">cancel the prompt, keep original answer
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>BackTab</code>            </td><td valign="top" width="69%">filename completion
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>BegNextLine</code>        </td><td valign="top" width="69%">copy the string from the current window
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>CopyToClipboard</code>    </td><td valign="top" width="69%">copy the answer to the clipboard
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>CutToClipboard</code>     </td><td valign="top" width="69%">copy the answer to the clipboard
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>DeleteLine</code>         </td><td valign="top" width="69%">erase the answer, but add it to the history
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>Help</code>               </td><td valign="top" width="69%">display help for the command, if any
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>KopyToClipboard</code>    </td><td valign="top" width="69%">copy the answer to the clipboard
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>LineDown</code>           </td><td valign="top" width="69%">retrieve the next answer from the history
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>LineUp</code>             </td><td valign="top" width="69%">retrieve the previous answer from the history
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>NextLine</code>           </td><td valign="top" width="69%">copy the word from the current window
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>PasteFromClipboard</code> </td><td valign="top" width="69%">copy the first line from the clipboard
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>Rturn</code>              </td><td valign="top" width="69%">accept the answer and add it to the history
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>ScrollDnLine</code>       </td><td valign="top" width="69%">complete next entry from the history
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>ScrollUpLine</code>       </td><td valign="top" width="69%">complete previous entry from the history
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>Tab</code>                </td><td valign="top" width="69%">filename completion
+<br></td></tr><tr align="left"><td valign="top" width="31%"><code>ToggleCWD</code>          </td><td valign="top" width="69%">if the <samp><span class="option">DisplayCWD</span></samp> option is off,
+display the current directory above the prompt, or at the bottom of the screen
+in a dialog
+        <br></td></tr></table>
+</blockquote>
+
+   <p>The clipboard functions are only available to <samp><span class="file">tdep.exe</span></samp> and
+<samp><span class="file">tdew.exe</span></samp>.
+
+   <p>Copying the word or string from the current window, or the line from the
+clipboard, will use the insert or overwrite mode.  If it is the first key
+pressed, the current answer will be erased.
+
+   <p>Filename completion is only available to functions that expect a filename.  If
+the answer contains wildcard characters, each matching filename will become the
+answer.  If there are no wildcards, the entire answer will form the prefix of a
+filename.  The first completion will add the characters common to all matching
+files; each subsequent completion will be the filename itself.  Once all names
+have been displayed, the common characters will again be shown.
+
+   <p>History completion will search the history for a line that matches the answer
+up to the current cursor position.  The search mode case will be used.
+
+   <p>Prompts that expect a filename (more specifically, any prompt that uses the
+file history) will recognise a leading `<samp><span class="samp">~/</span></samp>' and substitute it for
+<acronym>TDE</acronym>'s home directory (<samp><span class="env">TDEHOME</span></samp>, <samp><span class="env">HOME</span></samp> or the same path as
+the executable).
+
+   </body></html>
+

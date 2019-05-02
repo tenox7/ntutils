@@ -1,0 +1,3 @@
+NAME clipserv WINDOWAPI
+DESCRIPTION 'FTE Clipboard access server for VIO'
+STACKSIZE 49152

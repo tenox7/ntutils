@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>BlockUnComment - TDE 5.1v Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TDE 5.1v Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Alphabetical-List.html#Alphabetical-List" title="Alphabetical List">
+<link rel="prev" href="BlockTrimTrailing.html#BlockTrimTrailing" title="BlockTrimTrailing">
+<link rel="next" href="BlockUndent.html#BlockUndent" title="BlockUndent">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="BlockUnComment"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="BlockUndent.html#BlockUndent">BlockUndent</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="BlockTrimTrailing.html#BlockTrimTrailing">BlockTrimTrailing</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Alphabetical-List.html#Alphabetical-List">Alphabetical List</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">BlockUnComment</h3>
+
+<p><table summary=""><tr align="left"><td valign="top">Key:  </td><td valign="top"><kbd>Shift+Ctrl+E</kbd>
+<br></td></tr><tr align="left"><td valign="top">Menu: </td><td valign="top">Block &gt; Comment &gt; Remove
+<br></td></tr></table>
+
+   <p>Remove the comments (line or block, but not both) from the block.  The
+comments must be part of the block.  The first line of the block must have a
+comment, but it is not necessary for every line to have one.
+
+   <p>For line comments, the comment will be removed from the beginning of the line
+(or box), as well as the space after it, if one; a stream block will only remove
+the comment from the first line of the stream.
+
+   <p>For block comments, the comments will be removed from the beginning and end of
+a stream or the left and right edge of each line in a box.  A line block depends
+on the first line: if it has both start and end comments, each line is tested;
+if the start and end comments are on lines by themselves, those lines are
+deleted; otherwise it is assumed to be like a stream, with the comment ending at
+the last line.
+
+   </body></html>
+

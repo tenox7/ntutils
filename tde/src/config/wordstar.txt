@@ -1,0 +1,40 @@
+TDE_WS13 HELP     A summary of WordStar 2-key commands      Maximize [Ctrl-F9]
+                  available in TDE.                         Hide win   [Alt-6]
+____________________________________________________________Close win  [Alt-7]
+
+Ctrl-Q = Quick commands
+ ^QR,^QC  top,end of file       (find/replace)            (delete, other)
+ ^QE      top of screen         ^QF  find fwd (string)    ^Q-DEL  del to TOL
+ ^QM      middle of screen      ^QG  incr search fwd      ^QY     del to EOL
+ ^QX      bottom of screen      ^QH  incr search bkwd     ^QT  find string,
+ ^QS=Home top of line (TOL)     ^QA  find/replace              delete up to it
+ ^QD=End  end of line (EOL)     ^L=F5  repeat find fwd
+ ^QB,^QK  goto top,end of blk    F6    repeat find bkwd   ^Q[1-3]  goto Marker
+ ^QI      goto line/position     F7    repeat regex fwd   ^QQ  repeat next cmd
+ ^QP      goto prev position   Alt-F7  repeat regx bkwd   ^QU  strip high-bits
+ ^QV    pos before block move                                  in marked block
+
+Ctrl-K = Block & File commands
+ (block commands)              (file commands)          (other)
+ ^KB,^KK mark stream top,end   ^KE  rename (SaveAs)     ^K[1-3] set Marker 1-3
+ ^KN     mark box/column top   ^KS  save this buffer    ^K"  set blk uppercase
+ Alt-L   change to line mode   ^KD  save, close file    ^K'  set blk lowercase
+ ^KH     hide (unmark) block   ^KX  save, close all     ^KM  add nums in block
+ ^KC     copy block            ^KQ  quit/abandon file
+ ^KV     move block (insert)   ^KO  toggle ReadOnly     (TDE block commands)
+ ^KZ     move block (overlay)  ^KL  load a new file     ^KI   indent N spaces
+ ^KW     write block to file   ^KR  read/insert file    ^K^I  indent by INDENT
+ ^KY     delete block          ^KF  shell prompt        ^KU   undent N spaces
+ ^KP     print block                                    ^K^U  undent by INDENT
+
+Ctrl-O = Onscreen commands
+ (screen display)               (margins, tabs)              (line control)
+ ^OE  put line at screen top    ^OL,^OR  set L,R margins     ^OC  center line
+ ^OM  put line at scrn middle   ^OW  Fixed/DynamicWrap/off   ^OF  flush right
+ ^OX  put line at scrn bottom   ^OG  toggle indent on/off
+ ^OT  toggle ruler on/off       ^OI  set tab width
+ ^OB  toggle EOL display        ^ON  toggle Fixed/Smart tabs
+                                ^OV  toggle true/virtual tabs
+
+(Note: ^AB is short for Ctrl-A followed by B, or Ctrl-A followed by Ctrl-B.
+On the second key, either B or Ctrl-B will produce the same result.)

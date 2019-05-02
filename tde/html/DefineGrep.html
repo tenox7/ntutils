@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>DefineGrep - TDE 5.1v Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TDE 5.1v Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Alphabetical-List.html#Alphabetical-List" title="Alphabetical List">
+<link rel="prev" href="DefineDiff.html#DefineDiff" title="DefineDiff">
+<link rel="next" href="DefineSearch.html#DefineSearch" title="DefineSearch">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="DefineGrep"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="DefineSearch.html#DefineSearch">DefineSearch</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="DefineDiff.html#DefineDiff">DefineDiff</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Alphabetical-List.html#Alphabetical-List">Alphabetical List</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">DefineGrep</h3>
+
+<p><table summary=""><tr align="left"><td valign="top">Key:  </td><td valign="top"><kbd>Shift+F12</kbd>
+<br></td></tr><tr align="left"><td valign="top">Key:  </td><td valign="top"><kbd>Ctrl+F12</kbd>
+<br></td></tr><tr align="left"><td valign="top">Key:  </td><td valign="top"><kbd>Shift+Alt+Q</kbd>
+<br></td></tr><tr align="left"><td valign="top">Menu: </td><td valign="top">File &gt; Grep &gt; File Find
+<br></td></tr></table>
+
+   <p>Search a list of filenames and/or wildcards for a pattern.  If <samp><span class="option">RegX</span></samp>
+is checked, the pattern will be a regular expression; if unchecked, straight
+text.  If <samp><span class="option">Results</span></samp> is checked, all matching lines will be copied to a
+new window, prefixed with the filename, line number and column; otherwise it
+will load the first file that matches and position the cursor at the match. 
+If <samp><span class="option">Load all</span></samp> is checked, all matching files will be loaded into the
+editor, positioned either at the first match (<samp><span class="option">Results</span></samp> unchecked), or at
+the beginning of the file (<samp><span class="option">Results</span></samp> checked).  If <samp><span class="option">Binary</span></samp> is
+checked, files determined to be binary will autoload using the last value of
+<samp><span class="option">-b</span></samp> (see <a href="Usage.html#Usage">Usage</a>); otherwise binary files will be ignored.
+
+   <p>This function will also define the search string (see <a href="RepeatFindForward.html#RepeatFindForward">RepeatFindForward</a>,
+see <a href="RepeatRegXForward.html#RepeatRegXForward">RepeatRegXForward</a>), but changing the search string will not affect the
+grep.  See <a href="RepeatGrep.html#RepeatGrep">RepeatGrep</a>.
+
+   <p>See <a href="DirList.html#DirList">DirList</a>, for a description of wildcards.  Wildcards for this function
+can also be used for directories and the special path <samp><span class="file">...</span></samp> will traverse
+subdirectories.  For example, `<samp><span class="samp">d*/.../*.c</span></samp>' will find all the <samp><span class="file">.c</span></samp>
+files in all the directories starting with <samp><span class="file">d</span></samp> and all their
+subdirectories.  The files will be sorted according to the current directory
+list order.
+
+   </body></html>
+

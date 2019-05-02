@@ -1,0 +1,1861 @@
+; tde.shl -- stores descriptions of languages for syntax highlighting.
+; Modified from elvis.syn by Steve Kirkendall and its contributors.
+; Note: it requires four quotes ("""") for one individual quote (").
+;       semi-colons also need to be quoted (";").
+
+; Define the colors
+;background   Blue
+;normal       Yellow
+;bad          Bright_red
+;keyword      White
+;comment      Grey
+;function     Bright_green
+;string       Bright_cyan
+;character    Bright_cyan
+;integer      Bright_cyan
+;binary       Bright_cyan
+;octal        Bright_cyan
+;hex          Bright_cyan
+;real         Bright_cyan
+;preprocessor Cyan
+;symbol       White
+
+
+;-----------------------------------   C   ------------------------------------
+
+; Note that ".h" is not listed as a possible file name extension here since it
+; could also be C++ code.  The differences between the two are small, buf if
+; we must guess, then C++ is the better choice because C++ declarations use a
+; lot of keywords which are absent from C.
+language c
+pattern  *.c
+keyword  asm    continue  extern  long      static    void
+keyword  auto   default   float   register  struct    volatile
+keyword  break  do        for     return    switch    while
+keyword  case   double    goto    short     typedef   public
+keyword  char   else      if      signed    union
+keyword  const  enum      int     sizeof    unsigned
+; Add some implementation-specific keywords.
+keyword  near  far  typeof
+; Add some common predefined stuff.
+keyword  FILE  stdin  stdout  stderr  size_t  ssize_t  time_t  clock_t
+keyword  bool  true   false   BOOL    BOOLEAN TRUE     FALSE
+comment  //
+comment  /* */
+function (
+preprocessor # spanline \
+string    """" spanline \
+character ' 4
+escape    \
+octal     0-
+hex       0x-
+startword _
+inword    _
+innumber  flu
+
+c+k 3 Macro "\n  \3\n"
+c+k b Macro "\n{" c+k 3 "}"
+c+k f Macro "(\0)" c+k b
+
+PseudoMacro fo "r " c+k f ";;\l\l"
+PseudoMacro if " " c+k f
+PseudoMacro }i "\b\nelse if\p"
+PseudoMacro }e "\b\nelse" c+k b GotoMark3
+PseudoMacro wh "ile " c+k f
+Pseudomacro do c+k b " while (\0);"
+
+PseudoMacro sw "itch " c+k f
+PseudoMacro ca
+  "se \0:"
+  c+k 3
+  "break;"
+RecordMacro
+PseudoMacro de
+  "fault:\n"
+  "  \0\n"
+  "break;"
+RecordMacro
+
+PseudoMacro st "ruct \0" c+k b ";"
+PseudoMacro un "ion \0"  c+k b ";"
+
+PseudoMacro #h "\binclude <\0.h>"
+PseudoMacro #H "\binclude ""\0.h"""
+PseudoMacro #d "efine "
+
+c+k s+# Macro
+  c+k 3
+  "#else\n"
+  "  \2\n"
+  "#endif"
+RecordMacro
+PseudoMacro #i "fdef \0" c+k s+#
+PseudoMacro #I "\bif defined( \0 )" c+k s+#
+
+PseudoMacro ma
+  "\b\bint main" c+k f " int argc, char* argv[] "
+  GotoMark3
+  "\0\n\n  return 0;"
+RecordMacro
+
+UserMenu "{ }"            c+k b
+UserMenu "() { }"         c+k f
+UserMenu -
+UserMenu "main"           ma
+UserMenu -
+UserMenu "#include <>"    #h
+UserMenu "#include """""  #H
+UserMenu "#define"        #d
+UserMenu "#ifdef"         #i
+UserMenu "#if defined"    #I
+UserMenu -
+UserMenu "for"            fo
+UserMenu "if"             if
+UserMenu "else if"        }i
+UserMenu "else"           }e
+UserMenu "while"          wh
+UserMenu "do while"       do
+UserMenu "switch"         sw
+UserMenu "case"           ca
+UserMenu "default"        de
+UserMenu "struct"         st
+UserMenu "union"          un
+
+
+;----------------------------------   C++   -----------------------------------
+
+; Same as C, but with a few extra keywords.
+language c++ from c
+pattern  *.[ChH] *.cxx *.cc *.cpp *.hxx *.hh *.hpp
+keyword  bool      inline     template
+keyword  catch     new        this
+keyword  class     operator   throw
+keyword  delete    private    true
+keyword  false     protected  try
+keyword  friend               virtual
+; Common predefined C++ stuff.
+keyword  cin       cout       cerr
+keyword  istream   ostream
+keyword  ifstream  ofstream   fstream
+
+PseudoMacro cl
+  "ass \0" c+k b ";"
+  GotoMark3
+  "\bpublic:" c+k 3
+  "protected:\n\n"
+  "private:\n  \2"
+RecordMacro
+
+PseudoMacro te "mplate <class >\l"
+
+UserMenu "class"    cl
+UserMenu "template" te
+
+
+;---------------------------------   Intel   ----------------------------------
+
+; Assembly - Intel style (MASM & TASM).
+language  intel
+pattern   *.asm *.inc
+case      ignore
+binary    -b
+hex       -h
+string    """"
+character ' 0
+; Let's treat (some) labels as functions
+function  :
+comment   ";"
+; The comment directive is a little tricky. Since assembly doesn't have multi-
+; line comments, you could probably fudge something with that.
+comment   comment
+comment   ^ ^
+startword ?@_$%
+inword    ?@_$
+; In case radix 16 is being used
+innumber  a-f
+; Directives (taken from "IBM PC Assembly Language and Programming Second
+; Edition", Peter Abel, 1991, Prentice-Hall International Edition).
+preprocessor align alpha assume code comm const cref data data?
+preprocessor db dd df dosseg dq dt dw else end endif endm endp ends equ
+preprocessor err err1 err2 erre errnz errdef errndef errb errnb
+preprocessor erridn erridni errdif errdifi
+preprocessor even exitm extrn fardata fardata? group if if1 if2 ifb ifdef
+preprocessor ifdif ifdifi ife ifidn ifidni ifnb ifndef include includelib irp
+preprocessor irpc label lall lfcond list local macro model name org %out
+preprocessor page proc public purge radix record rept sall segment seq
+preprocessor sfcond stack struc subttl tfcond title union xall xcref xlist
+; Operators. Use symbol or keyword? Since I have symbol in white, I'll use that,
+; but if you like symbols in normal, you'll probably want to use keyword. (Some
+; of them will be keywords, anyway.)
+; Taken from the same place as above.
+symbol and byte con dword dup eq far fword ge gt high le length line low lt
+symbol mask mod ne near not nothing offset or ptr qword seg shl short shr size
+symbol stack this tbyte type width word xor
+
+; Instruction set taken from intel.doc that I got from their site (I think).
+; Only goes up to the 486. Not sure if I have all variations. Corrections
+; greatly appreciated.
+; 8086
+keyword AH       AL       BH       BL       CH       CL       DH       DL
+keyword AX       BX       CX       DX       SI       DI       SP       BP
+keyword CS       DS       ES       SS       SEGCS    SEGDS    SEGES    SEGSS
+keyword AAA      CMPSW    JAE      JNE      LDS      MUL      REPNZ    STC
+keyword AAD      CWD      JB       JNG      LEA      NEG      RET      STD
+keyword AAM      DAA      JBE      JNGE     LES      NOP      RETF     STI
+keyword AAS      DAS      JC       JNL      LOCK     NOT      RETN     STOS
+keyword ADC      DEC      JCXZ     JNLE     LODS     OR       ROL      STOSB
+keyword ADD      DIV      JE       JNO      LODSB    OUT      ROR      STOSW
+keyword AND      ESC      JG       JNP      LODSW    POP      SAHF     SUB
+keyword CALL     HLT      JGE      JNS      LOOP     POPF     SAL      TEST
+keyword CBW      IDIV     JL       JNZ      LOOPE    PUSH     SHL      WAIT
+keyword CLC      IMUL     JLE      JO       LOOPZ    PUSHF    SAR      FWAIT
+keyword CLD      IN       JMP      JP       LOOPNZ   RCL      SBB      XCHG
+keyword CLI      INC      JNA      JPE      LOOPNE   RCR      SCAS     XLAT
+keyword CMC      INT      JNAE     JPO      MOV      REP      SCASB    XLATB
+keyword CMP      INTO     JNB      JS       MOVS     REPE     SCASW    XOR
+keyword CMPS     IRET     JNBE     JZ       MOVSB    REPZ     SHL
+keyword CMPSB    JA       JNC      LAHF     MOVSW    REPNE    SHR
+; 80188
+keyword BOUND    INS      INSW     OUTS     OUTSB    OUTSW    POPA     PUSHA
+keyword ENTER    INSB     LEAVE
+; 286
+keyword ARPL     LAR      LIDT     LMSW     LTR      SIDT     SMSW     VERR
+keyword CLTS     LGDT     LLDT     LSL      SGDT     SLDT     STR      VERW
+; 386
+keyword EAX      EBX      ECX      EDX      EDI      ESI      EBP      ESP
+keyword FS       GS       SEGFS    SEGGS
+keyword CR0      CR2      CR3      TR4      TR5      TR6      TR7
+keyword DR0      DR1      DR2      DR3      DR6      DR7
+keyword BSF      CWDE     MOVSD    PUSHFD   SETE     SETNB    SETNLE   SETPE
+keyword BSR      INSD     MOVSX    SCASD    SETG     SETNBE   SETNO    SETPO
+keyword BT       IRETD    MOVZX    SETA     SETGE    SETNC    SETNP    SETS
+keyword BTC      JECXZ    OUTSD    SETAE    SETL     SETNE    SETNS    SETZ
+keyword BTR      LFS      POPAD    SETB     SETLE    SETNG    SETNZ    SHLD
+keyword BTS      LGS      POPFD    SETBE    SETNA    SETNGE   SETO     SHRD
+keyword CDQ      LODSD    PUSHAD   SETC     SETNAE   SETNL    SETP     STOSD
+keyword CMPSD    LSS
+; 486
+keyword BSWAP    CMPXCHG  INVD     INVLPG   WBINVD
+
+; Maths/numeric coprocessor. Taken from "BC45\DOC\TD_ASM.TXT".
+; 8087/287
+keyword ST
+keyword F2XM1    FCOMP    FFREE    FINIT    FLDL2E   FNSTS    FSQRT    FSUBRP
+keyword FABS     FCOMPP   FIACOM   FIST     FLDL2T   FPATAN   FST      FTST
+keyword FADD     FDECSTP  FIACOMP  FISTP    FLDLG2   FPREM    FSTCW    FWAIT
+keyword FADDP    FDISI    FIADD    FISUB    FLDLN2   FPTAN    FSTENV   FXAM
+keyword FBLD     FDIV     FIDIV    FISUBR   FLDPI    FRNDINT  FSTP     FXCH
+keyword FBSTP    FDIVP    FIDIVR   FLD      FLDZ     FRSTOR   FSTSW    FXTRACT
+keyword FCHS     FDIVR    FILD     FLD1     FMUL     FSAVENT  FSUB     FYL2X
+keyword FCLEX    FDIVRP   FIMUL    FLDCWR   FMULP    FSCALE   FSUBP    FYL2XPI
+keyword FCOM     FENI     FINCSTP  FLDENV   FNOP     FSETPM   FSUBR
+; 387
+keyword FCOS     FPREM1   FSIN     FSINCOS  FUCOM    FUCOMP   FUCOMPP
+
+
+;----------------------------------   AT&T   ----------------------------------
+
+; Assembly - AT&T style (GAS). Taken from RHIDE's syntaxhl.shl file.
+language  at&t
+pattern   *.s
+case      ignore
+hex       0x-
+string    """"
+character ' 0
+; Let's treat (some) labels as functions
+function  :
+preprocessor #
+comment   /* */
+startword ._
+inword    _
+Keyword  aaa aad aam aas adc adcb adcw adcl add addb addw addl and andb andw
+Keyword  andl arpl bound bsf bsr bswap bt btc btr bts lcall call cbw cbtw cdq
+Keyword  cltd clc cld cli clts cmc cmp cmpb cmpw cmpl cmps cmpsb cmpsw cmpsl
+Keyword  cmpxchg cwd cwtd cwde cwtl daa das dec decb decw decl div divw divl
+Keyword  enter esc hlt idiv idivw idivl imul imulw imull in inb inw inl inc
+Keyword  incb incw incl ins insb insw insl int into invd invlpg iret iretd ja
+Keyword  jae jb jbe jc je jg jge jl jle jmp jna jnae jnb jnbe jnc jne jng
+Keyword  jnge jnl jnle jno jnp jns jnz jo jp jpe jpo js jz jcxz jecxz jmp
+Keyword  ljmp lahf lar lds lea leaw leal leave les lfs lgdt lidt lgs lldt
+Keyword  lmsw lock lods lodsb lodsw lodsl loop loope loopz loopnz loopne lsl
+Keyword  lss ltr mov movb movw movl movs movsb movsw movsl movsx movsbl
+Keyword  movsbw movswl movzx movzbl movzbw movzwl mul mulw mull neg negb negw
+Keyword  negl nop not notb notw notl or orb orw orl out outb outw outl outs
+Keyword  outsb outsw outsl pop popb popw popl popa popad popf popfd push
+Keyword  pushb pushw pushl pusha pushad pushf pushfd rcl rclb rclw rcll rcr
+Keyword  rcrb rcrw rcrl rep repe repz repne repnz ret retf rol rolb rolw roll
+Keyword  ror rorb rorw rorl sahf sal salb salw sall shl shlb shlw shll sar
+Keyword  sarb sarw sarl sbb sbbb sbbw sbbl scas scasb scasw scasl setae setnb
+Keyword  setb setnae setbe setna sete setz setne setnz setl setnge setge
+Keyword  setnl setle setng setg setnle sets setns setc setnc seto setno setp
+Keyword  setpe setnp setpo sgdt sidt shl shlb shlw shll shr shrb shrw shrl
+Keyword  shld shldb shldw shldl shrd shrdb shrdw shrdl sldt smsw stc std sti
+Keyword  stos stosb stosw stosl str sub subb subw subl test testb testw testl
+Keyword  verr verw wait fwait wbinvd xchg xchgb xchgw xchgl xlat xlatb xor
+Keyword  xorb xorw xorl ax eax ah al bx ebx bh bl cx ecx ch cl dx edx dh dl
+Keyword  si esi di edi sp esp bp ebp cs ds ss es fs gs
+; GAS specific
+Keyword  .abort .align .app-file .ascii .asciz .balign .byte .comm
+Keyword  .data .def .desc .dim .double .eject .else .endef .endif .equ
+Keyword  .extern .file .fill .float .global .hword .ident .if .include
+Keyword  .int .irp .irpc .lcomm .lflags .line .ln .linkonce .list .long
+Keyword  .macro .mri .nolist .octa .org .p2align .psize .quad .rept
+Keyword  .sbttl .scl .section .set .short .single .size .skip .space
+Keyword  .stabd .stabn .stabs .string .tag .text .title .type .val .word
+Keyword  .globl
+; Floating point
+keyword st
+keyword f2xm1 fabs fadd faddp fiadd fbld fbstp fchs fclex fnclex fcmovb fcmove
+keyword fcmovbe fcmovu fcmovnb fcmovne fcmovnbe fcmovnu fcom fcomp fcompp fcomi
+keyword fcomip fucomi fucomip fcos fdecstp fdiv fdivp fidiv fdivr fdivrp fidivr
+keyword ffree ficom ficomp fild fincstp finit fninit fist fistp fld fld1 fldl2t
+keyword fldl2e fldpi fldlg2 fldln2 fldz fldcw fldenv fmul fmulp fimul fnop
+keyword fpatan fprem fprem1 fptan frndint frstor fsave fnsave fscale fsin
+keyword fsincos fsqrt fst fstp fstcw fnstcw fstenv fnstenv fstsw fnstsw fsub
+keyword fsubp fisub fsubr fsubrp fisubr ftst fucom fucomp fucompp fwait fxam
+keyword fxch fxtract fyl2x fyl2xp1
+; Suffixed versions - not all of them, just the ones I've come across
+keyword faddl fildl fistpl fldl fldt fmull fstpl fstpt
+
+
+;----------------------------------   NASM   ----------------------------------
+
+; Assembly - NASM style.
+language  nasm
+pattern   *.nsm *.nas *.mac
+case      ignore
+binary    -b
+octal     -o            ; or -q
+hex       -h            ; or 0x-, $-
+string    """" spanline \
+character ' 0  spanline \
+; Let's treat (some) labels as functions.
+function :
+comment ";"
+; . can start and be in a word, but let's leave it as a separator.
+startword _?@$
+inword _$#@~?
+innumber xa-fnolist ; in case 0x is used and to get around 0.nolist
+
+; Pseudo-instructions
+preprocessor db dw dd dq dt resb resw resd resq rest
+preprocessor incbin equ times
+preprocessor seg wrt strict
+preprocessor byte word dword qword tword near far long short nosplit to
+preprocessor a16 a32 o16 o32
+
+; Preprocessor
+; Since the % symbol forms part of the name define these explicitly.
+;preprocessor % spanline \
+startword %
+preprocessor %define %idefine %xdefine %xidefine %undef
+preprocessor %assign %iassign %strlen %substr
+preprocessor %macro %imacro %endmacro %endm %rotate nolist %clear
+preprocessor %if %elif %else %endif
+preprocessor %ifdef %ifndef %elifdef %elifndef
+preprocessor %ifmacro %ifnmacro %elifmacro %elifnmacro
+preprocessor %ifctx %ifnctx %elifctx %elifnctx
+preprocessor %ifidn %ifnidn %elifidn %elifnidn
+preprocessor %ifidni %ifnidni %elifidni %elifnidni
+preprocessor %ifnum %ifnnum %elifnum %elifnnum
+preprocessor %ifid %ifnid %elifid %elifnid
+preprocessor %ifstr %ifnstr %elifstr %elifnstr
+preprocessor %error
+preprocessor %rep %exitrep %endrep
+preprocessor %include
+preprocessor %push %pop %repl
+preprocessor %line
+preprocessor %arg %stacksize %local
+
+; Standard macros
+preprocessor __NASM_MAJOR__ __NASM_MINOR__ __NASM_SUBMINOR__
+preprocessor ___NASM_PATCHLEVEL__ __NASM_VERSION_ID__ __NASM_VER__
+preprocessor __FILE__ __LINE__
+preprocessor struc endstruc istruc at iend
+preprocessor align alignb
+preprocessor __SECT__
+
+; Directives
+preprocessor bits use16 use32 section segment absolute extern global common cpu
+preprocessor list warning debug
+; bin, obj, win32, coff
+preprocessor org progbits nobits start vstart follows vfollows map
+preprocessor private public stack class overlay flat group
+preprocessor uppercase import export resident nodata parm
+preprocessor code text data rdata bss info
+
+; Registers
+keyword al cl dl bl ah ch dh bh
+keyword ax cx dx bx sp bp si di
+keyword eax ecx edx ebx esp ebp esi edi
+keyword es cs ss ds fs gs
+keyword st0 st1 st2 st3 st4 st5 st6 st7
+keyword mm0 mm1 mm2 mm3 mm4 mm5 mm6 mm7
+keyword cr0 cr2 cr3 cr4
+keyword dr0 dr1 dr2 dr3 dr6 dr7
+keyword tr3 tr4 tr5 tr6 tr7
+
+; Condition codes
+keyword o no  b c nae nb nc ae  e z ne nz  be na nbe a
+keyword s ns  p pe np po  l nge  nl ge  le ng nle g
+keyword cxz ecxz
+
+; Instruction set (adapted from insns.dat, v1.46)
+; 8086
+keyword aaa aad aam aas adc add and call cbw clc cld cli cmc cmp cmpsb cmpsw cwd
+keyword daa das dec div fwait hlt idiv imul in inc int int03 int3 into iret
+keyword iretw ja jae jb jbe jc jcxz je jg jge jl jle jmp jna jnae jnb jnbe jnc
+keyword jne jng jnge jnl jnle jno jnp jns jnz jo jp jpe jpo js jz lahf lds lea
+keyword les lodsb lodsw loop loope loopne loopnz loopz mov movsb movsw mul neg
+keyword nop not or out pop popf popfw push pushf pushfw rcl rcr ret retf retn
+keyword rol ror sahf sal salc sar sbb scasb scasw shl shr stc std sti stosb
+keyword stosw sub test wait xchg xlat xlatb xor
+keyword lock rep repe repz repne repnz
+; 80186
+keyword bound enter insb insw leave outsb outsw popa popaw pusha pushaw
+; 286
+keyword arpl clts lar lgdt lidt lldt lmsw loadall286 lsl ltr sgdt sidt sldt smsw
+keyword str ud0 ud1 ud2 verr verw
+; 386
+keyword bsf bsr bt btc btr bts cdq cmpsd cwde ibts icebp insd int01 int1 iretd
+keyword jecxz lfs lgs loadall lodsd lss movsd movsx movzx outsd popad popfd
+keyword pushad pushfd scasd shld shrd smi stosd umov xbts seta setae setb setbe
+keyword setc sete setg setge setl setle setna setnae setnb setnbe setnc setne
+keyword setng setnge setnl setnle setno setnp setns setnz seto setp setpe setpo
+keyword sets setz
+; 486
+keyword bswap cmpxchg486 invd invlpg rsdc rsldt rsts smintold svdc svldt svts
+keyword wbinvd xadd
+; Pentium (586, including MMX/3DNow!)
+keyword cmpxchg cmpxchg8b cpuid emms movd movq packssdw packsswb packuswb paddb
+keyword paddd paddsb paddsiw paddsw paddusb paddusw paddw pand pandn paveb
+keyword pavgusb pcmpeqb pcmpeqd pcmpeqw pcmpgtb pcmpgtd pcmpgtw pdistib pf2id
+keyword pfacc pfadd pfcmpeq pfcmpge pfcmpgt pfmax pfmin pfmul pfrcp pfrcpit1
+keyword pfrcpit2 pfrsqit1 pfrsqrt pfsub pfsubr pi2fd pmachriw pmaddwd pmagw
+keyword pmulhriw pmulhrwa pmulhrwc pmulhw pmullw pmvgezb pmvlzb pmvnzb pmvzb por
+keyword prefetch prefetchw pslld psllq psllw psrad psraw psrld psrlq psrlw psubb
+keyword psubd psubsb psubsiw psubsw psubusb psubusw psubw punpckhbw punpckhdq
+keyword punpckhwd punpcklbw punpckldq punpcklwd pxor rdmsr rdtsc rsm wrmsr
+;  AMD Enhanced 3DNow! (Athlon) instructions
+keyword pf2iw pfnacc pfpnacc pi2fw pswapd
+; P6 (686, PentiumPro, P2)
+keyword cmova cmovae cmovb cmovbe cmovc cmove cmovg cmovge cmovl cmovle cmovna
+keyword cmovnae cmovnb cmovnbe cmovnc cmovne cmovng cmovnge cmovnl cmovnle
+keyword cmovno cmovnp cmovns cmovnz cmovo cmovp cmovpe cmovpo cmovs cmovz rdpmc
+keyword rdshr smint syscall sysenter sysexit sysret wrshr xstore
+; P3 (Pentium III, Katmai)
+keyword prefetchnta prefetcht0 prefetcht1 prefetcht2 sfence
+;  Katmai Streaming SIMD instructions (SSE -- a.k.a. KNI, XMM, MMX2)
+keyword addps addss andnps andps cmpeqps cmpeqss cmpleps cmpless cmpltps cmpltss
+keyword cmpneqps cmpneqss cmpnleps cmpnless cmpnltps cmpnltss cmpordps cmpordss
+keyword cmpps cmpss cmpunordps cmpunordss comiss cvtpi2ps cvtps2pi cvtsi2ss
+keyword cvtss2si cvttps2pi cvttss2si divps divss ldmxcsr maxps maxss minps minss
+keyword movaps movhlps movhps movlhps movlps movmskps movntps movss movups mulps
+keyword mulss orps rcpps rcpss rsqrtps rsqrtss shufps sqrtps sqrtss stmxcsr
+keyword subps subss ucomiss unpckhps unpcklps xorps
+;  New MMX
+keyword maskmovq movntq pavgb pavgw pextrw pinsrw pmaxsw pmaxub pminsw pminub
+keyword pmovmskb pmulhuw psadbw pshufw
+; P4 (Pentium 4, Williamette)
+;  Willamette SSE2 Cacheability Instructions
+keyword clflush lfence maskmovdqu mfence movntdq movnti movntpd pause
+;  Willamette MMX instructions (SSE2 SIMD Integer Instructions)
+keyword movdq2q movdqa movdqu movq2dq packssdw packsswb packuswb paddd paddq
+keyword paddsb paddsw paddusb paddusw paddw pand pandn pavgb pavgw pcmpeqd
+keyword pcmpeqw pcmpgtb pcmpgtd pcmpgtw pextrw pinsrw pmaddwd pmaxsw pmaxub
+keyword pminsw pminub pmovmskb pmulhuw pmulhw pmullw pmuludq por psadbw pshufd
+keyword pshufhw pshuflw pslld pslldq psllq psllw psrad psraw psrld psrldq psrlq
+keyword psrlw psubb psubd psubq psubsb psubsw psubusb psubusw psubw punpckhbw
+keyword punpckhdq punpckhqdq punpckhwd punpcklbw punpckldq punpcklqdq punpcklwd
+keyword pxor
+;  Willamette Streaming SIMD instructions (SSE2)
+keyword addpd addsd andnpd andpd cmpeqpd cmpeqsd cmplepd cmplesd cmpltpd cmpltsd
+keyword cmpneqpd cmpneqsd cmpnlepd cmpnlesd cmpnltpd cmpnltsd cmpordpd cmpordsd
+keyword cmppd cmpsd cmpunordpd cmpunordsd comisd cvtdq2pd cvtdq2ps cvtpd2dq
+keyword cvtpd2pi cvtpd2ps cvtpi2pd cvtps2dq cvtps2pd cvtsd2si cvtsd2ss cvtsi2sd
+keyword cvtss2sd cvttpd2dq cvttpd2pi cvttps2dq cvttsd2si divpd divsd maxpd maxsd
+keyword minpd minsd movapd movhpd movlpd movmskpd movsd movupd mulpd mulsd orpd
+keyword shufpd sqrtpd sqrtsd subpd subsd ucomisd unpckhpd unpcklpd xorpd
+; Prescott
+keyword monitor mwait
+;  Prescott New Instructions (SSE3)
+keyword addsubpd addsubps haddpd haddps hsubpd hsubps lddqu movddup movshdup
+keyword movsldup
+; IA64
+keyword jmpe
+
+; Floating point
+; 8087
+keyword f2xm1 fabs fadd faddp fbld fbstp fchs fclex fcom fcomp fcompp fdecstp
+keyword fdisi fdiv fdivp fdivr fdivrp feni ffree fiadd ficom ficomp fidiv fidivr
+keyword fild fimul fincstp finit fist fistp fisub fisubr fld fld1 fldcw fldenv
+keyword fldl2e fldl2t fldlg2 fldln2 fldpi fldz fmul fmulp fnclex fndisi fneni
+keyword fninit fnop fnsave fnstcw fnstenv fnstsw fpatan fprem fptan frndint
+keyword frstor fsave fscale fsqrt fst fstcw fstenv fstp fstsw fsub fsubp fsubr
+keyword fsubrp ftst fxam fxch fxtract fyl2x fyl2xp1
+; 287
+keyword ffreep fsetpm
+; 387
+keyword fcos fprem1 fsin fsincos fucom fucomp fucompp
+; P6 (686, PentiumPro, P2)
+keyword fcmovb fcmovbe fcmove fcmovnb fcmovnbe fcmovne fcmovnu fcmovu fcomi
+keyword fcomip fucomi fucomip fxrstor fxsave
+; Prescott
+keyword fisttp
+
+; My macros and defines.
+
+; Just because cxz can't be inverted doesn't mean cxnz shouldn't be.
+; I created a macro to do just that.
+keyword cxnz
+
+; Additional pseudo-instructions
+green dflg ib id iw dc d$ dz dln dl$ dlz CSTR STR$
+
+; Inlined far call and jump
+function icallf ijmpf
+
+; Ignore inlined variable
+comment  i
+
+; Number processing
+integer  hl bit
+
+; Interrupts
+function intr amis disk dos exit kbd mous mpx prch prnt$ vid win
+
+; Suffixed instructions
+keyword adcb adcw addb addw andb andw cmpb cmpw decb decw divb divw idivb idivw
+keyword imulw imuld incb incw movb movw mulb mulw negb negw notb notw orb orw
+keyword popw pushb pushw rclb rclw rcrb rcrw rolb rolw rorb rorw salb salw sarb
+keyword sarw sbbb sbbw shlb shlw shrb shrw subb subw testb testw xorb xorw
+keyword adcd  addd  andd cmpd decd divd  idivd
+keyword imuld incd  movl muld negd notd  ord
+keyword popd  pushd rcld rcrd rold rord  sald
+keyword sard  sbbd  shll shrl subd testd xord
+keyword callf jmpf
+
+; "Enhanced" instructions
+bright_magenta ld ldw ldd ldhl swap swapw swapd
+bright_magenta sthl scs sds ses sfs sgs sss mmov mmovb mmovw mmovl mmovd
+bright_magenta cmov cmovby cmovw cmovd
+bright_magenta zero zerob zerow zerod isz iszb iszw iszd
+bright_magenta jzr jzb jzw jzd jnzr jnzb jnzw jnzd
+bright_magenta tflg sflg cflg iflg jflg jnflg
+bright_magenta tbit tbits sbit cbit ibit cfbit
+bright_magenta save savea restore uses return
+bright_magenta retif retifb retifw retifd
+bright_magenta jif jifb jifw jifd
+
+; Control statements
+brown ifz ifzb ifzw ifzd ifnz ifnzb ifnzw ifnzd
+brown ifflg ifnflg
+brown ifn if andif elif else fi
+brown ifnb ifb andifb elifb fib
+brown ifnw ifw andifw elifw fiw
+brown ifnd ifd andifd elifd fid
+brown repeat repeatr repeatb repeatw repeatd
+brown until untilb untilw untild next nextb nextw nextd
+brown repeat0 repeat0r repeat0b repeat0w repeat0d
+brown rptlmt rptlmtb rptlmtw rptlmtd
+brown for forb forw ford for0 for0b for0w for0d
+brown do when while is whileb whilew whiled isb isw isd wend
+brown whilst whilstb whilstw whilstd
+brown break breakb breakw breakd cntnu cntnub cntnuw cntnud
+
+; Pseudo-operators
+symbol zr zb zw zd nzr nzb nzw nzd
+
+
+;---------------------------------   Pascal   ---------------------------------
+
+; Let's treat the TURBO Pascal {$ compiler directive as a preprocessor.
+; These are the reserved words from Borland Pascal 7.0 (but GNU Pascal is
+; probably very similar), as well as the predefined types.
+language pascal
+pattern *.pas *.p
+case    ignore
+keyword and          div      function        label    packed     string  while
+keyword array        do       goto            library  procedure  then    with
+keyword asm          downto   if              mod      program    to      xor
+keyword begin        else     implementation  nil      record     type
+keyword case         end      in              not      repeat     unit
+keyword const        exports  inherited       object   set        until
+keyword constructor  file     inline          of       shl        uses
+keyword destructor   for      interface       or       shr        var
+keyword absolute assembler export external far forward index interrupt near
+keyword private public resident virtual
+keyword break continue exit
+keyword byte char integer longint pointer real shortint word
+keyword boolean bytebool longbool wordbool
+keyword false true maxint maxlongint
+comment { }
+comment (* *)
+comment //
+preprocessor {$
+function  (
+string    '
+hex       $-
+startword _
+inword    _
+innumber  #
+
+
+;----------------------------------   Ada   -----------------------------------
+
+; Ada and Ada 95
+; Contributed by Zhu QunYing (zhu@pobox.org.sg)
+; some common predefined types are added as keyword after "xor"
+language ada
+pattern *.ad[abs]
+case    ignore
+comment --
+keyword abort abs abstract accept access aliased all and array at
+keyword begin body
+keyword case constant
+keyword declare delay delta digits do
+keyword else elsif end entry exception exit
+keyword for function
+keyword generic goto
+keyword if in is
+keyword limited loop
+keyword mod
+keyword new not null
+keyword of or others out
+keyword package pragma private procedure protected
+keyword raise range record rem renames requeue return reverse
+keyword select separate subtype
+keyword tagged task terminate then type
+keyword until use
+keyword when while with
+keyword xor
+keyword Boolean Character Wide_Character Integer Float Duration File_type
+keyword String Wide_String Natural Positive
+; function will also highlight arrays - jmh
+function  (
+inword    _'
+character '
+string    """"
+; Based numbers will be displayed as integers or reals and won't be tested for
+; correctness - "2#123#", "2#001" will not be shown as bad. Integer exponents
+; will be shown as real.
+innumber _#a-f
+
+
+;---------------------------------   Batch   ----------------------------------
+
+; DOS/Windows batch files. Treat labels as preprocessor statements and : as
+; comment (for :: lines, but it's also inword so it won't affect paths).
+language batch
+pattern  *.bat *.cmd
+case     ignore
+; Internal commands
+comment  rem
+keyword  break   del         for       path    shift
+keyword  call    dir         goto      pause   time
+keyword  cd      do          if        prompt  ver
+keyword  chcp    echo        lh        rd      verify
+keyword  chdir   erase       loadhigh  ren     vol
+keyword  cls     errorlevel  md        rename
+keyword  copy    exist       mkdir     rmdir
+keyword  date    exit        not       set
+; Since . is inword (for filenames) need another keyword
+keyword  echo.
+; Additional keywords for CMD.EXE
+keyword  else defined setlocal endlocal
+keyword   enableextensions  enabledelayedexpansion
+keyword  disableextensions disabledelayedexpansion
+keyword  equ neq lss leq gtr geq
+; Common external commands
+keyword  choice deltree mode move xcopy
+
+preprocessor :
+comment      :  ; stuffs up :eof, but you can't have everything
+string    """"
+startword \_
+inword    :\_~.
+innumber  a-z
+
+
+;----------------------------------   4DOS   ----------------------------------
+
+; 4DOS batch files. Taken from RHIDE's syntaxhl.shl file.
+language 4dos
+pattern  *.btm
+case     ignore
+string   `
+preprocessor :
+startword \_
+inword    :\_~.
+innumber  a-z
+comment  rem
+Keyword  alias and attrib beep break by call cancel cd cdd chcp chdir cls
+Keyword  color copy ctty date delay del describe dirs dir do drawbox
+Keyword  drawhline drawvline  echos echo else elseiff enddo endiff endlocal
+Keyword  erase errorlevel eset except exist exit fc find format for free
+Keyword  global gosub goto history iff if inkey input iterate keybd leave
+Keyword  lh list loadbtm loadhigh log md memory mem mkdir mode more move
+Keyword  not on or path pause popd print prompt pushd quit rd reboot rename
+Keyword  ren replace return rmdir screen scrput select setdos setlocal
+Keyword  setver set shift sort start subst sys tee text then timer time to
+Keyword  tree type unalias undelete unset until verify ver vol vscrput while
+Keyword  window xcopy xor
+
+
+;----------------------------------   HTML   ----------------------------------
+
+; Originally from Elvis, I've updated it with HTML 4.0, Netscape and Microsoft
+; extensions, from the "Bare Bones Guide to HTML" by Kevin Werbach.
+language html
+pattern *.html *.htm
+case    ignore
+comment   <!-- -->
+startword <
+inword    / -
+keyword <a </a <abbr </abbr <acronym </acronym <address </address
+keyword <applet </applet <area
+keyword <b </b <base <basefont <bdo </bdo <bgsound <big </big <blink </blink
+keyword <blockquote </blockquote <body </body <br <button </button
+keyword <caption </caption <center </center <cite </cite <code </code
+keyword <col </col <colgroup </colgroup
+keyword <dd <del </del <dfn </dfn <dir </dir <div </div <dl </dl <dt
+keyword <em </em <embed
+keyword <fieldset </fieldset <font </font <form </form <frame </frame
+keyword <frameset </frameset
+keyword <h1 </h1 <h2 </h2 <h3 </h3 <h4 </h4 <h5 </h5 <h6 </h6
+keyword <head </head <hr <html </html
+keyword <i </i <iframe </iframe <ilayer </ilayer <img <input <ins </ins <isindex
+keyword <kbd </kbd
+keyword <label </label <large </large <layer </layer <legend </legend <li </li
+keyword <link </link
+keyword <map </map <marquee </marquee <menu </menu <meta <multicol </multicol
+keyword <nobr </nobr <noframes </noframes <nolayer </nolayer
+keyword <noscript </noscript
+keyword <object </object <ol </ol <optgroup </optgroup <option
+keyword <p </p <param <pre </pre
+keyword <q </q
+keyword <s </s <samp </samp <script </script <select </select <server </server
+keyword <small </small <spacer <span </span <strike </strike <strong </strong
+keyword <style </style <sub </sub <sup </sup
+keyword <table </table <tbody </tbody <td </td <textarea <tfoot </tfoot <th </th
+keyword <thead </thead <title </title <tr </tr <tt </tt
+keyword <u </u <ul </ul
+keyword <var </var
+keyword <wbr
+keyword <xmp </xmp
+innumber  a-z
+function  =
+;character ' 0  newline         ; too much interference from apostrophe
+character &; 6                  ; may cause problems with '&' by itself
+string    """" newline
+
+
+;----------------------------------   Java   ----------------------------------
+
+; Note that ".jav" is offered as a possible file name extension for
+; folks who're still using MS-DOS or Windows 3.1.
+language java
+pattern *.java *.jav
+keyword abstract boolean break byte byvalue case cast catch char class
+keyword const continue default do double else extends false final finally
+keyword float for future generic goto if implements import inner instanceof
+keyword int interface long native new null operator outer package private
+keyword protected public rest return short static super switch synchronized
+keyword this throw throws transient true try var void volatile while
+comment //
+comment /* */
+function (
+string    """"
+character ' 0
+escape    \
+octal     0-
+hex       0x-
+startword _
+inword    _
+innumber  dflu
+
+
+;----------------------------------   PHP   -----------------------------------
+
+; This version contributed by Eric Pement. The keyword list is not exhaustive.
+language php
+
+; Include files temporarily assigned to PHP
+pattern *.php *.inc
+
+keyword __LINE__ __FILE__ PHP_OS PHP_VERSION TRUE FALSE NULL E_ERROR E_NOTICE
+keyword E_PARSE E_WARNING E_ALL E_USER_ERROR E_USER_WARNING E_USER_NOTICE
+keyword DEFAULT_INCLUDE_PATH PHP_BINDIR PHP_LIBDIR PHP_DATADIR PHP_SYSCONFDIR
+keyword PHP_LOCALSTATEDIR PHP_CONFIG_FILE_PATH SORT_ASC SORT_DESC SORT_STRING
+keyword SORT_REGULAR SORT_NUMERIC LOCK_SH LOCK_EX LOCK_UN LOCK_NB ENT_COMPAT
+keyword HTML_SPECIALCHARS HTML_ENTITIES INFO_GENERAL INFO_CREDITS INFO_ALL
+keyword INFO_VARIABLES INFO_LICENSE PHP_OUTPUT_HANDLER_START STR_PAD_RIGHT
+keyword STR_PAD_LEFT STR_PAD_BOTH PHP_OUTPUT_HANDLER_CONT ENT_QUOTES
+keyword PHP_OUTPUT_HANDLER_END ENT_NOQUOTES LC_CTYPE LC_NUMERIC LC_TIME
+keyword LC_COLLATE LC_MONETARY LC_ALL LC_MESSAGES
+keyword and as break case class continue declare do echo else elseif endfor
+keyword endforeach endif endswitch endwhile exit extends default for foreach
+keyword global if include include_once next or require require_once return
+keyword static switch then var while xor private throw catch try instanceof
+keyword print
+; Assorted keywords for PHP types
+keyword array bool boolean char const double float int integer long mixed
+keyword object real string
+; PHP superglobal variables
+symbol _GET _POST _COOKIE _SESSION _ENV GLOBALS SERVER _FILES _REQUEST
+;
+comment   #
+comment   //
+comment   /* */
+comment   <!-- -->
+function  (
+startword $
+inword    _
+string    """" newline
+character ' 0 newline
+escape    \
+innumber  .
+
+
+;--------------------------------   VBScript   --------------------------------
+
+; Contributed by Eric Pement (eric.pement [at] moody [dot] edu)
+language vbscript
+; jmh - use it for BASIC, too.
+pattern *.asp *.vbs *.bas
+case    ignore
+keyword Call Case Const Dim Do Each Else ElseIf End Erase Error Exit Explicit
+keyword For keyword Function If In Loop Next On Option Public Private Randomize
+keyword ReDim Resume Select Set Step Sub To Then Wend While
+keyword Empty False Nothing Null True And Eqv Imp Is Mod Not Or Xor
+keyword Abs Array Asc Atn CBool CByte CCur CDate CDbl Chr Cint CLng Cos
+keyword CreateObject CSng CStr Date DateAdd DateDiff DatePart DateSerial
+keyword DateValue Day Exp Filter Fix FormatCurrency FormatDateTime FormatNumber
+keyword FormatPercent GetObject Hex Hour InputBox InStr InStr InStrRev Int
+keyword IsArray IsDate IsEmpty IsNull IsNumeric IsObject Join LBound LCase Left
+keyword Len LoadPicture Log LTrim Mid Minute Month MonthName MsgBox Now Oct
+keyword Replace RGB Right Rnd Round RTrim ScriptEngine ScriptEngineBuildVersion
+keyword ScriptEngineMajorVersion ScriptEngineMinorVersion Second Sgn Sin Space
+keyword Split Sqr StrComp String StrReverse Tan Time TimeSerial TimeValue Trim
+keyword TypeName UBound UCase VarType Weekday WeekdayName Year
+keyword Dictionary Err Add AddFolders BuildPath Clear Close Copy CopyFile
+keyword CopyFolder CreateFolder CreateTextFile Delete DeleteFile DeleteFolder
+keyword DriveExists Exists Write WriteBlankLines WriteLine AtEndOfLine
+keyword AtEndOfStream Attributes AvailableSpace Column CompareMode Count
+keyword DateCreated DateLastAccessed DateLastModified Description Drive
+keyword DriveLetter Drives DriveType Type VolumeName
+comment  '
+function (
+string   """" newline
+inword   _
+
+
+;----------------------------------   AWK   -----------------------------------
+
+; This is actually for Thompson Automation's AWK compiler, which is
+; somewhat beefier than the standard AWK interpretter.
+language awk
+pattern *.awk
+keyword BEGIN BEGINFILE END ENDFILE INIT break continue do else for function
+keyword global if in local next return while
+comment #
+function (
+string """" spanline \
+escape \
+
+
+;-------------------------------   Make files   -------------------------------
+
+; Imakefiles.  This one is interesting because '#' is both the preprocessor
+; character and the comment character.  A '#' in the first column is displayed
+; as a preprocessor directive, and anywhere else as the start of a comment.
+language imakefile
+pattern  *Imakefile.*
+comment  #
+comment  /* */
+preprocessor #
+startword /.$
+inword    /.$()
+
+
+; Makefiles.  Note that file names like "Makefile" & "makefile" are recognized.
+; The keywords listed here are actually just common names for pseudo-targets.
+; The word characters include anything that's commonly used in a filename.
+; Any word followed by a : will be displayed in the function color.
+language  make
+pattern   *[mM]akefile *[mM]akefile.*
+keyword   all clean depend install uninstall
+comment   #
+startword /\.$_
+inword    /\.$()_
+function  :
+
+
+; Microsoft NMAKE-style makefiles.  Microsoft's NMAKE uses ! to introduce
+; preprocessor directives.
+language nmake
+pattern  *.mak
+comment  #
+preprocessor !
+startword /\.$_
+inword    /\.$()_
+function  :
+
+
+;-------------------------------   PostScript   -------------------------------
+
+language postscript
+pattern *.ps *.eps
+keyword add aload and arc arcn arcto array ashow awidthshow begin charpath
+keyword clear closepath copy copy copypage def definefont dict div dup end
+keyword eq exch exec exit false fill findfont for forall ge get grestore
+keyword gsave gt idiv if ifelse kshow le length lineto loop lt makefont
+keyword maxlength moveto mul ne neg newpath not or pop put repeat restore
+keyword rlineto rmoveto roll rotate round save scale search setgray
+keyword setlinewidth show showpage keyword string stroke sub translate true
+keyword widthshow xor
+string  ( )
+comment %
+
+
+;----------------------------------   Shell   ---------------------------------
+
+; Korn shell scripts.  It also tries to format other Bourne-like shell scripts.
+; Contributed by Gabriel Zachmann (zach@igd.fhg.de)
+; Let's treat #! as a preprocessor command - jmh
+language sh
+pattern *.sh
+keyword $* $@ $# $? $- $$ $! & | ";" [ ] < > ( )
+keyword for in do done select shift case esac eval set if then elif else fi
+keyword while until return echo test
+comment #
+function (
+preprocessor #!
+string    """" newline spanline \
+character ' 0  newline spanline \
+escape    \
+startword /?-*!.
+inword    /?*!.
+
+
+;--------------------------------   Modula-2   --------------------------------
+
+; Contributed by Peter Funk (pf@artcom0.north.de)
+language modula2
+pattern *.MOD *.DEF *.mod *.def *.mi *.md
+keyword AND ARRAY BEGIN BY CASE CONST DEFINITION DIV DO ELSE ELSIF END
+keyword EXIT EXPORT FOR FROM IF IMPLEMENTATION IMPORT IN LOOP MOD MODULE
+keyword NOT OF OR POINTER PROCEDURE QUALIFIED RECORD REPEAT RETURN SET
+keyword THEN TO TYPE UNTIL VAR WHILE WITH
+comment (* *)
+; Nested comments like (* foo (* bar *) gnu *) are NOT taken into account!
+function  (
+string    """"
+character '
+; you might want to try this out :
+; inword ._
+
+
+;----------------------------------   Perl   ----------------------------------
+
+; Original version contributed by Herb Kateley (herb@ke.com).  Another version
+; was contributed by Jeff Wang (jeffw@enterprise.advance.com).  What you see
+; here is the merger of those two, with other modifications.
+; jmh - Note that $ can start a word and # and ' can be in words. This prevents
+; $# and $' from being misinterpretted, hopefully without causing other mis-
+; interpretations.
+language perl  
+pattern *.pl *.pm
+keyword BEGIN END CORE __END__ __FILE__ __LINE__ AUTOLOAD DESTROY
+keyword abs accept alarm and atan2 bind binmode bless caller chdir chmod
+keyword chomp chop chown chr chroot close closedir cmp connect continue cos
+keyword crypt dbmclose dbmopen defined delete die do dump each else elsif
+keyword endgrent endhostent endnetent endprotoent endpwent endservent eof
+keyword eq eval exec exists exit exp fcntl fileno flock for foreach fork
+keyword format formline ge getc getgrent getgrgid getgrnam gethostbyaddr
+keyword gethostbyname gethostent getlogin getnetbyaddr getnetbyname
+keyword getnetent getpeername getpgrp getppid getpriority getprotobyname
+keyword getprotobynumber getprotoent getpwent getpwnam getpwuid
+keyword getservbyname getservbyport getservent getsockname getsockopt
+keyword glob gmtime goto grep gt hex if index int ioctl join keys kill
+keyword last lc lcfirst le length link listen local localtime log lstat
+keyword lt m map mkdir msgctl msgget msgrcv msgsnd my ne next no not oct
+keyword open opendir or ord pack package pipe pop pos print printf push q
+keyword qq quotemeta qw qx rand read readdir readline readlink readpipe
+keyword recv redo ref rename require reset return reverse rewinddir rindex
+keyword rmdir s scalar seek seekdir select semctl semget semop send setgrent
+keyword sethostent setnetent setpgrp setpriority setprotoent setpwent
+keyword setservent setsockopt shift shmctl shmget shmread shmwrite shutdown
+keyword sin sleep socket socketpair sort splice split sprintf sqrt srand
+keyword stat study sub substr symlink syscall sysread system syswrite tell
+keyword telldir tie time times tr truncate uc ucfirst umask undef unless
+keyword unlink unpack unshift untie until use utime values vec wait waitpid
+keyword wantarray warn while write x xor y
+comment   #
+function  (
+startword &_@$%
+inword    _#'
+string    """" newline
+character ' 0 newline
+escape    \
+octal     0-
+hex       0x-
+innumber  _
+
+
+;----------------------------------   TCL   -----------------------------------
+
+; TCL shell scripts.
+; Contributed by Jeff Wang (jeffw@advance.com)
+language tcl
+pattern *.tcl
+keyword Balloon ButtonBox Control DirList ExFileSelectBox ExFileSelectDialog
+keyword FileEntry HList LabelEntry LabelFrame NoteBook OptionMenu PanedWindow
+keyword PopupMenu ScrolledHList ScrolledText ScrolledWindow Select StdButtonBox
+keyword after append array auto_execok auto_load auto_mkindex auto_reset bell
+keyword bind bindtags break button canvas case catch cd checkbutton clipboard
+keyword close common concat constructor continue default destroy destructor
+keyword else elseif entry eof error eval exec exit expr file fileevent flush
+keyword focus for for_array_keys for_file for_recursive_glob foreach format
+keyword frame gets glob global grab history if image in incr info inherit
+keyword itcl_class join label lappend lindex linsert list listbox llength loop
+keyword lower lrange lreplace lsearch lsort menu menubutton message method open
+keyword option pack pid place proc protected public puts pwd radiobutton raise
+keyword read regexp regsub rename return scale scan scrollbar seek selection
+keyword send set source split string subst switch tell text then time tix tk
+keyword tk_popup tkwait toplevel trace unknown unset update uplevel upvar while
+keyword winfo wm
+comment   #
+function  {
+startword &$_
+inword    _
+string    """"
+character [
+
+
+;----------------------------------   VRML   ----------------------------------
+
+; VRML markups.
+; Contributed by Jeff Wang (jeffw@advance.com)
+language vrml
+pattern *.wrl
+keyword Anchor Appearance AsciiText AudioClip Background Billboard Box
+keyword Collision Color ColorInterpolator Cone Coordinate Coordinate3
+keyword CoordinateInterpolator Cube Cylinder CylinderSensor DirectionalLight
+keyword DiskSensor ElevationGrid Extrusion FALSE Fog FontStyle FontStyle Group
+keyword IS ImageTexture IndexedFaceSet IndexedLineSet Info Inline LOD Material
+keyword MaterialBinding MatrixTransform MovieTexture NULL NavigationInfo Normal
+keyword NormalBinding NormalInterpolator OrientationInterpolator
+keyword OrthographicCamera PerspectiveCamera PixelTexture PlaneSensor
+keyword PointLight PointSet PositionInterpolator ProximitySensor ROUTE Rotation
+keyword ScalarInterpolator Scale Script Separator Shape ShapeHints Sound Sphere
+keyword SphereSensor SpotLight Switch TO TRUE Text Texture2 Texture2Transform
+keyword TextureCoordinate TextureCoordinate2 TextureTransform TimeSensor
+keyword TouchSensor Transform TransformSeparator Translation USE Viewpoint
+keyword VisibilitySensor WWWAnchor WWWInline WorldInfo eventIn eventOut
+keyword exposedField field
+comment   #
+function  {
+startword &$_
+inword    _
+string    [ ]
+
+
+;----------------------------------   Diff   ----------------------------------
+
+; Quick hack to make context diffs use different colors for different lines
+; This isn't perfect, but it is useful
+language diff
+pattern  *.dif *.diff *.cdi *.patch
+comment  <
+preprocessor >
+startword 0-9
+
+
+;--------------------------------   Fortran   ---------------------------------
+
+; Fortran 77
+; Contributed by Lois Amoreira (amoreira@ubistf.ubi.pt)
+; Comments in F77 are *'s or c's appearing in the 1st column.
+; I defined them as "*"
+language fortran
+pattern *.f *.f77 *.for
+case    ignore
+comment *
+keyword .and.  .eq.  .eqv.  .ge.  .gt.  .le.  .lt.  .ne.  .neqv.  .not.  .or.
+keyword accept access assign backspace blank block blockdata boolean buffer
+keyword call character close common complex continue data data decode define
+keyword dimension do double dump dvck else elseif encode end endif entry
+keyword equivalence err exit external file find fmt form format function
+keyword go goto id if implicit in include integer intrinsic iostat level
+keyword logical namelist open out overfl parameter pause pdump precision
+keyword print program punch read real rec recl return rewind
+keyword save status stop strace subroutine then to type unit unit unknown
+keyword write virtual wait
+startword .
+inword    .
+string    '
+function  (
+
+
+;---------------------------------   Python   ---------------------------------
+
+; Contributed by Dan Fandrich (dan@fch.wimsey.bc.ca)
+; Note that there is no perfect way to specify Python's multiline strings here,
+; so after the first empty line they may be displayed as program text (I don't
+; know if this applies to TDE - jmh)
+language python
+pattern *.py
+comment #
+comment ''' '''
+; keywords
+keyword access and break class continue def del elif else except finally for
+keyword from global if import in is lambda not or pass print raise return try
+keyword while
+; built-in exceptions
+keyword AccessError AttributeError ConflictError EOFError
+keyword IOError ImportError IndexError KeyError KeyboardInterrupt
+keyword MemoryError NameError None OverflowError RuntimeError
+keyword SyntaxError SystemError SystemExit TypeError ValueError
+keyword ZeroDivisionError
+; built-in functions
+keyword abs apply callable chr cmp coerce compile delattr
+keyword dir divmod eval execfile filter float getattr
+keyword globals hasattr hash hex id input int len
+keyword locals long map max min oct open ord pow
+keyword range raw_input reduce reload repr round setattr
+keyword str tuple type vars xrange
+; other
+keyword exec _ __doc__ __import__ __main__ __name__ None
+; special methods
+keyword __abs__ __add__ __and__ __bases__ __builtins__ __call__ __class__
+keyword __cmp__ __coerce__ __del__ __delattr__ __delitem__ __delslice__
+keyword __dict__ __div__ __divmod__ __float__ __getattr__ __getitem__
+keyword __getslice__ __hash__ __hex__ __init__ __int__ __invert__ __len__
+keyword __long__ __lshift__ __members__ __methods__ __mod__ __mul__ __neg__
+keyword __nonzero__ __oct__ __or__ __pos__ __pow__ __repr__ __rshift__
+keyword __setattr__ __setitem__ __setslice__ __str__ __sub__ __version__ __xor__
+string    ' newline
+character """" 0
+function  (
+startword _
+inword    _
+
+
+;---------------------------------   Scheme   ---------------------------------
+
+; Contributed by Iver Odin Kvello (i.o.kvello@sum.uio.no)
+; R4RS Scheme, with keywords from the macro appendix. No functions,
+; doesn't work well with s-exp syntax. Also no chars or constants (beginning
+; with #.)
+language scheme
+pattern *.scm *.sc
+case    ignore
+keyword define lambda let let* letrec if cond begin and or case 
+keyword => delay do else quasiquote quote set! unquote unquote-splicing
+keyword define-syntax syntax-rules syntax let-syntax letrec-syntax 
+comment ";"
+string  """"
+startword + - . * / < = > ! ? : $ % _ & ~ ^
+inword    + - . * / < = > ! ? : $ % _ & ~ ^
+
+
+;----------------------------------   ODL   -----------------------------------
+
+; Oobject Description Files
+; Contributed by David Gottner (dgottner@microsoft.com)
+language odl
+pattern *.ODL *.odl
+keyword boolean char double float int long short void wchar_t
+keyword BSTR CURRENCY DATE HRESULT LPSTR LPWSTR SAFEARRAY SCODE VARIANT
+keyword IDispatch IUnknown
+keyword appobject bindable control default defaultbind displaybind
+keyword dllname dual entry helpcontext helpfile helpstring
+keyword hidden id in lcid licensed nonextensible odl oleautomation
+keyword optional out propget propput propputref public readonly
+keyword requestedit restricted retval source string uuid vararg
+keyword version
+keyword coclass dispinterface enum importlib interface library
+keyword methods module properties struct typedef union
+comment //
+comment /* */
+preprocessor #
+string    """"
+startword _
+inword    _
+
+
+;---------------------------------   Bibtex   ---------------------------------
+
+; Contributed by Woody Jin (wjin@cs.uh.edu)
+language bib
+pattern *.bib *.BIB
+keyword author year volume number pages month note
+keyword title publisher series address edition journal
+keyword booktitle organization howpublished type chapter
+keyword institution school editor
+comment %
+startword @
+string """" newline
+
+
+;---------------------------------   COBOL   ----------------------------------
+
+; RM/COBOL-85. Taken from "Modern COBOL Programming, Second Edition" by
+; Wilson Price & Jack Olson, McGraw-Hill, 1991.
+language cobol
+pattern *.cbl
+case    ignore
+keyword accept               delimiter       just             reports
+keyword access               depending       justified        rerun
+keyword add                  descending      key              reserve
+keyword advancing            destination     label            reset
+keyword after                detail          last             return
+keyword all                  disable         leading          return-code
+keyword alphabet             display         left             reverse
+keyword alphabetic           divide          length           reversed
+keyword alphabetic-lower     division        less             rewind
+keyword alphabetic-upper     down            limit            rewrite
+keyword alphanumberic        duplicates      limits           rf
+keyword alphanumeric-edited  dynamic         linage           rh
+keyword also                 echo            linage-counter   right
+keyword alter                egi             line             rounded
+keyword alternate            else            line-counter     run
+keyword and                  emi             lines            same screen
+keyword any                  enable          linkage          sd
+keyword are                  end             lock             search
+keyword area                 end-accept      low              section
+keyword areas                end-add         low-value        security
+keyword ascending            end-call        low-values       segment
+keyword assign               end-compute     memory           segment-limit
+keyword at                   end-delete      merge            select
+keyword author auto          end-divide      message          send
+keyword beep                 end-evaluate    mode             sentence
+keyword before               end-if          modules          separate
+keyword binary               end-multiply    move             sequence
+keyword blank                end-of-page     multiple         sequential
+keyword blink                end-perform     multiply         set
+keyword block                end-read        native           sign
+keyword bottom               end-receive     negative         size
+keyword by                   end-return      next             sort
+keyword call                 end-rewrite     no               sort-merge
+keyword cancel               end-search      not              source
+keyword cd                   end-start       number           source-computer
+keyword cf                   end-string      numeric          space
+keyword ch                   end-subtract    numeric-edited   spaces
+keyword character            end-unstring    object-computer  special-names
+keyword characters           end-write       occurs           standard
+keyword class                enter           of               standard-1
+keyword clock-units          environment     off              standard-2
+keyword close                eof             omitted          start
+keyword cobol                eol             on               status
+keyword code                 eop             open             stop
+keyword code-set             eos             optional         string
+keyword collating            equal           or               sub-queue-1
+keyword column col           erase           order            sub-queue-2
+keyword comma                error           organization     sub-queue-3
+keyword common               esi             other            subtract
+keyword communication        evaluate        output           sum
+keyword comp                 every           overflow         suppress
+keyword comp-1               exception       packed-decimal   symbolic
+keyword comp-3               exit            padding          sync
+keyword comp-4               extend          page             synchronized
+keyword comp-6               external        page-counter     tab
+keyword computational        false           perform          table
+keyword computational-1      fd              pf               tallying
+keyword computational-3      file            ph               tape
+keyword computational-4      file-control    pic              terminal
+keyword computational-6      filler          picture          terminate
+keyword compute              final           plus             test
+keyword configuration        first           pointer          text
+keyword contains             footing         position         than
+keyword content              for             positive         then
+keyword continue             from full       printing         through
+keyword control              generate        procedure        thru
+keyword controls             giving          procedures       time
+keyword convert              global          proceed          times
+keyword converting           go              program          to
+keyword copy                 goback          program-id       top
+keyword corr                 greater         prompt           trailing
+keyword corresponding        group           purge            true
+keyword count                heading         queue            type
+keyword currency             high highlight  quote            unit
+keyword cursor               high-value      quotes           unlock
+keyword data                 high-values     random           unstring
+keyword date                 i-o             rd               until
+keyword date-compiled        i-o-control     read             up
+keyword date-written         id              receive          update
+keyword day                  identification  record           upon
+keyword day-of-week          if              records          usage
+keyword de                   in              redefines        use
+keyword debug-contents       index           reel             using
+keyword debug-item           indexed         reference        value
+keyword debug-line           indicate        references       values
+keyword debug-name           initial         relative         varying
+keyword debug-sub-1          initialize      release          when
+keyword debug-sub-2          initiate        remainder        with
+keyword debug-sub-3          input           remarks          words
+keyword debugging            input-output    removal          working-storage
+keyword debugging            inspect         renames          write
+keyword decimal-point        installation    replace          zero
+keyword declaratives         into            replacing        zeroes
+keyword delete               invalid         report           zeros
+keyword delimited            is              reporting
+inword   -
+innumber -.a-z
+string   """"
+comment  *
+
+
+;------------------------   Windows Resource Script   -------------------------
+
+language rc
+pattern  *.rc *.dlg *.men *.str *.acc
+comment //
+comment /* */
+preprocessor #
+string """"
+escape \
+inword _
+hex    0x-
+
+; These were ripped out of lrc.exe, from LCC-Win32 by Jacob Navia.
+keyword ACCELERATOR ALT ASCII AUTO3STATE AUTOCHECKBOX AUTORADIOBUTTON
+keyword BITMAP BEGIN BLOCK
+keyword CAPTION CHARACTERISTICS CHECKBOX CHECKED CLASS COMBOBOX CONTROL CTEXT
+keyword CURSOR
+keyword DEFPUSHBUTTON DIALOG DIALOGEX DISCARDABLE
+keyword EDITTEXT END EXSTYLE
+keyword FIXED FONT
+keyword GRAYED GROUPBOX
+keyword HELP
+keyword ICON IMPURE INACTIVE
+keyword LANGUAGE LISTBOX LOADONCALL LTEXT
+keyword MENU MENUBARBREAK MENUBREAK MENUEX MENUITEM MESSAGETABLE MOVEABLE
+keyword NOINVERT NOT
+keyword OWNERDRAW
+keyword POPUP PRELOAD PURE PUSHBOX PUSHBUTTON
+keyword RADIOBUTTON RCDATA RTEXT
+keyword SCROLLBAR SEPARATOR SHIFT STATE3 STRINGTABLE STYLE
+keyword VERSION VIRTKEY
+
+; Version information
+keyword VS_VERSION_INFO VERSIONINFO FILESUBTYPE FILETYPE FILEOS FILEFLAGS
+keyword FILEFLAGSMASK PRODUCTVERSION FILEVERSION
+
+; Styles. Ripped out of win.h from LCC-Win32.
+; Window
+keyword WS_BORDER WS_CAPTION WS_CHILD WS_CHILDWINDOW WS_CLIPCHILDREN
+keyword WS_CLIPSIBLINGS WS_DISABLED WS_DLGFRAME WS_GROUP WS_HSCROLL WS_ICONIC
+keyword WS_MAXIMIZE WS_MAXIMIZEBOX WS_MINIMIZE WS_MINIMIZEBOX WS_OVERLAPPED
+keyword WS_OVERLAPPEDWINDOW WS_POPUP WS_POPUPWINDOW WS_SIZEBOX WS_SYSMENU
+keyword WS_TABSTOP WS_THICKFRAME WS_TILED WS_TILEDWINDOW WS_VISIBLE WS_VSCROLL
+; MDI
+keyword MDIS_ALLCHILDSTYLES
+; Button, Checkbox and Radiobutton.
+keyword BS_3STATE BS_AUTO3STATE BS_AUTOCHECKBOX BS_AUTORADIOBUTTON BS_BITMAP
+keyword BS_BOTTOM BS_CENTER BS_CHECKBOX BS_DEFPUSHBUTTON BS_GROUPBOX BS_ICON
+keyword BS_LEFT BS_LEFTTEXT BS_MULTILINE BS_NOTIFY BS_OWNERDRAW BS_PUSHBUTTON
+keyword BS_PUSHLIKE BS_RADIOBUTTON BS_RIGHT BS_RIGHTBUTTON BS_TEXT BS_TOP
+keyword BS_USERBUTTON BS_VCENTER BS_FLAT
+; Combobox
+keyword CBS_AUTOHSCROLL CBS_DISABLENOSCROLL CBS_DROPDOWN CBS_DROPDOWNLIST
+keyword CBS_HASSTRINGS CBS_LOWERCASE CBS_NOINTEGRALHEIGHT CBS_OEMCONVERT
+keyword CBS_OWNERDRAWFIXED CBS_OWNERDRAWVARIABLE CBS_SIMPLE CBS_SORT
+keyword CBS_UPPERCASE
+; Edit
+keyword ES_AUTOHSCROLL ES_AUTOVSCROLL ES_CENTER ES_LEFT ES_LOWERCASE
+keyword ES_MULTILINE ES_NOHIDESEL ES_NUMBER ES_OEMCONVERT ES_PASSWORD
+keyword ES_READONLY ES_RIGHT ES_UPPERCASE ES_WANTRETURN
+; Listbox
+keyword LBS_DISABLENOSCROLL LBS_EXTENDEDSEL LBS_HASSTRINGS LBS_MULTICOLUMN
+keyword LBS_MULTIPLESEL LBS_NODATA LBS_NOINTEGRALHEIGHT LBS_NOREDRAW LBS_NOSEL
+keyword LBS_NOTIFY LBS_OWNERDRAWFIXED LBS_OWNERDRAWVARIABLE LBS_SORT
+keyword LBS_STANDARD LBS_USETABSTOPS LBS_WANTKEYBOARDINPUT
+; Scrollbar
+keyword SBS_BOTTOMALIGN SBS_HORZ SBS_LEFTALIGN SBS_RIGHTALIGN SBS_SIZEBOX
+keyword SBS_SIZEBOXBOTTOMRIGHTALIGN SBS_SIZEBOXTOPLEFTALIGN SBS_SIZEGRIP
+keyword SBS_TOPALIGN SBS_VERT
+; Static
+keyword SS_BITMAP SS_BLACKFRAME SS_BLACKRECT SS_CENTER SS_CENTERIMAGE
+keyword SS_ENHMETAFILE SS_ETCHEDFRAME SS_ETCHEDHORZ SS_ETCHEDVERT SS_GRAYFRAME
+keyword SS_GRAYRECT SS_ICON SS_LEFT SS_LEFTNOWORDWRAP SS_NOPREFIX SS_NOTIFY
+keyword SS_OWNERDRAW SS_REALSIZEIMAGE SS_RIGHT SS_RIGHTJUST SS_SIMPLE SS_SUNKEN
+keyword SS_WHITEFRAME SS_WHITERECT SS_USERITEM
+; Dialog
+keyword DS_3DLOOK DS_ABSALIGN DS_CENTER DS_CENTERMOUSE DS_CONTEXTHELP
+keyword DS_CONTROL DS_FIXEDSYS DS_LOCALEDIT DS_MODALFRAME DS_NOFAILCREATE
+keyword DS_NOIDLEMSG DS_SETFONT DS_SETFOREGROUND DS_SYSMODAL
+; Extended window
+keyword WS_EX_APPWINDOW WS_EX_CLIENTEDGE WS_EX_CONTEXTHELP WS_EX_CONTROLPARENT
+keyword WS_EX_DLGMODALFRAME WS_EX_LEFT WS_EX_LEFTSCROLLBAR WS_EX_LTRREADING
+keyword WS_EX_MDICHILD WS_EX_NOPARENTNOTIFY WS_EX_OVERLAPPEDWINDOW
+keyword WS_EX_PALETTEWINDOW WS_EX_RIGHT WS_EX_RIGHTSCROLLBAR WS_EX_RTLREADING
+keyword WS_EX_STATICEDGE WS_EX_TOOLWINDOW WS_EX_TOPMOST WS_EX_TRANSPARENT
+keyword WS_EX_WINDOWEDGE
+
+
+;--------------------------------   AutoIt3   ---------------------------------
+
+; AutoIt (v3.1.0); use AutoHotkey for AutoIt v2. Adapted from the PSPad info.
+language  autoit3
+pattern   *.au3
+case      ignore
+comment   ";"
+comment   #cs #ce
+;preprocessor #
+function  (
+string    """" spanline _
+character ' 0  spanline _
+hex       0x-
+startword @$_
+inword    _
+
+; If # is preprocessor the block comments won't work.
+keyword include once    ; don't want to make "-" inword
+
+; Keywords
+keyword And ByRef Case Const ContinueLoop Dim Do Else ElseIf EndFunc EndIf
+keyword EndSelect Exit ExitLoop For Func Global If Local Next Not Or Return
+keyword ReDim Select Step Then To Until WEnd While
+
+; Predefined variables
+keyword $CmdLine $CmdLineRaw
+
+; Macros
+keyword @AppDataCommonDir @AppDataDir @AutoItExe @AutoItVersion @CommonFilesDir
+keyword @Compiled @ComputerName @ComSpec @CR @CRLF @DesktopCommonDir @DesktopDir
+keyword @DesktopHeight @DesktopWidth @DesktopDepth @DesktopRefresh
+keyword @DocumentsCommonDir @error @extended @FavoritesCommonDir @FavoritesDir
+keyword @GUI_CtrlId @GUI_CtrlHandle @GUI_WinHandle @HomeDrive @HomePath
+keyword @HomeShare @HOUR @InetGetActive @InetGetBytesRead @IPAddress1
+keyword @IPAddress2 @IPAddress3 @IPAddress4 @LF @LogonDNSDomain @LogonDomain
+keyword @LogonServer @MDAY @MIN @MON @MyDocumentsDir @NumParams @OSBuild @OSLang
+keyword @OSServicePack @OSTYPE @OSVersion @ProgramFilesDir @ProgramsCommonDir
+keyword @ProgramsDir @ScriptDir @ScriptFullPath @ScriptName @SEC
+keyword @StartMenuCommonDir @StartMenuDir @StartupCommonDir @StartupDir
+keyword @SW_DISABLE @SW_ENABLE @SW_HIDE @SW_MAXIMIZE @SW_MINIMIZE @SW_RESTORE
+keyword @SW_SHOW @SW_SHOWDEFAULT @SW_SHOWMAXIMIZED @SW_SHOWMINIMIZED
+keyword @SW_SHOWMINNOACTIVE @SW_SHOWNA @SW_SHOWNOACTIVATE @SW_SHOWNORMAL
+keyword @SystemDir @TAB @TempDir @UserProfileDir @UserName @WDAY @WindowsDir
+keyword @WorkingDir @YDAY @YEAR
+
+; Functions
+keyword Abs ACos AdlibDisable AdlibEnable Asc ASin Assign ATan AutoItSetOption
+keyword AutoItWinGetTitle AutoItWinSetTitle BitAND BitNOT BitOR BitShift BitXOR
+keyword BlockInput Break Call CDTray Chr ClipGet ClipPut ConsoleWrite
+keyword ControlClick ControlCommand ControlDisable ControlEnable ControlFocus
+keyword ControlGetFocus ControlGetHandle ControlGetPos ControlGetText
+keyword ControlHide ControlListView ControlMove ControlSend ControlSetText
+keyword ControlShow Cos Dec DirCopy DirCreate DirGetSize DirMove DirRemove
+keyword DllCall DllClose DllOpen DriveGetDrive DriveGetFileSystem DriveGetLabel
+keyword DriveGetSerial DriveGetType DriveMapAdd DriveMapDel DriveMapGet
+keyword DriveSetLabel DriveSpaceFree DriveSpaceTotal DriveStatus EnvGet EnvSet
+keyword EnvUpdate Eval Exp FileChangeDir FileClose FileCopy FileCreateShortcut
+keyword FileDelete FileExists FileFindFirstFile FileFindNextFile FileGetAttrib
+keyword FileGetLongName FileGetShortcut FileGetShortName FileGetSize FileGetTime
+keyword FileGetVersion FileInstall FileMove FileOpen FileOpenDialog FileRead
+keyword FileReadLine FileRecycle FileRecycleEmpty FileSaveDialog
+keyword FileSelectFolder FileSetAttrib FileSetTime FileWrite FileWriteLine
+keyword FtpSetProxy GUICreate GUICtrlCreateAvi GUICtrlCreateButton
+keyword GUICtrlCreateCheckbox GUICtrlCreateCombo GUICtrlCreateContextMenu
+keyword GUICtrlCreateDate GUICtrlCreateDummy GUICtrlCreateEdit
+keyword GUICtrlCreateGroup GUICtrlCreateIcon GUICtrlCreateInput
+keyword GUICtrlCreateLabel GUICtrlCreateList GUICtrlCreateListView
+keyword GUICtrlCreateListViewItem GUICtrlCreateMenu GUICtrlCreateMenuItem
+keyword GUICtrlCreatePic GUICtrlCreateProgress GUICtrlCreateRadio
+keyword GUICtrlCreateSlider GUICtrlCreateTab GUICtrlCreateTabItem
+keyword GUICtrlCreateTreeView GUICtrlCreateTreeViewItem GUICtrlCreateUpdown
+keyword GUICtrlDelete GUICtrlGetState GUICtrlRead GUICtrlRecvMsg GUICtrlSendMsg
+keyword GUICtrlSendToDummy GUICtrlSetBkColor GUICtrlSetColor GUICtrlSetCursor
+keyword GUICtrlSetData GUICtrlSetFont GUICtrlSetImage GUICtrlSetLimit
+keyword GUICtrlSetOnEvent GUICtrlSetPos GUICtrlSetResizing GUICtrlSetState
+keyword GUICtrlSetStyle GUICtrlSetTip GUIDelete GUIGetCursorInfo GUIGetMsg
+keyword GUISetBkColor GUISetCoord GUISetCursor GUISetFont GUISetHelp GUISetIcon
+keyword GUISetOnEvent GUISetState GUIStartGroup GUISwitch Hex HotKeySet
+keyword HttpSetProxy InetGet InetGetSize IniDelete IniRead IniReadSection
+keyword IniReadSectionNames IniWrite InputBox Int IsAdmin IsArray IsDeclared
+keyword IsFloat IsInt IsNumber IsString Log MemGetStats Mod MouseClick
+keyword MouseClickDrag MouseDown MouseGetCursor MouseGetPos MouseMove MouseUp
+keyword MouseWheel MsgBox Number Ping PixelChecksum PixelGetColor PixelSearch
+keyword ProcessClose ProcessExists ProcessList ProcessSetPriority ProcessWait
+keyword ProcessWaitClose ProgressOff ProgressOn ProgressSet Random RegDelete
+keyword RegEnumKey RegEnumVal RegRead RegWrite Round Run RunAsSet RunWait Send
+keyword SetError SetExtended Shutdown Sin Sleep SoundPlay SoundSetWaveVolume
+keyword SplashImageOn SplashOff SplashTextOn Sqrt StatusbarGetText String
+keyword StringAddCR StringFormat StringInStr StringIsAlNum StringIsAlpha
+keyword StringIsASCII StringIsDigit StringIsFloat StringIsInt StringIsLower
+keyword StringIsSpace StringIsUpper StringIsXDigit StringLeft StringLen
+keyword StringLower StringMid StringReplace StringRight StringSplit
+keyword StringStripCR StringStripWS StringTrimLeft StringTrimRight StringUpper
+keyword Tan TimerDiff TimerInit ToolTip TrayTip UBound WinActivate WinActive
+keyword WinClose WinExists WinGetCaretPos WinGetClassList WinGetClientSize
+keyword WinGetHandle WinGetPos WinGetProcess WinGetState WinGetText WinGetTitle
+keyword WinKill WinList WinMenuSelectItem WinMinimizeAll WinMinimizeAllUndo
+keyword WinMove WinSetOnTop WinSetState WinSetTitle WinSetTrans WinWait
+keyword WinWaitActive WinWaitClose WinWaitNotActive Opt
+
+
+;------------------------------   AutoHotkey   --------------------------------
+
+; AutoHotkey (v1.0.44.09) and AutoIt v2 (although it should now be separate).
+language  autohotkey
+pattern   *.ahk *.aut
+case      ignore
+comment   ";"
+comment   /* */
+function  :
+string    """"
+escape    `
+;character % 0
+hex       0x-
+startword #_@$?
+inword    #_@$?
+innumber  a-z.
+
+; Directives
+keyword #AllowSameLineComments #CommentFlag #Delimiter #DerefChar #ErrorStdOut
+keyword #EscapeChar #HotkeyInterval #HotkeyModifierTimeout #Hotstring #Include
+keyword #IncludeAgain #InstallKeybdHook #InstallMouseHook #KeyHistory
+keyword #MaxHotkeysPerInterval #MaxMem #MaxThreads #MaxThreadsBuffer
+keyword #MaxThreadsPerHotkey #NoTrayIcon #Persistent #SingleInstance #UseHook
+keyword #WinActivateForce #ClipboardTimeout #LTrim
+keyword #IfWinActive #IfWinExist #IfWinNotActive #IfWinNotExist
+keyword #NoEnv
+
+; Commands
+keyword AutoTrim BlockInput Break Click ClipWait CoordMode Continue Control
+keyword ControlFocus ControlGet ControlGetFocus ControlGetText ControlClick
+keyword ControlMove ControlGetPos ControlSend ControlSendRaw ControlSetText
+keyword Critical
+keyword DetectHiddenText DetectHiddenWindows Drive DriveSpaceFree Edit Else
+keyword EndRepeat EnvAdd EnvSub EnvMult EnvDiv EnvSub EnvUpdate Exit
+keyword EnvGet EnvSet
+keyword ExitApp FileAppend FileCopy FileCopyDir FileCreateDir FileCreateShortcut
+keyword FileDelete FileInstall FileReadLine FileGetAttrib FileGetSize
+keyword FileGetTime FileGetShortcut FileGetVersion FileMove FileMoveDir FileRead
+keyword FileRecycle FileRecycleEmpty FileRemoveDir FileSelectFile
+keyword FileSelectFolder FileSetAttrib FileSetTime FormatTime GetKeyState Gosub
+keyword Goto GroupActivate GroupAdd GroupClose GroupDeactivate Gui GuiControl
+keyword GuiControlGet if is not between and in contains HideAutoItWin Hotkey
+keyword IfEqual IfNotEqual IfExist IfNotExist IfGreater IfGreaterOrEqual
+keyword IfInString IfNotInString IfLess IfLessOrEqual IfMsgBox IfWinActive
+keyword IfWinNotActive IfWinExist IfWinNotExist ImageSearch IniDelete IniRead
+keyword IniWrite Input InputBox KeyHistory KeyWait LeftClick LeftClickDrag
+keyword ListHotkeys ListLines ListVars Loop Menu MouseClick MouseClickDrag
+keyword MouseGetPos MouseMove MsgBox OnExit OutputDebug Pause PixelGetColor
+keyword PixelSearch PostMessage Process Random RegDelete RegRead RegWrite Reload
+keyword Repeat EndRepeat Return RightClick RightClickDrag Run RunAs RunWait Send
+keyword SendEvent SendInput SendPlay
+keyword SendRaw SendMessage SendMode SetBatchLines SetCapslockState
+keyword SetControlDelay
+keyword SetDefaultMouseSpeed SetEnv SetFormat SetKeyDelay SetMouseDelay
+keyword SetNumlockState SetScrollLockState SetStoreCapslockMode SetTimer
+keyword SetTitleMatchMode SetWinDelay SetWorkingDir Shutdown Sleep Sort
+keyword SoundBeep SoundGet SoundGetWaveVolume SoundPlay SoundSet
+keyword SoundSetWaveVolume Progress SplashImage SplashTextOn SplashTextOff
+keyword StatusBarGetText StatusBarWait StringCaseSense StringGetPos StringLeft
+keyword StringLen StringLower StringMid StringReplace StringRight StringSplit
+keyword SplitPath StringTrimLeft StringTrimRight StringUpper Suspend SysGet
+keyword Thread ToolTip Transform TrayTip URLDownloadToFile WinActivate
+keyword WinActivateBottom WinClose WinGet WinGetActiveStats WinGetActiveTitle
+keyword WinGetClass WinGetPos WinGetText WinGetTitle WinHide WinKill WinMaximize
+keyword WinMenuSelectItem WinMinimize WinMinimizeAll WinMinimizeAllUndo WinMove
+keyword WinRestore WinSet WinSetTitle WinShowWinWait WinWaitActive WinWaitClose
+keyword WinWaitNotActive
+
+; Functions
+keyword WinExist WinActive VarSetCapacity DllCall
+keyword FileExist InStr StrLen IsLabel OnMessage
+
+; Variables
+;  Special Characters
+keyword A_Space A_Tab
+;  Script Properties
+keyword A_WorkingDir A_ScriptDir A_ScriptName A_ScriptFullPath A_ExitReason
+keyword A_AhkVersion A_IsCompiled A_LineNumber A_LineFile A_AhkPath
+;  Date and Time
+keyword A_YYYY A_MM A_DD A_MMMM A_MMM A_DDDD A_DDD A_WDay A_YDay A_Hour
+keyword A_Min A_Sec A_Now A_NowUTC A_TickCount A_YWeek A_MSec
+;  Script Settings
+keyword A_BatchLines A_NumBatchLines A_TitleMatchMode A_TitleMatchModeSpeed
+keyword A_DetectHiddenWindows A_DetectHiddenText A_AutoTrim
+keyword A_StringCaseSense A_FormatInteger A_FormatFloat A_KeyDelay
+keyword A_WinDelay A_ControlDelay A_MouseDelay A_DefaultMouseSpeed
+keyword A_IconHidden A_IconTip A_IconFile A_IconNumber A_IsSuspended
+keyword Join LTrim RTrim0
+;  User Idle Time
+keyword A_TimeIdle A_TimeIdlePhysical
+;  Hotkeysd Hotstringsd and Custom Menu Items
+keyword A_ThisMenuItem A_ThisMenu A_ThisMenuItemPos A_ThisHotkey
+keyword A_PriorHotkey A_TimeSinceThisHotkey A_TimeSincePriorHotkey A_EndChar
+;  Operating System and User Info
+keyword A_OSType A_OSVersion A_IsAdmin A_IPAddress1 A_IPAddress2
+keyword A_IPAddress3 A_IPAddress4 A_ScreenWidth A_ScreenHeight
+keyword A_ProgramFiles A_WinDir A_Language A_ComputerName A_UserName A_Desktop
+keyword A_DesktopCommon A_StartMenu A_StartMenuCommon A_Programs
+keyword A_ProgramsCommon A_Startup A_StartupCommon A_MyDocuments
+keyword ComSpec ProgramFiles A_AppData A_AppDataCommon A_Temp
+;  Misc.
+keyword A_Cursor A_CaretX A_CaretY Clipboard ClipboardAll ErrorLevel true false
+keyword OnClipboardChange A_LastError
+;  Loop
+keyword A_Index A_LoopReadLine A_LoopField A_LoopFileName A_LoopFileFullPath
+keyword A_LoopFileShortName A_LoopFileDir A_LoopFileTimeModified
+keyword A_LoopFileTimeCreated A_LoopFileTimeAccessed A_LoopFileAttrib
+keyword A_LoopFileSize A_LoopFileSizeKB A_LoopFileSizeMB A_LoopRegName
+keyword A_LoopRegType A_LoopRegKey A_LoopRegSubKey A_LoopRegTimeModified
+keyword A_LoopFileShortPath A_LoopFileLongPath A_LoopFileExt
+;  GUI
+keyword A_Gui A_GuiControl A_GuiControlEvent A_GuiWidth A_GuiHeight A_GuiX
+keyword A_GuiY A_GuiEvent A_EventInfo
+
+; Special Keywords
+;  Used with BlockInput
+keyword SendAndMouse MouseMoveOff ;On Off Send Mouse Default MouseMove
+;  Used with Control:
+keyword Check Uncheck Enable Disable Show Hide ShowDropDown HideDropDown TabLeft
+keyword TabRight Add Delete Choose ChooseString EditPaste
+;  Used with ControlGet:
+keyword Enabled FindString Choice LineCount CurrentLine CurrentCol Line
+keyword Selected Style ExStyle Hwnd
+;  Used with CoordMode:
+keyword PIXEL MOUSE CARET SCREEN RELATIVE
+;  Used with PixelSearch/PixelGetColor:
+keyword Fast RGB Slow ;Alt
+;  Used with SetFormat and/or "if Var is [not] type"
+keyword INTEGER FLOAT NUMBER DIGIT XDIGIT ALPHA UPPER LOWER ALNUM TIME DATE
+;  Omitted because it's a key name too: SPACE
+;  Used with DriveGet and/or WinGet and/or Drive:
+keyword ID IDLast Count List Capacity Filesystem Label Eject Serial Type
+keyword Status StatusCD ControlList PID ProcessName MinMax Lock Unlock
+keyword ControlListHwnd
+;  Used with SysGet:
+keyword MonitorCount MonitorPrimary Monitor MonitorWorkArea MonitorName
+;  Used with WinSet:
+keyword AlwaysOnTop Bottom Transparent TransColor On Off Toggle Redraw Region
+keyword Top
+;  Used with SendMode
+keyword Event InputThenPlay Play ; Input
+;  Used with Pause:
+keyword OperateOnUnderlyingThread
+;  Time units for use with addition and subtraction:
+keyword SECONDS MINUTES HOURS DAYS
+;  For use with the Loop command:
+keyword READ PARSE
+;  A_ExitReason
+keyword Logoff Close Error Single
+;  The following are commented out because they are already keywords due to
+;  being commands:
+;  Shutdown Menu Exit Reload
+;  Keywords used with the "menu" command:
+keyword TRAY ADD RENAME CHECK UNCHECK TOGGLECHECK ENABLE DISABLE TOGGLEENABLE
+keyword DEFAULT NODEFAULT STANDARD NOSTANDARD DELETE DELETEALL ICON NOICON TIP
+keyword SHOW MAINWINDOW NOMAINWINDOW USEERRORLEVEL COLOR
+;  Keywords used with the Hotkey command:
+keyword AltTab ShiftAltTab AltTabMenu AltTabAndMenu AltTabMenuDismiss
+;  Keywords used with the Process command:
+keyword Exist Priority Wait WaitClose
+;  Keywords used with the StringCaseSense command:
+keyword Locale ;on off
+;  Keywords used with the Thread command:
+keyword NoTimers Interrupt ; Priority
+;  Keywords used with the Transform command:
+keyword Asc Chr Deref Mod Pow Exp Sqrt Log Ln Round Ceil Floor Abs Sin Cos Tan
+keyword ASin ACos ATan BitNot BitAnd BitOr BitXor BitShiftLeft BitShiftRight
+keyword Unicode
+;  Keywords used with "IfMsgBox":
+keyword YES NO OK CANCEL ABORT RETRY IGNORE TryAgain Timeout ;Continue
+;  Registry root keys:
+keyword HKEY_LOCAL_MACHINE HKEY_USERS HKEY_CURRENT_USER HKEY_CLASSES_ROOT
+keyword HKEY_CURRENT_CONFIG HKLM HKU HKCU HKCR HKCC
+;  Registry value types:
+keyword REG_SZ REG_EXPAND_SZ REG_MULTI_SZ REG_DWORD REG_BINARY
+;  Window indicators:
+keyword ahk_class ahk_id ahk_pid ahk_group
+;  Gui commands/options:
+keyword Color Font Resize Owner Submit NoHide Destroy Text ReadOnly Password
+keyword Picture Pic GroupBox Button CheckBox Checked CheckedGray Radio
+keyword DropDownList DDL ComboBox ListBox Multi Disabled Hidden Center NoTab
+keyword HScroll GuiEscape GuiClose Flash Theme BackgroundTrans Invert
+keyword GuiSize GuiDropFiles Minimize Maximize Restore NoActivate NA LastFound
+keyword Margin DateTime LongDate MonthCal AltSubmit UpDown Wrap Horz OwnDialogs
+keyword GuiContextMenu Delimiter ListView LastFoundExist TreeView StatusBar
+;   Already used: Menu Show Cancel Add Edit Default Left Right
+;   Not usable: Choose (number suffix prevents highlight)
+;  Colors:
+keyword cBlack cSilver cGray cWhite cMaroon cRed cPurple cFuchsia
+keyword cGreen cLime cOlive cYellow cNavy cBlue cTeal cAqua
+;  GuiControl/Get additional commands
+keyword Move Focus String Pos Visible Slider
+
+; Key Codes
+; These should be enclosed in braces.
+keyword ALTDOWN ALTUP SHIFTDOWN SHIFTUP CTRLDOWN CTRLUP LWINDOWN RWINDOWN
+keyword Blind
+; Already used by Transform.
+;ASC
+; For use with hotkey definitions and the GetKeyState command:
+keyword SHIFT LSHIFT RSHIFT ALT LALT RALT CONTROL LCONTROL RCONTROL CTRL LCTRL
+keyword RCTRL LWIN RWIN APPSKEY LButton RButton MButton WheelUp WheelDown
+keyword XButton1 XButton2 Joy1 Joy2 Joy3 Joy4 Joy5 Joy6 Joy7 Joy8 Joy9 Joy10
+keyword Joy11 Joy12 Joy13 Joy14 Joy15 Joy16 Joy17 Joy18 Joy19 Joy20 Joy21 Joy22
+keyword Joy23 Joy24 Joy25 Joy26 Joy27 Joy28 Joy29 Joy30 Joy31 Joy32 JoyX JoyY
+keyword JoyZ JoyR JoyU JoyV JoyPOV JoyName JoyButtons JoyAxes JoyInfo SPACE TAB
+keyword ENTER
+; Not this one since it's already a keyword (a command): RETURN
+keyword ESCAPE ESC BACKSPACE BS DELETE DEL INSERT INS PGUP PGDN HOME END UP DOWN
+keyword LEFT RIGHT PRINTSCREEN CTRLBREAK PAUSE ScrollLock Capslock Numlock
+keyword NUMPAD0 NUMPAD1 NUMPAD2 NUMPAD3 NUMPAD4 NUMPAD5 NUMPAD6 NUMPAD7 NUMPAD8
+keyword NUMPAD9 NUMPADMULT NUMPADADD NUMPADSUB NUMPADDIV NUMPADDOT NUMPADDEL
+keyword NUMPADINS NUMPADCLEAR NUMPADUP NUMPADDOWN NUMPADLEFT NUMPADRIGHT
+keyword NUMPADHOME NUMPADEND NUMPADPGUP NUMPADPGDN NUMPADENTER F1 F2 F3 F4 F5 F6
+keyword F7 F8 F9 F10 F11 F12 F13 F14 F15 F16 F17 F18 F19 F20 F21 F22 F23 F24
+keyword BROWSER_BACK BROWSER_FORWARD BROWSER_REFRESH BROWSER_STOP BROWSER_SEARCH
+keyword BROWSER_FAVORITES BROWSER_HOME VOLUME_MUTE VOLUME_DOWN VOLUME_UP
+keyword MEDIA_NEXT MEDIA_PREV MEDIA_STOP MEDIA_PLAY_PAUSE LAUNCH_MAIL
+keyword LAUNCH_MEDIA LAUNCH_APP1 LAUNCH_APP2
+
+
+;----------------------------------   TDE   -----------------------------------
+
+; This syntax file, as well as the config and macro files.
+language tde
+pattern  *tde*shl *tde*cfg *.tdm
+case     ignore
+keyword  bad     character  function  integer  language  pattern       startword
+keyword  binary  comment    hex       inword   normal    preprocessor  string
+keyword  case    escape     innumber  keyword  octal     real          symbol
+function newline  spanline  ignore  match  from
+comment  ";"
+string   """"
+; Include all characters in words and numbers, except plus and caret.
+; Note that the invisible character 255 ends these strings.
+startword !-* ,-/ :-] _-ÿ
+inword    !-* ,-ÿ
+innumber  !-ÿ
+
+; Let's define the keys as functions and the functions as keywords.
+keyword AbortCommand About AddLine BackSpace BackTab BalanceHorizontal
+keyword BalanceVertical BegNextLine BegOfLine BlockBegin BlockBlockComment
+keyword BlockCapitalise BlockCenterJustify BlockCompressTabs BlockEmailReply
+keyword BlockEnd BlockExpandTabs BlockFixUUE BlockIndent BlockIndentN
+keyword BlockIndentTabs BlockInvertCase BlockLeftJustify BlockLineComment
+keyword BlockLowerCase BlockRightJustify BlockRot13 BlockStripHiBit BlockToFile
+keyword BlockTrimTrailing BlockUnComment BlockUndent BlockUndentN BlockUpperCase
+keyword BottomLine BorderBlock BorderBlockEx BotOfScreen CenterJustify
+keyword CenterLine CenterWindow ChangeCurDir CharacterSet CharLeft CharRight
+keyword ClearAllMacros CloseWindow ContextHelp CopyBlock CopyString
+keyword CopyToClipboard CopyWord CutToClipboard DateTimeStamp DefineDiff
+keyword DefineGrep DefineSearch DelBegOfLine DelEndOfLine DeleteBlock DeleteChar
+keyword DeleteLine DirList DuplicateLine DynamicTabSize EditFile EditNextFile
+keyword EndNextLine EndOfFile EndOfLine EraseBegOfLine Execute File FileAll
+keyword FileAttributes FillBlock FillBlockDown FillBlockPattern FindBackward
+keyword FindForward FormatParagraph FormatText GotoMark1 GotoMark2 GotoMark3
+keyword GotoWindow HalfScreenDown HalfScreenLeft HalfScreenRight HalfScreenUp
+keyword Help InsertFile ISearchBackward ISearchForward JoinLine JumpToPosition
+keyword KopyBlock KopyToClipboard LeftJustify LineDown LineUp LoadMacro Macro
+keyword MacroMark MakeHalfHorizontal MakeHalfVertical MakeHorizontal
+keyword MakeVertical MarkBegin MarkBox MarkEnd MarkLine MarkStream MoveBlock
+keyword MoveMark NextBrowse NextDirtyLine NextHiddenWindow NextLine NextWindow
+keyword Null NumberBlock OverlayBlock PanDn PanLeft PanRight PanUp ParenBalance
+keyword PasteFromClipboard Pause PlayBack PopupRuler PrevBrowse PrevDirtyLine
+keyword PrevHiddenWindow PreviousPosition PreviousWindow PrintBlock PseudoMacro
+keyword PullDown Quit QuitAll ReadConfig RecordMacro Redo RedrawScreen
+keyword RegXBackward RegXForward Repeat RepeatDiff RepeatFindBackward
+keyword RepeatFindForward RepeatGrep RepeatRegXBackward RepeatRegXForward
+keyword RepeatSearch ReplaceString RestoreLine RetrieveLine Revert RightJustify
+keyword Rturn Save SaveAll SaveAs SaveMacro SaveTo SaveUntouched SaveWorkspace
+keyword ScratchWindow ScreenDown ScreenLeft ScreenRight ScreenUp ScrollDnLine
+keyword ScrollUpLine SetBreakPoint SetDirectory SetMargins SetMark1 SetMark2
+keyword SetMark3 SetTabs Shell SizeWindow SortBoxBlock SplitHalfHorizontal
+keyword SplitHalfVertical SplitHorizontal SplitLine SplitVertical StampFormat
+keyword StartOfLine Statistics Status StreamCharLeft StreamCharRight
+keyword StreamDeleteChar StringEndLeft StringEndRight StringLeft StringRight
+keyword SumBlock SwapBlock SyntaxSelect Tab TitleWindow ToggleCRLF
+keyword ToggleCursorCross ToggleCWD ToggleDraw ToggleEol ToggleGraphicChars
+keyword ToggleIndent ToggleLineNumbers ToggleOverWrite ToggleQuickEdit
+keyword ToggleReadOnly ToggleRuler ToggleSearchCase ToggleSmartTabs ToggleSync
+keyword ToggleSyntax ToggleTabInflate ToggleTrailing ToggleUndoGroup
+keyword ToggleUndoMove ToggleWordWrap ToggleZ TopLine TopOfFile TopOfScreen
+keyword Transpose TwoCharKey Undo UnMarkBlock UserScreen WordDelete
+keyword WordDeleteBack WordEndLeft WordEndRight WordLeft WordRight ZoomWindow
+
+preprocessor Macro PseudoMacro RecordMacro PlayBack
+function FixedTabs Indent Insert NoIndent Overwrite SmartTabs
+function Wrap NoWrap NoWarn NeedBlock NeedBox NeedLine NeedStream UsesBlock
+function UsesDialog
+
+function ! # $ % & ' ( ) * , - . / 0 1 2 3 4 5 6 7 8 9 : < = > ? @ [ \ ] ^ _ `
+function a b bkspace c center d del down e end enter esc f f1 f10 f11 f12 f2 f3
+function f4 f5 f6 f7 f8 f9 g grey* grey+ grey- grey/ greydel greydown greyend
+function greyenter greyhome greyins greyleft greypgdn greypgup greyright greyup
+function h home i ins j k l left left\ left| m n o p pgdn pgup prtsc q quote r
+function right s semicolon space t tabkey u up v w x y z { | } ~
+
+; Mode settings
+keyword Backups            CaseConvert        CaseIgnore          CaseMatch
+keyword CharDef            ControlZ           CursorCross         CursorStyle
+keyword DirSort            DisplayEndOfLine   EndOfLineStyle      FrameSpace
+keyword FrameStyle         GroupUndo          IndentMode          InflateTabs
+keyword InitialCaseMode    InsertMode         JustifyRightMargin  LeftMargin
+keyword LineNumbers        LTabSize           ParagraphMargin     PTabSize
+keyword RightMargin        Ruler              Shadow              SmartTabMode
+keyword TimeStamp          TrimTrailingBlanks UndoGroup           UndoMove
+keyword WordWrapMode       KeyName            Scancode            UserMenu
+keyword AutoSaveWorkspace  TrackPath          DisplayCWD          HelpFile
+keyword HelpTopic          Menu               QuickEdit
+; Valid values for the modes.
+function Off On  No_Z Write_Z  Large Medium Small  Binary CRLF LF Native
+function DynamicWrap FixedWrap  Real  Extend  Extension Filename
+function ASCII Combine Double Single
+function Clear Header Item Popout PopItem
+
+; Colors.
+keyword Background
+keyword co80_Blocks co80_BreakPoint co80_Cross co80_CurLine co80_CWD co80_Dialog
+keyword co80_DirtyLine co80_Disabled co80_EditLabel co80_EndOfFile
+keyword co80_FileHeader co80_HelpScreen co80_HilitedFile co80_Menu
+keyword co80_MenuDisabled co80_MenuHeader co80_MenuItem co80_MenuItemBad
+keyword co80_MenuSelected co80_MessageLine co80_ModeLine co80_Overscan
+keyword co80_Ruler co80_RulerPointer co80_SpecialMode co80_Swap co80_Text
+keyword co80_Wrapped
+keyword mono_Blocks mono_BreakPoint mono_Cross mono_CurLine mono_CWD mono_Dialog
+keyword mono_DirtyLine mono_Disabled mono_EditLabel mono_EndOfFile
+keyword mono_FileHeader mono_HelpScreen mono_HilitedFile mono_Menu
+keyword mono_MenuDisabled mono_MenuHeader mono_MenuItem mono_MenuItemBad
+keyword mono_MenuSelected mono_MessageLine mono_ModeLine mono_Overscan
+keyword mono_Ruler mono_RulerPointer mono_SpecialMode mono_Swap mono_Text
+keyword mono_Wrapped
+
+; Color names. Some colors are hard to see on a blue background (or even
+; impossible) so, since colors are integers, use the integer color.
+integer        Black
+integer        Blue
+Green          Green
+Cyan           Cyan
+Red            Red
+Magenta        Magenta
+Brown          Brown
+Grey           Grey
+integer        Dark_grey
+integer        Bright_blue
+Bright_green   Bright_green
+Bright_cyan    Bright_cyan
+Bright_red     Bright_red
+Bright_magenta Bright_magenta
+Yellow         Yellow
+White          White
+; Mono attributes
+Bold           Bold
+Reverse        Reverse
+Standout       Standout
+Underline      Underline
+
+PseudoMacro Ma "cro \0\n  \3\nRecordMacro"
+PseudoMacro Ps "eudoMa" PseudoMacro
+PseudoMacro ps "\b\bPseudoMacro "
+
+UserMenu "Multi-line Macro"  Ma
+UserMenu "Multi-line Pseudo" Ps
+UserMenu "PseudoMacro"       ps

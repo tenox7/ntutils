@@ -1,0 +1,285 @@
+#
+# Compilers supported == MSC (5.1, 6.0ax, 7.0, 8.0), QC 2.5, and BCC 3.1
+# Makes supported     == Microsoft's nmake and Borland's make
+#
+# To make TDE with Microsoft compilers, change the defines as needed and type:
+#
+#      nmake -f makefile.dos
+#
+# To make TDE with Borland's make, change the appropriate defines and type:
+#
+#      make -f makefile.dos
+#
+#
+# jmh - Added __DOS16__ defines, renamed project to "tde16"
+# jmh 020823 - place object files in the dos directory
+# jmh 020907 - support for MSC 8.0 (Visual C/C++ 1.52c),
+#		from suggestions by Billy Chen (includes removing ilink);
+#	       general maintenance.
+# jmh 030318 - add BRIEF option.
+# jmh 050818 - renamed project to "tder" (real-mode).
+# jmh 050920 - added install target.
+#
+
+
+PROJ	   = tder
+
+#
+# Define the location to place the executable.
+#
+bindir	   = d:\utils
+
+#
+# Define the command to compress the executable.
+#
+UPX	   = rem
+UPX	   = upx --8086 -9 -qq
+
+#
+# Define your favorite compiler last
+#
+COMPILER   = QUICKC
+COMPILER   = MSC
+COMPILER   = BCC
+
+
+#
+# Define your favorite assembler last
+#
+ASSEMBLER  = QUICKASSEMBLER
+ASSEMBLER  = MASM51
+ASSEMBLER  = MASM6
+ASSEMBLER  = TASM
+
+
+#
+# Assertions may be turned off or on.  I usually leave assertions on.
+#
+ASSERT	   = ON
+ASSERT	   = OFF
+!IF "$(ASSERT)" == "OFF"
+!UNDEF ASSERT
+!ENDIF
+
+
+#
+# Comment the following to see the compilation command.
+#
+BRIEF = @
+
+
+!IF "$(COMPILER)" == "BCC"
+DEFINES = -D__DOS16__
+OUTPUT	= -o
+!ELSE
+DEFINES = /D__DOS16__ /D__MSC__ /D__MSDOS__
+OUTPUT	= /Fo
+!ENDIF
+
+
+#
+# Compiler and linker flags and switches.
+#
+# TDE exceeds the 64K DGROUP. Use the threshold option
+# to move a couple of big variables to their own segment.
+#
+!IF "$(COMPILER)" == "BCC"
+THRESHOLD = /Ff=2000
+!ELSE
+THRESHOLD = /Gt512
+!ENDIF
+
+!IF "$(COMPILER)" == "MSC"
+CC      = cl
+CFLAGS	= /nologo /c /AL $(THRESHOLD) /W2 /Osler /I. $(DEFINES)
+!IFDEF ASSERT
+CFLAGS	= $(CFLAGS) /Ge
+!ELSE
+CFLAGS	= $(CFLAGS) /Gs /DNDEBUG
+!ENDIF
+LINK    = link
+LFLAGS	= /BATCH /STACK:10240 /NOI
+STRIP	= rem
+
+!ELSE
+!IF "$(COMPILER)" == "QUICKC"
+CC      = qcl
+CFLAGS	= /nologo /c /AL $(THRESHOLD) $(DEFINES) /Ot /W4
+!IFNDEF ASSERT
+CFLAGS	= $(CFLAGS) /DNDEBUG
+!ENDIF
+LINK    = qlink
+LFLAGS	= /STACK:10240 /NOI
+STRIP	= rem
+
+!ELSE
+!IF "$(COMPILER)" == "BCC"
+CC      = bcc
+CFLAGS	= -c -d -f- -ml $(THRESHOLD) -Os -w -w-par $(DEFINES) $(CPU)
+!IFDEF ASSERT
+CFLAGS	= $(CFLAGS) -k -N
+!ELSE
+CFLAGS	= $(CFLAGS) -DNDEBUG
+!ENDIF
+LINK    = tlink
+LFLAGS	= /c /v /x
+STRIP	= tdstrip
+
+!ELSE
+!ERROR I only know how to make MSC, QuickC, and BCC.
+!ENDIF
+!ENDIF
+!ENDIF
+
+
+#
+# Assembler flags and switches.
+#
+!IF "$(ASSEMBLER)" == "MASM51"
+AS      = MASM
+AFLAGS	= /c /MX
+
+!ELSE
+!IF "$(ASSEMBLER)" == "MASM6"
+AS      = ML
+AFLAGS	= /nologo /c /Cp /Zm
+
+!ELSE
+!IF "$(ASSEMBLER)" == "QUICKASSEMBLER"
+AS      = QCL
+AFLAGS	= /c
+
+!ELSE
+!IF "$(ASSEMBLER)" == "TASM"
+AS      = TASM
+AFLAGS	= /Mx /t /z
+
+!ELSE
+!ERROR I only know how to make MASM, QuickAssembler, and TASM.
+!ENDIF
+!ENDIF
+!ENDIF
+!ENDIF
+
+
+#
+# Define the compiler and assembler rules
+#
+{}.c{dos}.obj :
+	$(BRIEF)$(CC) $(CFLAGS) $(OUTPUT)$@ $<
+.c.obj :
+	$(BRIEF)$(CC) $(CFLAGS) $(OUTPUT)$@ $<
+
+!IF "$(ASSEMBLER)" == "TASM"
+.asm.obj :
+!IFDEF BRIEF
+	@echo Assembling $<
+!ENDIF
+	$(BRIEF)$(AS) $(AFLAGS) $<, $@
+
+!ELSE
+!IF "$(ASSEMBLER)" == "MASM51"
+.asm.obj :
+	$(BRIEF)$(AS) $(AFLAGS) $<,$@;
+
+!ELSE
+.asm.obj :
+	$(BRIEF)$(AS) $(AFLAGS) /Fo$@ $<
+!ENDIF
+!ENDIF
+
+
+#
+# List the dependent obj files
+#
+TDEOBJS = dos\bj_ctype.obj  dos\block.obj    dos\cfgfile.obj   \
+	  dos\config.obj    dos\console.obj  dos\criterr.obj   \
+	  dos\default.obj   dos\dialogs.obj  dos\diff.obj      \
+	  dos\dirlist.obj   dos\ed.obj	     dos\file.obj      \
+	  dos\filmatch.obj  dos\findrep.obj  dos\global.obj    \
+	  dos\help.obj	    dos\hwind.obj    dos\macro.obj     \
+	  dos\main.obj	    dos\memory.obj   dos\menu.obj      \
+	  dos\movement.obj  dos\port.obj     dos\prompts.obj   \
+	  dos\pull.obj	    dos\query.obj    dos\regx.obj      \
+	  dos\sort.obj	    dos\syntax.obj   dos\tab.obj       \
+	  dos\undo.obj	    dos\utils.obj    dos\window.obj    \
+	  dos\wordwrap.obj  dos\int24.obj    dos\kbdint.obj
+
+INC	= tdestr.h common.h tdefunc.h define.h
+
+
+all: $(PROJ).exe
+
+
+#
+# List the rules for the obj files.
+#
+dos\bj_ctype.obj : bj_ctype.c bj_ctype.h tdestr.h common.h
+dos\block.obj	 : block.c    $(INC)
+dos\cfgfile.obj  : cfgfile.c  tdestr.h syntax.h config.h
+dos\config.obj	 : config.c   config.h $(INC)
+dos\console.obj  : dos\console.c  $(INC)
+dos\criterr.obj  : dos\criterr.c dos\criterr.h $(INC)
+dos\default.obj  : default.c  tdestr.h define.h
+dos\dialogs.obj  : dialogs.c  tdestr.h
+dos\diff.obj	 : diff.c     $(INC)
+dos\dirlist.obj  : dirlist.c  $(INC)
+dos\ed.obj	 : ed.c       $(INC)
+dos\file.obj	 : file.c     $(INC)
+dos\filmatch.obj : filmatch.c filmatch.h tdestr.h common.h
+dos\findrep.obj  : findrep.c  $(INC)
+dos\global.obj	 : global.c   tdestr.h tdefunc.h
+dos\help.obj	 : help.c
+dos\hwind.obj	 : hwind.c    $(INC)
+dos\macro.obj	 : macro.c    $(INC)
+dos\main.obj	 : main.c     $(INC)
+dos\memory.obj	 : memory.c   $(INC)
+dos\menu.obj	 : menu.c     tdestr.h define.h
+dos\movement.obj : movement.c $(INC)
+dos\port.obj	 : dos\port.c $(INC)
+dos\prompts.obj  : prompts.c  bj_ctype.h
+dos\pull.obj	 : pull.c     $(INC)
+dos\query.obj	 : query.c    $(INC)
+dos\regx.obj	 : regx.c     $(INC)
+dos\sort.obj	 : sort.c     $(INC)
+dos\syntax.obj	 : syntax.c   syntax.h $(INC)
+dos\tab.obj	 : tab.c      $(INC)
+dos\undo.obj	 : undo.c     $(INC)
+dos\utils.obj	 : utils.c    $(INC)
+dos\window.obj	 : window.c   $(INC)
+dos\wordwrap.obj : wordwrap.c $(INC)
+dos\int24.obj	 :
+dos\kbdint.obj	 :
+
+
+#
+# Once we get everything compiled, link with either Microsoft or Borland stuff.
+# Incidentally, blank lines are significant for the linker response files.
+#
+#  Borland linker
+#
+!IF "$(COMPILER)" == "BCC"
+$(PROJ).exe  : $(TDEOBJS)
+        $(LINK) $(LFLAGS) @&&%
+C0L  $(TDEOBJS)
+$*
+
+CL.LIB
+%
+!ELSE
+#
+# Microsoft linker
+#
+$(PROJ).exe : $(TDEOBJS)
+	$(LINK) $(LFLAGS) @<<
+$(**: =+^
+)
+$(PROJ).exe;
+<<
+!ENDIF
+
+
+install: $(PROJ).exe
+	-$(STRIP) $(PROJ).exe
+	-$(UPX) $(PROJ).exe
+	copy $(PROJ).exe $(bindir)

@@ -1,0 +1,631 @@
+.TH XVI 1 19/6/1992 Unix
+.nh
+.rm hy
+.SH NAME
+xvi \- multi-file text editor
+.SH SYNOPSIS
+.B xvi
+{
+.B \-s
+.I parameter-assignment
+}
+[
+.B \-t
+.I tag
+|
+.BI + number
+|
+.BI +/ pattern
+]
+{
+.I filename
+\&.\|.\|.
+}
+.SH DESCRIPTION
+\fBXvi\fP (pronounced \fIecks-vee-eye\fP)
+is a free, portable, multi-window implementation of the popular
+.BR vi (1)
+editor.
+It has some useful enhancements, although, as described below,
+not all of
+.BR vi 's
+features have been implemented yet, and some things work differently from
+.BR vi .
+.SH OPTIONS
+The following command-line options are available:
+.TP
+\fB\-s\fP \fIparameter-assignment\fP
+Set the value of the specified parameter at startup.
+The assignment has the same form as when given as an editor command,
+i.e:
+.RS
+.TP
+\fIname\fB=\fIstring\fP
+for string parameters
+.TP
+\fIname\fB=\fInumber\fP
+for numeric parameters
+.TP
+\fIname\fP
+to turn a Boolean parameter on
+.TP
+\fBno\fP\fIname\fP
+to turn a Boolean parameter off
+.RE
+.TP
+\fB\-t\fP \fItag\fP
+Edit the file containing the definition specified as \fItag\fP,
+at the start of the definition (as per \fBvi\fP).
+.TP
+\fB+\fP\fInumber\fP
+Go to the specified line number of the file being edited.
+.TP
+\fB+\fP/\fIpattern\fP
+Go to the first occurrence of the specified \fIpattern\fP within
+the file being edited.
+.LP
+The \fB\-r\fP command line option is not supported.
+.SH ENHANCEMENTS
+.SS Multiple buffers and windows
+.LP
+A
+.I buffer
+is the internal object
+which holds a file in memory, while a
+.I window
+is an area of the
+screen which shows part of a buffer.
+Every window references a buffer, even if no file is being edited.
+The following commands are
+available for operating on buffers and windows:
+.IP \fB:buffer\fP
+create a new buffer in a new window;
+can be followed by a filename, which will be edited in the new buffer.
+.IP \fB:split\fP
+create a new window on to the current buffer by
+splitting the current window in half.
+The two resulting windows are similar to
+.I viewports
+on to a single editing buffer,
+in that changes made in one window are reflected in the other one.
+.IP \fB:close\fP
+close the current window;
+will also close the buffer if this is the last window on to it.
+.IP "\fB:x\fP\ /\ \fBZZ\fP"
+close only the current window.
+If the window is the only one on to the buffer,
+the buffer will be closed as well,
+writing it first if it is modified.
+.IP \fBg\fP
+move to the next window.
+.IP \fB^W\fP
+increase the size of the current window
+(may be given a numeric prefix, default is one line).
+.IP \fB^T\fP
+decrease the size of the current window
+(may be given a numeric prefix, default is one line).
+.IP \fB^O\fP
+make the current window as large as possible.
+.IP \fB^]\fP
+as for
+.BR vi ,
+but create a new buffer window if appropriate
+(and if
+.B autosplit
+allows).
+.LP
+Note that the
+.B :quit
+command quits out of the editor, not out of a window.
+The
+.B :close
+command is thus the equivalent of
+.B :quit
+for windows.
+There
+is no equivalent of
+.B :x
+or
+.B ZZ
+for the whole editor; these have been
+hijacked for operations on windows.
+.LP
+The numeric
+.B autosplit
+parameter specifies the maximum number
+of buffer windows that will be created automatically whenever you
+either edit more than one file, or use tags to edit a different file.
+.LP
+Undo works per buffer, as do marks; yank/put and redo (the
+.B .
+command)
+work over all buffers, i.e. you can delete from one buffer and put
+the text into a different buffer.
+.SS "File preservation"
+.LP
+Rather than use
+.BR vi 's
+Unix-specific method
+for preservation,
+.B xvi
+does periodic preservation of all files
+currently being edited into temporary files in the same directory.
+It
+tries to do this when you aren't typing, so that you won't
+notice the short delay when the temporary file is written out.
+Obviously, only changed files are preserved in this way, and
+the temporary file is removed once the real file has been successfully
+written.
+.SS "8-bit character support"
+.LP
+Characters with the top bit set are accepted by
+.BR xvi ,
+but
+it is not yet possible to have null
+(\(fm\^\e\^0\^\(fm)
+bytes in a file buffer.
+How characters are displayed can be controlled by
+the \fBcchars\fP and \fBmchars\fP
+parameters, which, if set, cause
+control and meta-characters
+respectively 
+to be
+output unchanged;
+otherwise they are shown as sequences of printable characters.
+.LP
+Tabs are normally displayed as a series of spaces of the appropriate
+length (according to the \fBtabstops\fP parameter);
+setting \fBlist\fP mode will cause them to be displayed as control
+characters, as will unsetting the \fBtabs\fP parameter.
+How the tab character is displayed is then under the control of
+the \fBcchars\fP parameter.
+.LP
+You can use the
+.B ^_
+(control-underscore) command to flip the
+top bit of the character the cursor is on.
+This may be useful on systems where it is otherwise impossible
+to enter 8-bit characters.
+.SS "File formats"
+.LP
+.B Xvi
+can read and write text files in non-Unix formats.
+The current format is given by the value of the
+.B format
+parameter, which
+may be set to "\fBunix\fP", "\fBmsdos\fP", etc.
+To see a list of available formats, type
+.IP
+.B ":se fmt=?"
+.SS "Extended regular expressions"
+.LP
+.BR vi 's
+.B magic
+parameter is superseded by the
+.B regextype
+parameter,
+which can take the following values:
+.IP \fBtags\fP
+only
+.B ^
+and
+.B $
+are significant (used for tags)
+.IP \fBgrep\fP
+like
+.BR grep (1),
+but with
+.B \e\^<
+and
+.B \e\|\^>
+added
+.IP \fBegrep\fP
+like
+.BR egrep (1),
+but with
+.B \e\^<
+and
+.B \e\|\^>
+added
+.LP
+The default is
+.BR grep .
+.LP
+Note that it is still possible to set or unset \fBmagic\fP
+as in \fBvi\fP; this will simply result in \fBregextype\fP
+being set as appropriate.
+.LP
+The \fBsections\fP and \fBparagraphs\fP parameters define
+.BR egrep -style
+patterns to search for, rather than
+.BR vi 's
+simplistic (and
+.BR troff -dependent)
+character pairs.
+.SS "Improved replace mode"
+.LP
+The
+.B R
+command acts more intelligently when you press return \(em
+it leaves the rest of the current line alone,
+and just starts
+replacing text on the next line,
+starting at the screen column
+where you first typed
+.BR R .
+.SS "Command re-execution"
+.LP
+As well as the normal named (conjugate) buffers,
+and the default one (named
+.BR @ ),
+there exist several extra ones named
+.BR : ,
+.BR / ,
+.B ?
+and
+.BR ! ,
+which contain the last command lines typed to each of the given
+commands.
+So for instance,
+.B @:
+will re-execute the last \fBex\fP command, or you can insert
+it into your buffer, edit it and then re-execute it (e.g. with
+.BR dd\^@@ ).
+.SS Jumpscroll
+When multiple windows are used,
+.B xvi
+normally has to be able to scroll individual windows
+without scrolling the whole screen.
+This can be very inefficient
+on terminals
+without
+scrolling regions,
+so the
+.B jumpscroll
+parameter
+is provided to control the editor's scrolling behaviour.
+It can be set to one of:
+.TP
+.B off
+When the cursor moves outside a window's boundaries,
+and the new position is near enough,
+the window will scroll to the new position.
+.TP
+.B on
+When the cursor moves outside a window's boundaries,
+the window will always jump to the new position.
+.TP
+.B auto
+A window will scroll only if it can do so efficiently;
+otherwise it will jump.
+.LP
+The default value is
+.BR auto .
+.LP
+On ISA-type systems which have memory-mapped displays,
+hardware character generators
+and reasonably fast processors,
+.B jumpscroll
+should generally be set to
+.BR off ;
+however,
+on LCD screens or other displays with a long image persistence,
+this may actually make the text more difficult to read,
+and many users may be more comfortable with it turned
+.BR on .
+.LP
+Explicit scroll commands (e.g.
+.B ^D
+and
+.BR ^E )
+are not affected by
+the \fBjumpscroll\fP parameter.
+.SS Colour
+.LP
+There are four new parameters to control screen colours:
+.ta 1.25i
+.LP
+\fBcolour\fP	colour used for text
+.LP
+\fBstatuscolour\fP	colour used for status lines
+.LP
+\fBroscolour\fP		as
+.BR statuscolour ,
+but for readonly files
+.LP
+\fBsystemcolour\fP	colour used for system mode
+(i.e. subshells and after termination)
+.LP
+.DT
+These parameters are numeric, and the value means different
+things on different operating systems.
+On Unix, it is an index into the
+.BR termcap (5)
+entries "\fBc0\fP" to "\fBc9\fP",
+which are assumed to be colour-setting
+escape sequences if they are present.
+If they are not present,
+"\fBso\fP"
+(begin standout mode)
+and
+"\fBse\fP"
+(end standout mode)
+are used instead.
+Values of 0 and 1 give normal text,
+whereas 2 and above give standout mode.
+.LP
+The default colour for
+the
+.B roscolour
+parameter will generally involve red
+if colours are available;
+this is intended
+to provide a warning to the user that writing the file
+may not be possible.
+.SS "On-line help"
+.LP
+A primitive help facility is available; the
+.B :help
+command
+simply creates a new
+buffer window on to a standard help file.
+The name of the file which is edited
+is given by the
+.B helpfile
+string parameter;
+the default on Unix versions is
+\fB"/usr/lib/xvi.help"\fP.
+Note that the help file buffer will be marked "not editable"
+when it is created, which prevents accidental overwriting
+of the help file even when the file permissions would allow it.
+.SS Miscellaneous
+.LP
+The command
+.B :wn
+(write file and edit next) is provided, as in \fBPC-vi\fP.
+.LP
+The new
+.B edit
+parameter controls whether a buffer can be modified.
+This may be used to implement a nicer version of
+.BR view (1)
+than the
+standard
+.B vi
+version, since it won't fool you into thinking that editing
+the buffer is in any way safe.
+Be warned:
+once having set
+.BR noedit ,
+it is not possible to do a
+.B ":set edit"
+any more.
+It's a one-way street.
+.LP
+In insert and replace modes,
+.B ^A
+has the same meaning as
+.B ^@
+in vi, except that it
+works at any time,
+not just for the first character.
+Also, typing
+.BI ^B x
+where
+.I x
+is the name of a conjugate buffer, inserts the contents of that
+buffer into the input stream at that point.
+The buffer named 
+.B <
+always contains the last thing inserted,
+so that
+.B ^B<
+is the same as
+.BR ^A .
+.SH LIMITATIONS
+.SS "Ex mode"
+.LP
+The main area in which \fBxvi\fP is lacking is \fBvi\fP's
+.B ex
+mode,
+which is not implemented at all (and neither are \fBedit\fP, \fBe\fP,
+or \fBopen\fP modes).
+However, many of the \fBex\fP commands are available in
+.B vi
+mode
+as colon commands;
+the colon commands that have not been implemented
+are mostly those which offer
+the same functionality as other commands in \fBvi\fP mode.
+.LP
+In particular,
+.BR abbreviate ,
+.BR append ,
+.BR change ,
+.BR ex ,
+.BR insert ,
+.BR join ,
+.BR open ,
+.BR recover ,
+.BR unabbreviate ,
+.BR undo ,
+.BR write>> ,
+.B z
+and
+.B |
+have not been implemented as colon commands yet.
+.SS "Vi mode"
+.LP
+In
+.B vi
+mode, the
+.B U
+and
+.B =
+commands are not implemented,
+although there is no real reason why they shouldn't be,
+whilst
+.B Q
+is inappropriate in the context of
+.BR xvi ,
+since there is no
+.B ex
+mode.
+.SS Parameters
+.LP
+Many of
+.BR vi 's
+parameters
+have not been implemented;
+the command
+.B ":se all"
+gives a complete list, with current values,
+of those that have been.
+.SS Miscellaneous
+.LP
+Repeat counts before insertions don't work.
+.LP
+Appending to named buffers is not yet implemented.
+.LP
+Typing \fB^Q\fP in input mode does not mean the same as \fB^V\fP;
+it just inserts a `\fB^Q\fR', assuming it gets as far as the editor at all.
+.LP
+Typing \fB^W\fP in insert mode does not back up one word as in \fBvi\fP.
+.LP
+It is not possible to interrupt the editor while it is
+performing certain operations.
+If you start off a big global command, you have to wait for it to finish.
+.LP
+Flags and counts after \fBex\fP mode commands are not supported.
+.LP
+It is not possible to read the output of a system command using
+.IP
+\fB:r\ !\fP\fIcommand\fP
+.LP
+or to write into a command using
+.IP
+\fB:w\ !\fP\fIcommand\fP.
+.LP
+Regular expressions, although implemented (see above),
+do not support the \fB~\fP metacharacter;
+also, the \fB\e\^u\fP and \fB\e\^l\fP escape sequences are not supported in
+substitute replacement patterns.
+Newlines included on the right hand side of a substitution
+do not currently cause the line to be split;
+the newline character is literally inserted into the line.
+.LP
+The \fB:global\fP command only supports the commands [\fBlps&~d\fP].
+.SH "OTHER DIFFERENCES FROM VI"
+The
+.B XVINIT
+environment variable is read instead of
+.BR EXINIT .
+Whilst no files are sourced
+automatically,
+users who wish to have a startup file can arrange it very easily.
+.BR sh (1)
+or
+.BR ksh (1)
+users should add this line to their
+.BR "$HOME/.profile" :
+.IP
+.BI "XVINIT=\(fmsource " xvi-startup-file "\(fm; export XVINIT"
+.LP
+.BR csh (1)
+users should add this to their
+.BR "$HOME/.login" :
+.IP
+.BI "setenv XVINIT \(fmsource " xvi-startup-file \(fm
+.LP
+The \fBtags\fP parameter can be used to specify multiple tags files;
+these can be separated by either
+``\^\e\ \|''
+(backslash space) or
+``,''
+(comma).
+.LP
+Alternate files are handled slightly differently,
+owing to the presence of buffer and window handling.
+Essentially, when you close a buffer, its filename
+is remembered as the alternate file;
+when you invoke the \fB^^\fP or \fB:e\ #\fP commands,
+this file is re-edited.
+Note that \fB^^\fP edits the alternate file in a new buffer window,
+if \fBautosplit\fP allows.
+.LP
+Hitting the escape key while in the command line does not terminate input;
+instead, it cancels input, returning the prompt to the beginning
+of the line.
+This applies to input for
+.BR : ,
+.BR / ,
+.B ?
+and
+.BR ! .
+.SH "FILES"
+.DS
+.ta 1.5i
+\fB/usr/lib/xvi.help\fP	Default help file.
+.DE
+.SH "SEE ALSO"
+.BR ex (1),
+.BR vi (1),
+.BR termcap (5).
+.br
+.IR "Summary of Differences between Vi and Xvi" .
+.SH BUGS
+.IP \(bu
+When the cursor is on the last word of a buffer,
+the command
+.B dw 
+leaves the last character of the word undeleted.
+.IP \(bu
+Some screen updates do not get shown properly when buffers are split,
+and certain commands (e.g.
+.BR x )
+are executed.
+.IP \(bu
+If you do something like
+\fBcf.WORD\fR\^<\^\fIesc\fR\^>
+and then redo it, and the
+.B f.
+fails, then the
+\fBWORD\fR\^<\^\fIesc\fR\^>
+gets taken as normal input.
+The rest of the input should really be cancelled when part of a redo fails.
+.IP \(bu
+A command of the form
+.B :/pat/;+1m.
+will not work because the
+editor incorrectly detects a conflict between source and destination.
+.IP \(bu
+The editor
+in its present form
+is very inefficient in terms of CPU cycles.
+.IP \(bu
+Most
+.BR termcap (5)
+terminal descriptions are only tested with
+.BR vi (1)
+(and possibly
+.BR rogue (6)).
+Since
+.B xvi
+is, in some ways, more demanding than
+.B vi
+in its use of
+.B termcap
+capabilities, it sometimes exposes bugs or inadequacies in
+.B termcap
+entries.
+This applies especially to scrolling regions.
+.SH AVAILABILITY
+.LP
+.B Xvi
+has been ported to \%MS-DOS, OS/2, QNX and many different versions of Unix.
+Source code is available from the authors.
+.SH AUTHORS
+.LP
+Chris and John Downey.
+.LP
+Derived from STEVIE, written by Tim Thompson and Tony Andrews.

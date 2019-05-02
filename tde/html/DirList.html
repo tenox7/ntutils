@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+<title>DirList - TDE 5.1v Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="TDE 5.1v Manual">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Alphabetical-List.html#Alphabetical-List" title="Alphabetical List">
+<link rel="prev" href="DeleteLine.html#DeleteLine" title="DeleteLine">
+<link rel="next" href="DuplicateLine.html#DuplicateLine" title="DuplicateLine">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+   -->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="DirList"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="DuplicateLine.html#DuplicateLine">DuplicateLine</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="DeleteLine.html#DeleteLine">DeleteLine</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Alphabetical-List.html#Alphabetical-List">Alphabetical List</a>
+<hr>
+</div>
+
+<h3 class="unnumberedsec">DirList</h3>
+
+<p><table summary=""><tr align="left"><td valign="top">Key:  </td><td valign="top"><kbd>Alt+F1</kbd>
+<br></td></tr><tr align="left"><td valign="top">Menu: </td><td valign="top">File &gt; Directory
+<br></td></tr></table>
+
+   <p>Select a subdirectory (or the current if none) and/or a wildcard pattern and
+list the matching files and all subdirectories.  Select a directory (placed
+first and indicated by a trailing slash (`<samp><span class="samp">/</span></samp>') to move into it (provided it
+is not empty).  The parent directory can be selected by the `<samp><span class="samp">../</span></samp>' entry, or
+by using <code>BackSpace</code>; another drive can be selected by typing the drive
+letter, followed by a colon (`<samp><span class="samp">:</span></samp>'), or vice versa (colon then letter).  The
+files can be sorted by filename or extension by using the <code>SortBoxBlock</code>
+key (<kbd>Alt+S</kbd> by default).  Typing a character will select each file that
+begins with that character; additional characters (within half a second) will
+then narrow the selection down.  A new path and/or pattern can be entered by
+pressing <code>Tab</code>.
+
+   <p>The wildcards might be a bit more flexible than <acronym>DOS</acronym>/Windows users
+are accustomed to.  The `<samp><span class="samp">*</span></samp>' character can be used anywhere (so `<samp><span class="samp">a*z</span></samp>'
+matches all files that start with `<samp><span class="samp">a</span></samp>' and end in `<samp><span class="samp">z</span></samp>').  Brackets can
+be used to match a character in a list (so `<samp><span class="samp">[aeiou]*</span></samp>' matches any file that
+starts with a vowel).  If the list starts with `<samp><span class="samp">!</span></samp>' or `<samp><span class="samp">^</span></samp>' it matches
+any character not in the list (so `<samp><span class="samp">[!aeiou]*</span></samp>' matches any file that does
+<em>not</em> start with a vowel).  The list may also contain a range &mdash;
+`<samp><span class="samp">[a-z]</span></samp>' represents all lower case letters.  Multiple patterns can be
+specified by separating with `<samp><span class="samp">;</span></samp>' (or `<samp><span class="samp">:</span></samp>' in <acronym>UNIX</acronym>), so
+`<samp><span class="samp">*.txt;*.doc</span></samp>' will find all <samp><span class="file">.txt</span></samp> and <samp><span class="file">.doc</span></samp> files.  Exclusions
+can be achieved by separating with `<samp><span class="samp">!</span></samp>', thus `<samp><span class="samp">!*.exe;*.com</span></samp>' will find
+everything <em>except</em> <samp><span class="file">.exe</span></samp> and <samp><span class="file">.com</span></samp> files and
+`<samp><span class="samp">*.txt;*.doc!r*</span></samp>' will find all <samp><span class="file">.txt</span></samp> and <samp><span class="file">.doc</span></samp> files, except
+those starting with <samp><span class="file">r</span></samp>.  To find a literal `<samp><span class="samp">;</span></samp>' or `<samp><span class="samp">!</span></samp>' place it
+inside a list.
+
+   <p><strong>Caution</strong>: the extension dot is just a normal character, so `<samp><span class="samp">*.*</span></samp>'
+will only match files that have an extension; to match all files only a single
+`<samp><span class="samp">*</span></samp>' is required.  To match files without an extension use `<samp><span class="samp">!*.*</span></samp>' (the
+<acronym>DOS</acronym> method of `<samp><span class="samp">*.</span></samp>' will not work).
+
+   </body></html>
+

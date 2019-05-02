@@ -1,0 +1,30 @@
+#include <os2.h>
+
+ICON 1 icons\ftepm.ico
+
+BITMAP 101 bmps\exit.bmp
+BITMAP 102 bmps\open.bmp
+BITMAP 103 bmps\save.bmp
+BITMAP 104 bmps\close.bmp
+BITMAP 105 bmps\prev.bmp
+BITMAP 106 bmps\last.bmp
+BITMAP 107 bmps\next.bmp
+BITMAP 108 bmps\undo.bmp
+BITMAP 109 bmps\redo.bmp
+BITMAP 110 bmps\cut.bmp
+BITMAP 111 bmps\copy.bmp
+BITMAP 112 bmps\paste.bmp
+BITMAP 113 bmps\pastecol.bmp
+BITMAP 114 bmps\errprev.bmp
+BITMAP 115 bmps\errnext.bmp
+BITMAP 116 bmps\tagfind.bmp
+BITMAP 117 bmps\tagnext.bmp
+BITMAP 118 bmps\tagprev.bmp
+BITMAP 119 bmps\tagpop.bmp
+
+MENU 1
+BEGIN
+     MENUITEM "Quit", 100
+END
+
+rcinclude pmdlg.rc

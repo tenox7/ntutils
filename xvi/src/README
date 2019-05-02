@@ -1,0 +1,56 @@
+This is a source release of the Xvi editor (derived from "STEVIE"), a
+clone of the UNIX editor `vi'. The program was originally developed
+for the Atari ST, but has been ported to UNIX, MS-DOS, OS/2 and QNX as
+well.
+
+Xvi is a portable multi-window version of `vi'. In spite of its name,
+there is, as yet, no X-Windows-specific version of it, but work is
+still in progress. Existing versions use text windows separated by
+horizontal status lines on character mode displays.  The windows may
+represent different files being edited, or different views on to the
+same file.
+
+Unix, MS-DOS and QNX versions have now been in regular use by the
+authors, and many of our colleagues, for about three and a half years,
+and the editor's behaviour seems fairly satisfactory.
+
+This source code is not in the public domain, but is provided for free,
+subject to the license conditions set out in the COPYING file.
+
+The files included in the `doc' directory are:
+
+README
+	What you're reading.
+
+COPYING
+	The license under which xvi is provided. Please read and
+	understand this license if you are going to re-distribute xvi.
+
+help
+	The help file used by xvi.
+
+source.ms
+source.lst
+	A guide to the Xvi source code, including information about
+	how to port Xvi to different systems. Provided in [nt]roff -ms
+	source & nroff output formats. A PostScript version may follow
+	later.
+
+summary.ms
+summary.lst
+	A document describing the differences between vi and xvi.
+	Same formats.
+
+xvi.1
+xvi.lst
+	A Unix-style manual page, in [nt]roff -man & nroff output
+	formats.
+
+Chances are, if you're on UNIX, MS-DOS or QNX, you'll be able
+to compile xvi without changing anything. Change directory
+into `src', pick a makefile and go for it.
+
+If that doesn't work, read doc/source.ms.
+
+Chris & John Downey
+October 1992
