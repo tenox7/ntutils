@@ -1,0 +1,315 @@
+HOW TO COMPILE & INSTALL ELVIS 2.2
+
+Separate sets of instructions are provided below for UNIX, Windows-NT,
+MS-DOS, and OS/2.
+
+For Win32 and MS-DOS, I've constructed batch files which, when run, cause
+the programs to be compiled.  This is the preferred way to compile elvis
+and its related programs.  However, you can also use MSVC++'s interactive
+development environment if you prefer.  Separate instructions are given
+for both compilation methods, for both operating systems.
+
+All of these instructions assume that you have already unpacked the files
+from the source code archive, "elvis-2.2*.tar.gz".  That's a gzipped tar
+archive.  If you don't have the gzip and tar utilities, then the easiest
+way for you to unpack them is to compile the "untar.c" program (available
+via anonymous FTP from ftp://ftp.cs.pdx.edu/pub/elvis/untar.c).  The files
+will be placed in a subdirectory named "elvis-2.2*".  The MS-DOS *.MAK files
+assume that you've unpacked them while in C:\MSVC, so the files themselves
+should end up in C:\MSVC\elvis-2.2*.
+
+Under MS-DOS, the name of the archive will be mangled.  It will probably
+be "elvis-~1.gz", but it may be something else; the exact name depends on
+how you downloaded it, and whether you already had an old version of that
+archive in the same directory.  The MS-DOS version of the "untar" program
+needs to be passed the mangled name, whatever that turns out to be.  The
+Win32 version, on the other hand, can handle the full "elvis-2.2*.tar.gz"
+file name.
+
+================================================================================
+
+UNIX
+     1) Run the "configure" shell script to create "Makefile" and "config.h"
+	files.  I tried to make this "configure" script work about the same
+	as GNU ones.  For a complete list of options, run "configure -?"
+	Here's a list of some of the more important ones, but YOU PROBABLY
+	DON'T NEED TO USE ANY OF THEM because the defaults are pretty smart.
+
+	    --verbose
+		    This causes "configure" to output an explanation for each
+		    decision that it makes.  If "configure" isn't configuring
+		    elvis correctly for your system, then you should rerun it
+		    with "--verbose" to see why.
+
+	    --with-x[=no]
+		    This forces elvis to include support for X-windows, or
+		    (with "=no") forces it not to support X-windows.  If you
+		    omit this flag, configure will automatically detect
+		    whether X is installed on your system, and use it if
+		    available.
+
+	    --without-x
+		    This is a synonym for "--with-x=no".
+
+	    --x-includes=directory
+		    configure has a built-in list of likely places where
+		    X-windows header files might be installed.  This argument
+		    adds another possible location to the list.  The list is
+		    used for the automatic inspection if "--with-x[=no]" was
+		    omitted, and the actual directory where the files were
+		    found are incorporated into the Makefile.
+
+		    The X-windows header files are actually expected to
+		    reside in a subdirectory named "X11" under the given
+		    directory.  For example, if your system has a file named
+		    /usr/local/X11R6/include/X11/X.h then you would give the
+		    argument "--x-includes=/usr/local/X11R6/include"
+
+	    --x-libraries=directory
+		    Similarly, this adds a directory to the list of
+		    directories where X-windows libraries might reside.  The
+		    directory where they actually do reside is incorporated
+		    into the Makefile.
+
+	    --bindir=directory
+		    This value is incorporated into the Makefile.  The
+		    command "make install" will copy the executables into
+		    this directory.  The default is /usr/bin.
+
+	    --datadir=directory
+		    This is incorporated into both the Makefile and the
+		    config.h file.  It is the directory where elvis' support
+		    files will reside after a "make install".  The default is
+		    /usr/share/elvis.
+
+	    --docdir=directory
+		    This is incorporated into both the Makefile and the
+		    config.h file.  It is the directory where elvis' manual
+		    will reside after a "make install".  The default is
+		    /usr/share/elvis/doc.
+
+	    --prefix=directory
+		    This value is incorporated into the Makefile.  It supplies
+		    leading part of the datadir, docdir, and bindir values.
+		    Its default value is /usr, which is why those directories
+		    all have values starting with "/usr".
+
+	    --libs=string
+		    This option allows you to specify which library to use
+		    for the "termcap" user interface.  It will usually be
+		    either -ltermcap or -lcurses.
+
+	    --ioctl=tty-style
+		    There are three possibilities: termios, termio, and
+		    sgtty.  These use Posix, SysV, and BSD terminal control
+		    calls, respectively.  The Posix termios calls usually
+		    work best.  The default is chosen by inspecting the
+		    header files in /usr/include.
+
+     2)	Give the command "make".  This should eventually produce programs
+	named "elvis", "ref", "elvtags", and "elvfmt".  (elvtags and elvfmt
+	are elvis' own versions of the standard ctags and fmt programs.  The
+	names of elvis' versions were changed so they wouldn't clash with the
+	standard ones.)
+
+     3)	You should be able to run "elvis" in the source code directory now.
+	Try "e2 README.html" or "e2 config.h".
+
+	Note that we're running the e2 shell script instead of the elvis
+	executable.  e2 simply runs elvis in such a way that it looks for
+	its support files in the "data" subdirectory, instead of the usual
+	directory.  We do this because the support files haven't been
+	installed into their usual directory yet.
+
+     4) If all goes well, you can install elvis by becoming the superuser and
+        running the command "make install".  (Later, if you decide to uninstall
+        it you can do so via the command "make uninstall".)
+
+	 --------------------------------------------------------------------
+	| NOTE: If you want to compile elvis with multiple configurations,   |
+	| you should compile it with each configuration separately, and then |
+	| rename the executables, and "make clean" before running the        |
+	| configure script for the next configuration.  For example, to make |
+	| elvis both with and without X-windows, you could...                |
+	|                                                                    |
+	|	configure --with-x linux                                     |
+	|	make                                                         |
+	|	mv elvis xelvis                                              |
+	|	make clean                                                   |
+	|	configure --with-x=no linux                                  |
+	|	make                                                         |
+	 --------------------------------------------------------------------
+
+================================================================================
+
+MS-Windows/NT (or Windows95?), with Visual C++ 2.0 or later (Method #1):
+     1)	Run the "makwin32.bat" file.
+
+		makwin32
+
+     2) You can install elvis.exe by copying it into some directory in your
+	execution path, and the "lib" files into a subdirectory named "lib"
+	under the directory where you installed elvis.exe.  The following
+	commands are APPROXIMATELY what you need to do:
+
+		mkdir \localbin
+		copy *.exe \localbin
+		path %path%;\localbin
+		mkdir \localbin\lib
+		copy lib\*.* \localbin\lib
+
+
+MS-Windows/NT (or Windows95?), with Visual C++ 2.0 or later (Method #2):
+     1)	Copy all of the "*.mak" files from files from the oswin32 subdirectory.
+
+		copy oswin32\*.mak
+
+     2)	Copy the file "osconfig.h" from the oswin32 directory to "config.h"
+	(without the initial "os") in the current directory.
+
+		copy oswin32\osconfig.h config.h
+
+     3)	Start Visual C++ 2.0, and open the "elvis.mak" file.  Select the
+	"Release" target.
+
+     4)	Select the "Project->Build elvis.exe" menu item, and wait a while.
+	Eventually this should give you an "elvis.exe" program in the
+	WinRel subdirectory.  You can test this program from inside
+	VC++ via the <F5> key.
+
+     5) Repeat steps 3 and 4 for the "ctags.mak", "ref.mak", and "fmt.mak"
+	files.
+
+     6) You can install elvis.exe by copying it into some directory in your
+	execution path, and the "lib" files into a subdirectory named "lib"
+	under the execution directory.  The following commands are
+	APPROXIMATELY what you need to do:
+
+		mkdir \localbin
+		copy WinRel\*.exe \localbin
+		copy *.exe \localbin
+		path %path%;\localbin
+		mkdir \localbin\lib
+		copy lib\*.* \localbin\lib
+
+================================================================================
+
+MS-DOS, using Visual C++ 1.5 (Method #1):
+     REMINDER: MSVC++ 1.5 always puts the complete pathnames of all files
+        into its NMAKE files.  Because of this, you *MUST* install the
+        source code into a directory named "C:\MSVC\elvis-2.2*".  The
+        "elvis-2.*" component of that directory name is stored in the
+        "elvis-2.2*.tar.gz" archive file, so you should be in the C:\MSVC
+        directory when you extract the files.  After extracting the files,
+        do a "cd elvis-2.2*"
+
+     1) Run the "makmsdos.bat" file
+
+		makmsdos
+
+     2) You can install elvis by copying the *.EXE files into some directory
+	in your execution path, and copying the "lib" files into a subdirectory
+	named "lib" under the directory where you installed the *.EXE files.
+	The following commands are APPROXIMATELY what you need to do:
+
+		mkdir \localbin
+		copy *.exe \localbin
+		mkdir \localbin\lib
+		copy \lib\*.* \localbin\lib
+		path {OLD PATH HERE};\localbin
+
+MS-DOS, using Visual C++ 1.5 (Method #2):
+     REMINDER: MSVC++ 1.5 always puts the complete pathnames of all files
+        into its NMAKE files.  Because of this, you *MUST* install the
+        source code into a directory named "C:\MSVC\elvis-2.2*".  The
+        "elvis-2.2*" component of that directory name is stored in the
+        "elvis-2.2*.tar.gz" archive file, so you should be in the C:\MSVC
+        directory when you extract the files.
+
+     1) Copy all of the "C:\MSVC\elvis-2.2*\OSMSDOS\*.MAK" files into the
+	"C:\MSVC\elvis-2.2*" directory.
+
+		c:
+		cd \msvc\elvis-2.2*
+		copy osmsdos\*.mak
+
+     2)	Copy the "\MSVC\elvis-2.2*\OSMSDOS\OSCONFIG.H" file to
+	"\MSVC\elvis-2.1\CONFIG.H" Note that the "OS" is dropped from the
+	filename.
+
+		copy osmsdos\osconfig.h config.h
+
+     3) Start Visual C++ 1.5, and open the "ELVIS.MAK" project.
+
+     4)	Select the "Project->Build ELVIS.EXE" menu item, and wait a while.
+	Eventually this should give you an "ELVIS.EXE" program in the
+	current directory.  You can test this program from inside VC++
+	via the <F5> key.
+
+     5)	Repeat steps 3 and 4 for "CTAGS.MAK", "REF.MAK", and "FMT.MAK".
+
+     6) You can install elvis by copying the *.EXE files into some directory
+	in your execution path, and copying the "lib" files into a subdirectory
+	named "lib" under the directory where you installed the *.EXE files.
+	The following commands are APPROXIMATELY what you need to do:
+
+		mkdir \localbin
+		copy *.exe \localbin
+		mkdir \localbin\lib
+		copy lib\*.* \localbin\lib
+		path {OLD PATH HERE};\localbin
+
+================================================================================
+
+OS/2, using IBM VisualAge C++ 3.0, IBM CSet++ 2.01 or emx/gcc and GNU
+     "make".  To use IBM's nmake instead of GNU make, edit the "makos2.cmd"
+     file and replace "make" with "nmake".
+
+     To use a different compiler... good luck.  Basically you need to change
+     the setting of the "CC" macro in the Makefile, but there also come
+     compiler flags which you may need to change, and that's going to be a
+     challenge.
+
+     1) Run "makos2.cmd" with no arguments to compile elvis with TCP/IP
+	support.  If your system doesn't have TCP/IP software installed,
+        then you can skip this step.
+
+		makos2
+
+     2) Run "makos2.cmd" with "--no-tcp" as an argument to compile elvis
+	without TCP/IP support.  The resulting binary will be named
+	"elvis-no-tcp.exe".  If you do have TCP/IP installed on your
+	computer, and never expect to use elvis on a non-TCP/IP system,
+	then you can skip this step.
+
+		makeos2 --no-tcp
+
+     3) To compile Elvis using emx/gcc linked against emx.dll providing
+        additional Termcap support use the "--with-emx" switch.  The
+        resulting binaries will all end "emx.exe", like "refemx.exe":
+
+                makeos2 --with-emx
+
+     4) To compile Elvis using emx/gcc not needing emx.dll and not
+        providing TCP/IP support use the "--with-gcc" switch.  The
+        resulting binaries will all end "gcc.exe", like "refgcc.exe":
+
+                makeos2 --with-gcc
+
+     5) You can install elvis by copying the *.exe files into some directory
+	in your execution path, and copying the "lib" files into a subdirectory
+	named "lib" under the directory where you installed the *.exe files.
+	The following commands are APPROXIMATELY what you need to do:
+
+		mkdir \localbin
+		copy *.exe \localbin
+		mkdir \localbin\lib
+		copy lib\*.* \localbin\lib
+		path {OLD PATH HERE};\localbin
+
+        After installing the files you should set the ELVISPATH environment
+        variable in your CONFIG.SYS file to the directory containing all the
+        stuff from the lib\ directory. This could look like:
+
+                set ELVISPATH=c:\localbin\lib
+
