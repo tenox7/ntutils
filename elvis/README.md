@@ -14,11 +14,10 @@ Quick intro to elvis 2.2, with links to source code and binaries
     *   [3.4 Changed or removed options](#OldOptions)
 *   [4\. Links to related files](#links)
 
-.---------------------------------------------------------------.
-| **This is not elvis' user manual!**  The _real_ documentation for   |
-| elvis is located in its online help facility.  While running  |
-| elvis, enter the command "`:help`" to see the table of contents.|
-^---------------------------------------------------------------^
+
+ **This is not elvis' user manual!**  The _real_ documentation for   
+ elvis is located in its online help facility.  While running  
+ elvis, enter the command "`:help`" to see the table of contents.
 
 1\. About this file
 ===================
