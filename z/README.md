@@ -11,5 +11,5 @@ For more info visit this [blog post](https://virtuallyfun.com/wordpress/2018/03/
 
 For documentation check [the manual](doc/z.txt)
 
-Screenshot:
+
 ![Screenshot](z.png)
