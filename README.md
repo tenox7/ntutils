@@ -1,4 +1,4 @@
-# NT Utils
+# Windows NT Console Utils
 
 Various utilities ported Windows NT Console. 
 Typically editors and other hard to find tools. 
