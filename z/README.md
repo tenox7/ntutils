@@ -10,3 +10,6 @@ This version is a port Windows NT Console. Enchanced version of NT SDK MEP.
 For more info visit this [blog post](https://virtuallyfun.com/wordpress/2018/03/11/microsoft-editor/)
 
 For documentation check [the manual](doc/z.txt)
+
+Screenshot:
+![Screenshot](z.png)
