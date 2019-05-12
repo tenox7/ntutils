@@ -10,3 +10,5 @@ Copyrights included where available.
 Because WTF Microsoft?
 
 ![Screenshot](edit.png)
+
+Seriously?
