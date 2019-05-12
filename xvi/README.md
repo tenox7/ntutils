@@ -5,3 +5,6 @@ Xvi editor is a derivative of [STEVIE](https://en.wikipedia.org/wiki/Stevie_(tex
 This is a port to Windows NT Console
 
 More info in [src/](src/)
+
+
+![XVI Screenshot](xvi.png)
