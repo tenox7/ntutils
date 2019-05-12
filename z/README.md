@@ -1,6 +1,7 @@
 # Z Text Editor
 
-Originally known as Yale Z Editor. Developed by Steve Woods for TOPS20 OS.
+Originally known as [Yale Z Editor](http://texteditors.org/cgi-bin/wiki.pl?Z).
+Developed by Steve Woods for TOPS20 OS.
 
 Later sold to Microsoft and ported to DOS, OS/2 and Windows by Mark Zbikowski.
 
