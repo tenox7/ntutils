@@ -4,7 +4,7 @@ Originally known as Yale Z Editor. Developed by Steve Woods for TOPS20 OS.
 
 Later sold to Microsoft and ported to DOS, OS/2 and Windows by Mark Zbikowski.
 
-Used extensively as Microsoft C and Microsoft OS/2 SDK editor.
+Used extensively as *Microsoft C* and *Microsoft OS/2 SDK* editor.
 
 This version is a port to Windows NT Console. Originally included with Windows NT SDK CDROM.
 
