@@ -1,7 +1,7 @@
 # Windows NT Console Utils
 
 Various utilities ported Windows NT Console. 
-Typically editors and other hard to find tools. 
+Some editors, Dialog, Figlet, etc.
 
 
 Most of the software is not mine. 
