@@ -1,4 +1,4 @@
-#Z Text Editor
+# Z Text Editor
 
 Originally known as Yale Z Editor. Developed by Steve Woods for TOPS20 OS.
 
