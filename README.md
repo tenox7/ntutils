@@ -5,9 +5,9 @@ Some editors, Dialog, Figlet, etc.
 
 
 Most of the software is not mine. 
-Copyrights included where available.
+Copyrights included if available.
 
-Because WTF Microsoft?
+Because seriously WTF Microsoft?
 
 ![Screenshot](edit.png)
 
