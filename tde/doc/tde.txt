@@ -1,0 +1,3204 @@
+TDE Manual
+**********
+
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+   Copyright (C) 2003,2004,2005,2006,2007 Jason Hood.
+
+     Permission is granted to freely modify and distribute this
+     document.
+
+Overview
+********
+
+Description
+===========
+
+TDE is a simple, public domain, multi-file/multi-window binary and text
+file editor written for IBM PCs and close compatibles running either
+DOS, Windows or Linux.  TDE is suitable for editing batch files, binary
+files, text files, and various computer language source code files.
+The only limit on the number and size of files that TDE can handle is
+the amount of memory.  Likewise, the only limit on the number of
+windows is the amount of memory.  There is no preset maximum number of
+files or windows that may be open at any one time.
+
+Introduction
+============
+
+I (Frank Davis) work with data files, computer source code, and various
+text files quite a bit.  Most of the features in TDE are related, in
+some way, to handling those types of files.  The various window and
+cursor commands in TDE are really nice for comparing and editing source
+code or output files.  A good collection of block commands is available
+for use on source code and formatted data files.  For what little word
+processing I do, TDE has a few simple commands for formatting text and
+paragraphs.  In short, TDE contains most of the features that I use
+most of the time in an easy to use, easy to remember, and easy to
+configure editor.  I hope you find TDE as easy to use for most of your
+routine editing as me.
+
+Usage
+*****
+
+The general format for running TDE is:
+
+     tde [-v] [-i CONFIG] [-w [WORKSPACE]]
+         [options] [filename(s)] [options] [-f|F|g|G[=] PATTERN filename(s)]
+
+Everything is optional -- running without any parameters will either
+bring up a prompt to load a filename (or display the directory list for
+a pattern), or automatically load the workspace if `tde.wsp' is present
+in the current directory (`.tdewsp' in UNIX).  The three options `-v',
+`-i' and `-w' must be first, but can appear in any order amongst
+themselves.
+
+`-v'
+     Enter viewer mode, where every file is loaded read-only.
+
+`-i'
+     Read the specified configuration file (after reading the global
+     and local files; *note Configuration::).
+
+`-w'
+     If this is used by itself, TDE will load the workspace from its
+     home directory; if it doesn't exist the usual prompt is displayed.
+     If WORKSPACE is present, but no other options, TDE will load the
+     given workspace.  When used with other options, TDE will load as
+     normal, using WORKSPACE as the filename of the workspace.
+
+`-f'
+`-F'
+`-g'
+`-G'
+     These options cause TDE to search files for PATTERN.  The lower
+     case letter will ignore case, whilst the upper case letter will
+     match it.  `F' will perform a text-based search; `G' will perform
+     a regular expression search.  The normal operation is to load the
+     first matching file, positioned at the first match; adding `='
+     immediately after the letter will instead create a window
+     containing the matching lines from all files.  If a directory is
+     specified all files in that directory will be searched.
+
+
+   Filenames (and directories) can include wildcards (*note DirList::,
+*note DefineGrep::).  If a directory is specified, the directory list
+will be brought up for it.
+
+   Options begin with either `-' or `+'.  An option starting with `-'
+will apply to all following files; an option starting with `+' will
+apply to only one file.  A lower case option letter will apply to the
+file(s) coming after it; an upper case letter will apply to the file
+before it (and possibly those after it).  For options that apply to
+following files, the normal behavior can be restored by adding `-'
+after the letter.
+
+`a'
+     Usually files are only loaded into the editor at the request of
+     the user (by closing the current file or explicitly loading the
+     next); this option will load all files into the editor immediately.
+
+`b[N]'
+`b!'
+     Load files as binary, using N as the line length (default is 64);
+     if N is zero, force loading files as text; if N is negative, load
+     text files as normal and use the positive value of N as the line
+     length for binary files (without prompting).  Alternatively, skip
+     binary files altogether.
+
+`c TITLE'
+     Name the window TITLE; use `.' for the filename (which won't be
+     split like it usually is).  This option always applies to only one
+     file.
+
+`e MACRO'
+     Execute MACRO after loading each file.  If MACRO refers to an
+     existing file, it will be read as a macro file.
+
+`l[LANG]'
+     If LANG is absent, syntax highlighting will be disabled; otherwise
+     it will be used as the language, overriding the filename test.
+
+`n'
+     Create a new (scratch) window.
+
+`r'
+     Load files as read-only.
+
+`s'
+     Set the scratch flag for files.
+
+`t[N]'
+     Use a physical tab size of N (default is 8; 0 will deflate tabs).
+
+`[LINE][:COL]'
+     Start at the specified position.  If LINE is negative it will be
+     taken from the end of the file (i.e. `-1' is the last line, `-2'
+     is the second last, etc.).  If COL is negative it will be taken
+     from the end of the line (i.e. `0' is EOL, `-1' is the last
+     character, `-2' is the second last, etc.).  This option always
+     applies to only one file -- start with `+' for the next file, `-'
+     for the previous (sic).
+
+`+OFFSET'
+     Move to the specified offset (prefix with `0x' for hexadecimal) in
+     the file.  It can be used with text files, but OFFSET is not the
+     same as the file offset, since line endings are not counted.  This
+     option always applies to only one file, as above.
+
+
+   There are also a number of help options.  These options must be the
+only argument present.
+
+`/?'
+`-?'
+`--help'
+     Display a (long) help screen, including version and contact
+     information.
+
+`--version'
+     Just display the current version and release date.
+
+`-g?'
+`-G?'
+     Display the regular expression help screen.
+
+`-??'
+     Display the wildcard help screen.
+
+
+   Finally, TDE can be used as a filter, where it reads from standard
+input and writes to standard output.  In this instance, input is
+treated as an implicit (scratch) file after the command, so it is
+always read first and the upper case version of options is required.
+
+Examples
+========
+
+     tde -b FILE1 -b- FILE2
+     tde FILE1 +B FILE2
+
+   Both load FILE1 as binary (using the default line length of 64) and
+auto-detect the type of FILE2.
+
+     dir | tde >dir.lst
+
+   Pipe the output of `dir' into TDE and save its output into `dir.lst'.
+
+     unzip -c tde51ss | tdv -Lc
+
+   View TDE's source using C syntax highlighting (`tdv' is equivalent
+to `tde -v').
+
+     tde -lpascal file.c file.bat -l file.for -l- file.cbl
+
+   This will load `file.c' and `file.bat' using Pascal syntax
+highlighting, disable syntax highlighting for `file.for' and use the
+filename to determine if `file.cbl' should have it.
+
+     tdv -b! ...
+
+   View every text file in the current directory and all subdirectories.
+
+     tde -F s_output .;[dwu]*/*.[ch]
+
+   Do a case-sensitive, text-based search for `s_output', in all the
+`.c' and `.h' files in the current directory and the subdirectories
+starting with `d', `w' and `u'.  UNIX users can use `:' instead of `;'.
+
+     tde -e "JumpToPosition \"-1:0\" Rturn LineDown BottomLine LineUp" FILE
+
+   Load FILE, moving to EOL of the last line, with EOF at the bottom of
+the window.
+
+Screen Layout
+*************
+
+        ÚÄÄÄ File number - each window opened to same file has same number
+        ³ ÚÄÄÄ Window letter
+        ³ ³  ÚÄÄÄ Read-only indicator - exclamation mark
+        ³ ³  ³ ÚÄÄÄ Dirty/scratch file indicator - asterisk or hash
+        ³ ³  ³ ³ ÚÄÄÄ File name
+        ³ ³  ³ ³ ³                    ÚÄÄÄÄ File attributes
+        ³ ³  ³ ³ ³                    ³    ÚÄÄÄÄ CRLF, LF, BIN mode
+        ³ ³  ³ ³ ³                    ³    ³    ÚÄÄÄ Total number of lines
+        ³ ³  ³ ³ ³                    ³    ³    ³             ÚÄÄÄ line:column
+                                                      
+     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+     ³    The first line on the screen contains file information    ³
+     ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+     ³........1......    Optional ruler line    ......7........8³
+     ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+     ³                                                              ³
+     ³                                                              ³
+     ³                          File area                           ³
+     ³                                                              ³
+     ³                                                              ³
+     ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+     ³                 Editor modes and information                 ³
+     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+                                                        Insert
+       ³   ³    ³    ³    ³    ³    ³     ³        ³  ³     ³  ³  ÀÄ Overwrite
+       ³   ³    ³    ³    ³    ³    ³     ³        ³  ³     ³  ÀÄÄ ^Z at eof?
+       ³   ³    ³    ³    ³    ³    ³     ³        ³  ³     ÀÄÄÄÄÄ markers
+       ³   ³    ³    ³    ³    ³    ³     ³        ³  ³
+       ³   ³    ³    ³    ³    ³    ³     ³        ³  ÀÄÄÄÄÄÄ trim trailing
+       ³   ³    ³    ³    ³    ³    ³     ³        ³          space at EOL?
+       ³   ³    ³    ³    ³    ³    ³     ³        ÀÄÄÄÄ character under cursor
+       ³   ³    ³    ³    ³    ³    ³     ÀÄÄÄÄÄ word wrap indicator
+       ³   ³    ³    ³    ³    ³    ÀÄÄÄÄÄ Sync cursor in all windows?
+       ³   ³    ³    ³    ³    ÀÄÄÄÄÄ Ignore / Match search case?
+       ³   ³    ³    ³    ÀÄÄÄÄÄ Indent mode?
+       ³   ³    ³    ÀÄÄÄÄÄ Tab modes = Smart/Fixed, In/Deflate, size
+       ³   ³    ÀÄÄÄÄÄ Available memory for editing files
+       ³   ÀÄÄÄÄÄ Total number of windows, including hidden
+       ÀÄÄÄÄÄ Total number of open files
+
+Configuration
+*************
+
+TDE uses three external files: `tde.cfg', `tde.hlp' and `tde.shl' (in
+UNIX the dot is at the front).  These files are read from the home
+directory (the "global" file) and/or the current directory (the "local"
+file).  The home directory is determined by the environment variables
+`TDEHOME' or `HOME', or the same path as TDE itself, whichever exists
+first (however, in order for `HOME' to be used in DOS or Windows,
+`tde.cfg' must already exist in it).  The default `tde.cfg' and
+`tde.hlp' files can be found in the `config' directory (without any dot
+for UNIX); the default `tde.shl' is called `tdedist.shl' in the source
+distribution (its `tde.shl' includes TDE's own highlighting).
+
+`tde.cfg'
+     This file defines what key performs what function (including
+     macros) and the initial state of the editor (mode settings and
+     colors).  It can also define upper and lower case letters and the
+     sort sequence.  Please see the default file for more information.
+     It is loaded globally first and then locally (i.e. both locations,
+     not one or the other).
+
+`tde.hlp'
+     This file contains the screen(s) displayed when *Note Help:: is
+     pressed.  It is at most 50 lines, with at most 100 characters per
+     line; any more than this will be ignored.  Lines need not be the
+     same length, as all lines will be space-padded to the length of
+     the longest.  Two screens are present, one for the normal help and
+     another for read-only files; separate the two with a `<<<>>>'
+     sequence.  If `tde.hlp' doesn't exist locally it will be read
+     globally.  A local file need only define one type of screen; the
+     other will still be read globally.
+
+`tde.shl'
+     This file supplies the colors used for syntax highlighting and the
+     information required to assign those colors to a particular file.
+     It searches for the language locally first and then tries
+     globally.  Note that when a local language is found, all the
+     patterns are prefixed with the current directory.
+
+
+Syntax Highlighting
+===================
+
+The colors always come first in the file.  They are global for all
+languages.  Colors are defined in the same manner as in the
+configuration file (see `config/tde.cfg').  Following are all the
+recognized colors, with their default color in brackets.
+
+`background'
+     The default background color for all the following (blue).
+
+`normal'
+     The color for any text that is not explicitly highlighted (yellow).
+
+`bad'
+     The color for invalid components, such as malformed numbers,
+     character literals containing too many characters, or unterminated
+     string and character literals (bright red).
+
+`keyword'
+     The color of keywords (white).
+
+`comment'
+     The color of comments (grey).
+
+`function'
+     The color of function names (bright green).
+
+`string'
+     The color of string literals (bright cyan).
+
+`character'
+     The color of character literals (bright cyan).
+
+`integer'
+     The color of numbers (in decimal, without a point; bright cyan).
+
+`binary'
+     The color of binary (base 2) numbers (bright cyan).
+
+`octal'
+     The color of octal (base 8) numbers (bright cyan).
+
+`hex'
+     The color of hexadecimal (base 16) numbers (bright cyan).
+
+`real'
+     The color of numbers with a decimal point (bright cyan).
+
+`preprocessor'
+     The color of preprocessor statements (cyan).
+
+`symbol'
+     The color of any non-alphanumeric that is otherwise unrecognized
+     (white).
+
+
+   The language definitions follow the colors.  Each definition is
+started with `language' and continues until the next `language' or EOF.
+The following keywords can be used to define a language (where `[]'
+indicates an optional component and `|' indicates one or the other):
+
+`language NAME [from] PARENT'
+     Associates NAME with the syntax highlighting information.  This is
+     what is used to select a particular syntax highlight (*note
+     SyntaxSelect::).  If PARENT exists, this language will inherit all
+     of PARENT's language definitions.
+
+`pattern WILDCARDS'
+     Must follow immediately after `language'.  It is a space-separated
+     list of wildcards to identify a language from a file's extension
+     (or name, or even path).
+
+`case match | ignore'
+     Determines if keywords will be case sensitive or insensitive.  The
+     default is `match'.
+
+`startword LIST'
+`inword    LIST'
+`innumber  LIST'
+     A list (or range) of characters that may start a word (or, more
+     correctly, an identifier), be found within a word and be found
+     within numbers.
+
+`comment STRING'
+`comment STRING1 STRING2'
+     Indicates STRING will begin a line comment (stops at the end of the
+     line), or that STRING1 and STRING2 will begin and end a block
+     comment (can extend across multiple lines).  Each string can be up
+     to four characters and there can be two of each type of comment.
+
+`function CHAR'
+     Identifiers that are followed by CHAR (allowing for whitespace, but
+     not across line boundaries) are given the `function' color.
+
+`preprocessor CHAR2 [spanline CHAR]'
+     Lines that begin with CHAR2 (one or two characters) are given the
+     `preprocessor' color.  If the line ends in CHAR, the preprocessor
+     will continue on the next line.
+
+`binary CHAR2- | -CHAR2'
+`octal  CHAR2- | -CHAR2'
+`hex    CHAR2- | -CHAR2'
+     Define the format of binary, octal and hexadecimal numbers.  The
+     first form indicates a prefix (such as C's `0x123'), the second a
+     suffix (such as assembly's `123h').
+
+`string    C1 [C2]       [spanline CHAR] [newline]'
+`character C1 [C2] [NUM] [spanline CHAR] [newline]'
+     Define the starting and closing characters of string and character
+     literals.  If C2 is missing, it is taken the same as C1.
+     `spanline' indicates the literal will continue onto the next line
+     if this line ends in CHAR; `newline' indicates that it will
+     continue onto the next line, regardless.  NUM is the maximum
+     number of characters permitted in a character literal.  The
+     default is one; if it is zero, `character' functions identically
+     to `string'.
+
+`escape CHAR'
+     When CHAR is encountered within a string or character literal, the
+     following character is skipped over.
+
+`keyword LIST'
+     The words in LIST will be displayed in the `keyword' color.  Note
+     that all of the color keywords can be used in this fashion (when
+     LIST starts with a character from `startword').
+
+`COLOR LIST'
+     Use COLOR to display the words in LIST.
+
+`InflateTabs'
+`LTabSize'
+`Macro'
+`PseudoMacro'
+`PTabSize'
+`UserMenu'
+     The same as the configuration file, although macros must be
+     defined using a two-key combination.
+
+
+Alphabetical List
+*****************
+
+AbortCommand
+============
+
+Key:    `Ctrl+['
+Menu:   n/a
+
+   Cancel a function, usually leaving the original value of a prompt
+unchanged.
+
+   `Esc' is usually temporarily remapped to this function when
+performing other functions.
+
+About
+=====
+
+Key:    n/a
+Menu:   Help > About
+
+   Display the version, authors and release date of TDE.  This
+information is also displayed when TDE is started without any
+parameters (and no workspace is present).
+
+AddLine
+=======
+
+Key:    `Ctrl+N'
+Key:    `Alt+A'
+Menu:   Other > Add
+
+   Add a blank line below the current line; if the current line is EOF,
+add it above.
+
+BackSpace
+=========
+
+Key:    `Backspace'
+Key:    `Shift+Backspace'
+Key:    `Ctrl+H'
+Menu:   n/a
+
+   Delete the character to the left of the cursor; join with the
+previous line if the cursor is at BOL.  If the cursor is on the first
+non-blank character of the line and indent mode is on, match the
+indentation of previous lines.
+
+   Has no effect at TOF, but at EOF it will delete the previous line if
+it is blank.
+
+BackTab
+=======
+
+Key:    `Shift+Tab'
+Menu:   n/a
+
+   Move the cursor back to the previous tab stop (*note
+ToggleSmartTabs::).  In insert mode the intervening characters are
+deleted.
+
+BalanceHorizontal
+=================
+
+Key:    `Shift+Ctrl+H'
+Menu:   Window > Balance horiz.
+
+   All windows that have the same left and right edge as the current
+window will be resized to have an equal height.
+
+BalanceVertical
+===============
+
+Key:    `Shift+Ctrl+V'
+Menu:   Window > Balance vert.
+
+   All windows that have the same top and bottom edge as the current
+window will be resized to have an equal width.
+
+BegNextLine
+===========
+
+Key:    `Ctrl+Enter'
+Menu:   n/a
+
+   Move the cursor to the first column of the next line.
+
+BegOfLine
+=========
+
+Key:    `Home'
+Key:    `Shift+Home'
+Menu:   n/a
+
+   Move the cursor to the first non-blank character on the line, or the
+first column.  If already at one, move to the other.
+
+BlockBegin
+==========
+
+Key:    `Alt+['
+Key:    `Ctrl+K Ctrl+B' (UNIX)
+Menu:   n/a
+
+   Move the cursor to the beginning of the block.  For a box block, it
+will move to the left edge first, then the right.  For a line block,
+the column will be the same as when the block was marked.
+
+BlockBlockComment
+=================
+
+Key:    `Shift+Ctrl+C'
+Menu:   Block > Comment > Block
+
+   Surround the block with block comments; if the language does not
+have block comments a warning is displayed.  For a stream block, the
+comments will be added to the beginning and end of the stream; for a
+line block, the comments will be new lines added to the beginning and
+end of the block; for a box block, the comments will be added to each
+line in the block, at the left and right edges of the block.  In all
+cases, the block will be extended to contain the comments.
+
+BlockCapitalise
+===============
+
+Key:    `Ctrl+Alt+.'
+Menu:   Block > Conversions > Capitalise
+
+   For each word in the block, upper case the first letter and lower
+case the rest.
+
+BlockCenterJustify
+==================
+
+Key:    `Shift+Alt+F10'
+Menu:   Word > (Block Justify) Center
+
+   Center justify the contents of the block.  For a line block, each
+line is centered according to the current margins; for a box block,
+text within the block is centered according to the left and right edges
+of the block; this function is not available for a stream block.
+
+BlockCompressTabs
+=================
+
+Key:    `Shift+Alt+C'
+Menu:   Block > Compress Tab
+
+   Compress spaces in the block to tabs, using the current physical tab
+size (*note SetTabs::).  Spaces after a `"' or `'' will not be
+compressed.  This function is only available for a line block.
+
+BlockEmailReply
+===============
+
+Key:    `Shift+Alt+/'
+Menu:   Block > E-mail '>'
+
+   Insert `> ' to the beginning of each line in the block.  If the line
+already starts with `>', just insert another `>'.  This function is
+only available for a line block.
+
+BlockEnd
+========
+
+Key:    `Alt+]'
+Key:    `Ctrl+K Ctrl+K' (UNIX)
+Menu:   n/a
+
+   Move the cursor to the end of the block.  For a box block, it will
+move to the right edge first, then the left.  For a line block, the
+column will be the same as when the block was marked.
+
+BlockExpandTabs
+===============
+
+Key:    `Alt+E'
+Menu:   Block > Expand Tabs
+
+   Expand the tabs in the block to the appropriate number of spaces,
+using the current physical tab size (*note SetTabs::).  This function
+is only available for a line block.
+
+BlockFixUUE
+===========
+
+Key:    `Shift+Alt+.'
+Menu:   Block > Conversions > Fix UUE Prob
+
+   Fixes the EBCDIC to ASCII problem with text e-mail.
+
+BlockIndent
+===========
+
+Key:    `Ctrl+K Ctrl+I'
+Menu:   Word > Indentation > Indent
+
+   Perform a tab (*note Tab::) on the first line of the block and add
+the same number of spaces to the remaining lines.  The tab is added at
+the first non-blank character and initial blank lines are skipped.  A
+box block effectively treats the left edge as the beginning of the
+line; this function is not available for a stream block.
+
+BlockIndentN
+============
+
+Key:    `Ctrl+K I'
+Menu:   Word > Indentation > Indent spaces
+
+   Ask for a number and add that many spaces to the beginning of the
+block.  If the number is zero, the first line will be used to align the
+remaining lines.  A box block effectively treats the left edge as the
+beginning of the line; this function is not available for a stream
+block.
+
+BlockIndentTabs
+===============
+
+Key:    `Shift+Alt+I'
+Menu:   Block > Indent Tabs
+
+   Compress initial spaces in the line to tabs, leaving remaining
+spaces alone.  This function is only available for line blocks.
+
+BlockInvertCase
+===============
+
+Key:    `Ctrl+Alt+`'
+Menu:   Block > Conversions > Invert Case
+
+   Convert lower case characters in the block to upper case and vice
+versa.
+
+BlockLeftJustify
+================
+
+Key:    `Shift+Alt+F8'
+Menu:   Word > (Block Justify) Left
+
+   Left justify the contents of the block.  For a line block, each line
+is adjusted to start at the left margin; for a box block, text within
+the block is moved to the left edge of the block; a stream block will
+generate a warning.
+
+BlockLineComment
+================
+
+Key:    `Shift+Ctrl+L'
+Menu:   Block > Comment > Line
+
+   Place line comments on each line of the block.  For a line block,
+the comments will be inserted at the column of the left-most non-blank
+character of the lines in the block; for a box block, the comments will
+be inserted at the left edge of the block; this function is not
+available for a stream block.
+
+BlockLowerCase
+==============
+
+Key:    `Alt+.'
+Menu:   Block > Conversions > Lower Case
+
+   Convert every letter in the block to lower case.
+
+BlockRightJustify
+=================
+
+Key:    `Shift+Alt+F9'
+Menu:   Word > (Block Justify) Right
+
+   Right justify the contents of the block.  For a line block, each
+line is adjusted to end at the right margin; for a box block, text
+within the block is moved to the right edge of the block; a stream
+block will generate a warning.
+
+BlockRot13
+==========
+
+Key:    `Shift+Alt+,'
+Menu:   Block > Conversion > Rot13
+
+   Rotate the English letters thirteen places.  This has the effect of
+swapping `A'..`M' with `N'..`Z'.
+
+BlockStripHiBit
+===============
+
+Key:    `Alt+/'
+Menu:   Block > Conversions > Strip hi bit
+
+   Zero the high (eighth) bit of all characters in the block.  This
+function is useful when editing files created by WordStar.
+
+BlockToFile
+===========
+
+Key:    `Alt+W'
+Menu:   File > Special > Write Block
+
+   Write the block to a file, using the current line ending (*note
+ToggleCRLF::).
+
+BlockTrimTrailing
+=================
+
+Key:    `Alt+T'
+Menu:   Block > Trim Trail
+
+   Remove all spaces from the end of each line in the block.  This
+function is only available for line blocks.
+
+BlockUnComment
+==============
+
+Key:    `Shift+Ctrl+E'
+Menu:   Block > Comment > Remove
+
+   Remove the comments (line or block, but not both) from the block.
+The comments must be part of the block.  The first line of the block
+must have a comment, but it is not necessary for every line to have one.
+
+   For line comments, the comment will be removed from the beginning of
+the line (or box), as well as the space after it, if one; a stream
+block will only remove the comment from the first line of the stream.
+
+   For block comments, the comments will be removed from the beginning
+and end of a stream or the left and right edge of each line in a box.
+A line block depends on the first line: if it has both start and end
+comments, each line is tested; if the start and end comments are on
+lines by themselves, those lines are deleted; otherwise it is assumed
+to be like a stream, with the comment ending at the last line.
+
+BlockUndent
+===========
+
+Key:    `Ctrl+K Ctrl+U'
+Menu:   Word > Indentation > Undent
+
+   Perform a `BackSpace' or `BackTab' (depending on the indent mode) on
+the first non-blank line of the block and carry that change throughout
+the remaining lines.  A box block effectively treats the left edge as
+the beginning of the line; this function is not available for a stream
+block.
+
+   If there are lines in the block that begin before the first line,
+the initial characters will be deleted and the lines will be placed in
+the undo buffer (*note RetrieveLine::).  Example:
+
+       line1
+     line2
+
+Undenting these two lines would remove the two spaces from `line1', but
+also the first two characters of `line2':
+
+     line1
+     ne2
+
+BlockUndentN
+============
+
+Key:    `Ctrl+K U'
+Menu:   Word > Indentation > Undent spaces
+
+   Ask for a number and remove that many spaces from the beginning of
+the block.  If the number is greater than the number of spaces on the
+first non-blank line, use that number instead.  *Note BlockUndent::,
+for a side-effect.
+
+   This function is not available for a stream block.
+
+BlockUpperCase
+==============
+
+Key:    `Alt+,'
+Menu:   Block > Conversions > Upper Case
+
+   Convert every letter in the block to upper case.
+
+BorderBlock
+===========
+
+Key:    `Shift+Alt+B'
+Menu:   Block > Border > Standard
+
+   Draw a border/frame within the confines of a box block.  The
+characters used to generate the border are configurable (press the
+*Note Help:: key for how).  This function will always draw each corner
+and side (use a space to "hide" one) using one character; *Note
+BorderBlockEx::, for a multi-character border, with optional corners
+and sides.
+
+   The graphic characters (*note ToggleGraphicChars::) are
+automatically turned on at the start of this function; once completed,
+they are turned off again (if they were not already on).
+
+BorderBlockEx
+=============
+
+Key:    `Ctrl+Alt+B'
+Menu:   Block > Border > Enhanced
+
+   Draw a border/frame within the confines of a box block.  Each corner
+and side can be any number of characters, or none, in which case that
+item is not drawn (although if there are no top or bottom items, the
+left or right items will be drawn at the corners).
+
+   The graphic characters (*note ToggleGraphicChars::) are
+automatically turned on at the start of this function; once completed,
+they are turned off again (if they were not already on).
+
+BotOfScreen
+===========
+
+Key:    `Ctrl+PgDn'
+Menu:   Move > Bottom line
+
+   Move the cursor to the bottom line of the window.
+
+BottomLine
+==========
+
+Key:    `Alt+End'
+Menu:   Move > Line to bottom
+
+   Move the current line and the cursor to the bottom line of the
+window.
+
+CenterJustify
+=============
+
+Key:    `Alt+F10'
+Menu:   Word > (Justify) Center
+
+   The current line is centered between the left and right margins.
+
+CenterLine
+==========
+
+Key:    `Alt+End'
+Menu:   Move > Line to center
+
+   Move the current line and the cursor to the center line of the
+window.
+
+CenterWindow
+============
+
+Key:    `Center'
+Menu:   Move > Center line
+
+   Move the cursor to the center line of the window.
+
+ChangeCurDir
+============
+
+Key:    `Shift+Ctrl+D'
+Menu:   Toggles > Cursor direction
+
+   Change the direction the cursor moves after typing a character or
+backspace.  The direction can be selected by any of the arrow keys;
+`Enter' will restore the normal direction.
+
+   When the cursor is not updating the usual way, overwrite mode is
+always on and the new direction is indicated in the mode line.
+`BackSpace' will move in the opposite direction and overwrite the
+character with a space.
+
+CharacterSet
+============
+
+Key:    `Shift+Alt+H'
+Menu:   Other > Character set
+
+   Display the current character set.  The decimal code for each
+character can be found by adding the number on the left to the number
+on the top (add another ten for the second `0' to `5').
+
+   Due to limitations in the UNIX console, not all characters will be
+displayed on that system.
+
+CharLeft
+========
+
+Key:    `Left'
+Key:    `Ctrl+S'
+Menu:   n/a
+
+   Move the cursor one character to the left; has no effect if the
+cursor is already on the first column.
+
+CharRight
+=========
+
+Key:    `Right'
+Key:    `Ctrl+D'
+Menu:   n/a
+
+   Move the cursor one character to the right; has no effect if the
+cursor is on the 1040th column.
+
+ClearAllMacros
+==============
+
+Key:    `Ctrl+Esc'
+Key:    `Shift+Ctrl+M'
+Menu:   Other > File > Clear
+
+   Wipe all the macro definitions.  If the current window has syntax
+highlighting only its language macros will be wiped; otherwise only the
+global macros.
+
+CloseWindow
+===========
+
+Key:    `Shift+Ctrl+F3'
+Menu:   Window > Close
+
+   This function has two uses, depending on when it used.  If used on a
+zoomed (full-screen) window, it will close only that window (unlike
+*Note Quit::, which will also close all hidden windows).  If used on a
+split window, it will remove and hide the window, increasing the window
+above or below, or left or right, and making it current.
+
+ContextHelp
+===========
+
+Key:    `Shift+Ctrl+F1'
+Menu:   Help > Context Help
+
+   Loads a file into the editor (or switches to it if it is already
+loaded) and, if the cursor is on a word, searches it for that word
+(using a regular expression).  The default file is `tde.txt' and the
+default expression is `^<~>' (where `~' is replaced with the word);
+these can be changed in the configuration.  The file can have a
+relative path, but if it exists when the editor is started, or once it
+has been loaded, it will be made absolute.
+
+CopyBlock
+=========
+
+Key:    `Alt+C'
+Menu:   Block > Copy
+
+   Copy the block to the cursor and then unmark the block.  For a line
+block, the block will be copied to the line below the cursor; if the
+cursor is inside the block, the block will be copied to the line after
+the last line in the block.
+
+CopyString
+==========
+
+Key:    `Ctrl+Enter'
+Menu:   n/a
+
+   Copy the string at the cursor in the current window to the prompt;
+if the cursor is on a blank, do nothing.  It is an alias for
+`BegNextLine', intended for use in macros.
+
+CopyToClipboard
+===============
+
+Key:    `Ctrl+Insert'
+Menu:   Block > Clipboard > Copy
+
+   Copy the block to the Windows clipboard and then unmark the block.
+It is only available for the 32-bit DOS (`tdep.exe') and Windows
+(`tdew.exe') versions.
+
+CopyWord
+========
+
+Key:    `Shift+Enter'
+Menu:   n/a
+
+   Copy the word (using the syntax highlighting definitions of a word)
+at the cursor in the current window to the prompt; if the cursor is not
+on a word, do nothing.  It is an alias for `NextLine', intended for use
+in macros.
+
+CutToClipboard
+==============
+
+Key:    `Shift+Delete'
+Menu:   Block > Clipboard > Cut
+
+   Copy the block to the Windows clipboard and then delete the block
+(if the copy was successful).  It is only available for the 32-bit DOS
+(`tdep.exe') and Windows (`tdew.exe') versions.
+
+DateTimeStamp
+=============
+
+Key:    `Ctrl+2'
+Menu:   Other > Date Stamp
+
+   Insert (or overwrite) the current system time and/or date to the
+cursor.  *Note StampFormat::, for how to configure the format.
+
+DefineDiff
+==========
+
+Key:    `Shift+F11'
+Menu:   Search > Begin Diff
+
+   Start a "diff", the difference between two visible windows.  The
+diff is capable of ignoring all space, or just leading space, on a
+line; it can also ignore blank lines, and line endings (usually in
+conjunction with ignore all space).  The case mode (*note
+ToggleSearchCase::) determines if the diff will ignore or match case.
+
+DefineGrep
+==========
+
+Key:    `Shift+F12'
+Key:    `Ctrl+F12'
+Key:    `Shift+Alt+Q'
+Menu:   File > Grep > File Find
+
+   Search a list of filenames and/or wildcards for a pattern.  If `RegX'
+is checked, the pattern will be a regular expression; if unchecked,
+straight text.  If `Results' is checked, all matching lines will be
+copied to a new window, prefixed with the filename, line number and
+column; otherwise it will load the first file that matches and position
+the cursor at the match.  If `Load all' is checked, all matching files
+will be loaded into the editor, positioned either at the first match
+(`Results' unchecked), or at the beginning of the file (`Results'
+checked).  If `Binary' is checked, files determined to be binary will
+autoload using the last value of `-b' (*note Usage::); otherwise binary
+files will be ignored.
+
+   This function will also define the search string (*note
+RepeatFindForward::, *note RepeatRegXForward::), but changing the
+search string will not affect the grep.  *Note RepeatGrep::.
+
+   *Note DirList::, for a description of wildcards.  Wildcards for this
+function can also be used for directories and the special path `...'
+will traverse subdirectories.  For example, `d*/.../*.c' will find all
+the `.c' files in all the directories starting with `d' and all their
+subdirectories.  The files will be sorted according to the current
+directory list order.
+
+DefineSearch
+============
+
+Key:    `Shift+Ctrl+F5'
+Menu:   Search > Search
+
+   Start a search.  The pattern can be either plain text, or check
+`RegX' for a regular expression.  To search the block it must be marked
+in the current file.  The `All files' option will search across all
+currently loaded files; it will ignore non-file (scratch) windows
+(unless one happens to be current).  Since it is not possible to search
+both the block and all files, checking one will uncheck the other.  The
+`Results' option will create a new window containing all matching lines
+of the search (prompting to continue if wrap occurred), prefixed by
+filename, line number and column.  Generating results across all files
+will always start the search from the beginning.  *Note RepeatSearch::.
+
+DelBegOfLine
+============
+
+Key:    `Shift+Alt+-'
+Menu:   Other > Delete begin
+
+   Move the cursor to the first non-blank character, or the first
+column, deleting everything in the way.
+
+DelEndOfLine
+============
+
+Key:    `Alt+-'
+Menu:   Other > Delete end
+
+   Truncate the line at the cursor.
+
+DeleteBlock
+===========
+
+Key:    `Alt+G'
+Menu:   Block > Delete
+
+   Delete the block.  The block does not have to be in the current file.
+
+DeleteChar
+==========
+
+Key:    `Delete'
+Key:    `Ctrl+G'
+Menu:   n/a
+
+   Delete the character under the cursor, shifting all remaining
+characters back one.  This function will not join lines; *Note
+StreamDeleteChar:: will do that.
+
+DeleteLine
+==========
+
+Key:    `Ctrl+Y'
+Key:    `Alt+D'
+Menu:   Other > Delete
+
+   Delete the current line, placing it in the undo buffer.  *Note
+RetrieveLine::.
+
+DirList
+=======
+
+Key:    `Alt+F1'
+Menu:   File > Directory
+
+   Select a subdirectory (or the current if none) and/or a wildcard
+pattern and list the matching files and all subdirectories.  Select a
+directory (placed first and indicated by a trailing slash (`/') to move
+into it (provided it is not empty).  The parent directory can be
+selected by the `../' entry, or by using `BackSpace'; another drive can
+be selected by typing the drive letter, followed by a colon (`:'), or
+vice versa (colon then letter).  The files can be sorted by filename or
+extension by using the `SortBoxBlock' key (`Alt+S' by default).  Typing
+a character will select each file that begins with that character;
+additional characters (within half a second) will then narrow the
+selection down.  A new path and/or pattern can be entered by pressing
+`Tab'.
+
+   The wildcards might be a bit more flexible than DOS/Windows users
+are accustomed to.  The `*' character can be used anywhere (so `a*z'
+matches all files that start with `a' and end in `z').  Brackets can be
+used to match a character in a list (so `[aeiou]*' matches any file that
+starts with a vowel).  If the list starts with `!' or `^' it matches
+any character not in the list (so `[!aeiou]*' matches any file that does
+_not_ start with a vowel).  The list may also contain a range --
+`[a-z]' represents all lower case letters.  Multiple patterns can be
+specified by separating with `;' (or `:' in UNIX), so `*.txt;*.doc'
+will find all `.txt' and `.doc' files.  Exclusions can be achieved by
+separating with `!', thus `!*.exe;*.com' will find everything _except_
+`.exe' and `.com' files and `*.txt;*.doc!r*' will find all `.txt' and
+`.doc' files, except those starting with `r'.  To find a literal `;' or
+`!' place it inside a list.
+
+   *Caution*: the extension dot is just a normal character, so `*.*'
+will only match files that have an extension; to match all files only a
+single `*' is required.  To match files without an extension use `!*.*'
+(the DOS method of `*.' will not work).
+
+DuplicateLine
+=============
+
+Key:    `Alt+='
+Menu:   Other > Duplicate
+
+   Make a copy of the current line and insert it below the cursor.
+
+DynamicTabSize
+==============
+
+Key:    `Shift+Ctrl+Tab'
+Menu:   Word > Tabs > Dynamic size
+
+   Interactively choose the physical tab size, instantaneously changing
+the display to reflect the new size.  `Left' or `Right' will change the
+size by one, `Up' or `Down' will change by four.  Press `Enter' to
+accept the new size, or `Esc' to restore the original.
+
+EditFile
+========
+
+Key:    `Shift+F4'
+Menu:   File > Load
+
+   Prompt for a name and load the file into the editor.  If the name is
+a subdirectory or contains wildcards then bring up the directory list
+(*note DirList::); if the name is `=' the name of the current file will
+be used.  The file will be made the current window, with the previous
+window becoming hidden.
+
+EditNextFile
+============
+
+Key:    `Alt+F4'
+Menu:   File > Load Next
+
+   The same as *Note EditFile::, but uses the next file (or next
+matching file) on the command line, instead of prompting for a name.
+
+EndNextLine
+===========
+
+Key:    `Shift+Ctrl+Enter'
+Menu:   n/a
+
+   Move the cursor to the end of the next line.
+
+EndOfFile
+=========
+
+Key:    `Ctrl+End'
+Menu:   Move > End of File
+
+   Move the cursor to the last page of the file (place EOF at the
+bottom of the window, if possible); the cursor will remain at the same
+screen position.
+
+EndOfLine
+=========
+
+Key:    `End'
+Menu:   n/a
+
+   Move the cursor to the end of the line.
+
+EraseBegOfLine
+==============
+
+Key:    `Shift+Ctrl+-'
+Menu:   Other > Erase begin
+
+   Fill the line with blanks, from the first column up to the cursor.
+
+Execute
+=======
+
+Key:    `Shift+Alt+E'
+Menu:   Other > Execute
+
+   Run an external command.  The command can contain a number of
+variables:
+
+     `%f'    copy the current filename to the command, using a relative
+             path
+     `%F'    copy the current filename to the command, using the
+             absolute path
+     `%p'    prompt for a parameter for the command
+     `%w'    copy the current word to the command
+     `%W'    copy the current string to the command
+
+   The filename will be automatically quoted if it contains a space or
+any of the characters `+;,=%' and there is no quote (`"' or `'') before
+it; insert an equal sign after the percent symbol to prevent that
+(`%=f').  The function will fail if either `%f' or `%F' is used and the
+current file is a scratch window.  If the cursor is not on a word or
+string, it will prompt for one.
+
+   There are also a few options:
+
+     Capture output   capture the output of the command (`stderr' first,
+                      followed by `stdout') into a new window (or
+                      replace the current output) and make it the
+                      current window; there is never a pause
+     No echo          don't output the command
+     No pause         return immediately, don't wait for a key
+     Original files   don't save the files in the editor, use the
+                      originals still on disk
+     Reload files     reload modified files without prompting
+
+   A blank command will run the shell, always with no echo and no
+pause, but unlike *Note Shell::, files can be saved and automatically
+reloaded.
+
+File
+====
+
+Key:    `F4'
+Menu:   Window > Close & Save
+
+   Save the current file (*note Save::) then close the window (*note
+Quit::).  If TDE has its output redirected, though, the block if one is
+marked, otherwise the entire file, will be written to `stdout'.
+
+FileAll
+=======
+
+Key:    `Ctrl+Q'
+Menu:   File > Save and Exit
+
+   Save all files then exit the editor (any files remaining on the
+command line will not be loaded).  If any file could not be saved, all
+files will remain open.
+
+FileAttributes
+==============
+
+Key:    `Alt+F2'
+Menu:   File > File attr
+
+   Change the attributes (DOS/Windows) or permissions (UNIX) of a file.
+The edit field takes precedence over the check boxes.  For UNIX, using
+a string will apply the permissions to all groups; use the three-digit
+octal number to set the groups independently.
+
+FillBlock
+=========
+
+Key:    `Alt+F'
+Menu:   Block > Fill > Character
+
+   Completely fill the box block with a single character.
+
+FillBlockDown
+=============
+
+Key:    `Shift+Ctrl+F'
+Menu:   Block > Fill > Down
+
+   Duplicate the first row of the box block throughout the rest of the
+block.
+
+FillBlockPattern
+================
+
+Key:    `Ctrl+Alt+F'
+Menu:   Block > Fill > Pattern
+
+   Completely fill the box block with some text.  If the text is not
+the same width as the block, it will be repeated and will wrap to
+continue onto the next row.
+
+FindBackward
+============
+
+Key:    `Shift+F6'
+Menu:   Search > Find backward
+
+   Start a text search, going backwards from the current cursor
+position.  If it could not be found, the search will continue from the
+end of the file.  *Note RepeatFindBackward::.
+
+FindForward
+===========
+
+Key:    `Shift+F5'
+Menu:   Search > Find forward
+
+   Start a text search, going forwards from the current cursor
+position.  If it could not be found, the search will continue from the
+start of the file.  *Note RepeatFindForward::.
+
+FormatParagraph
+===============
+
+Key:    `Shift+Ctrl+B'
+Menu:   Word > Format Paragraph
+
+   Format the current paragraph (a group of lines between blank lines)
+according to the current margins.
+
+FormatText
+==========
+
+Key:    `Ctrl+B'
+Menu:   Word > Format forward
+
+   Format the text from the current line to the first blank line,
+according to the current margins.
+
+GotoMark<N>
+===========
+
+Key:    `Shift+Alt+<N>'
+Key:    `Ctrl+K <N>' (UNIX)
+Menu:   n/a
+
+   Move the cursor to a previously defined position.  There are three
+markers available, so replace `<N>' with `1', `2', or `3'.  The markers
+are local to each file.
+
+GotoWindow
+==========
+
+Key:    `Ctrl+F11'
+Menu:   Window > Goto
+
+   Select a window by number and letter, or filename.  If the string
+starts with a digit, it is assumed to be the file number; if there is
+no following letter, find the first (visible) window.  If the string
+does not start with a digit, it is assumed to be the start of the
+filename (the name itself, not the path).  If no window is chosen (i.e.
+an empty string) a window list is displayed.  This is similar to the
+directory list (*note DirList::).  This list uses symbols to indicate
+the type of window.  The first symbol is `!' for the current window,
+`-' for a hidden window and `+' for a visible window.  Then comes the
+window number and letter and the three file indicators: `!' for
+read-only, `#' for scratch and `*' for modified.  The window title or
+relative file name is last, which also determines the sorting.  Typing
+a number will select that window number; typing anything else will
+select the name.
+
+HalfScreenDown
+==============
+
+Key:    `Shift+PgDn'
+Menu:   Move > Half window down
+
+   Move the file down half a page, leaving the cursor where it is.
+
+HalfScreenLeft
+==============
+
+Key:    `Shift+Alt+PgUp'
+Menu:   Move > Half window left
+
+   Move the file half a page to the left, leaving the cursor where it
+is.
+
+HalfScreenRight
+===============
+
+Key:    `Shift+Alt+PgDn'
+Menu:   Move > Half window right
+
+   Move the file half a page to the right, leaving the cursor where it
+is.
+
+HalfScreenUp
+============
+
+Key:    `Shift+PgUp'
+Menu:   Move > Half window up
+
+   Move the file up half a page, leaving the cursor where it is.
+
+Help
+====
+
+Key:    `F1'
+Key:    `Ctrl+J'
+Key:    `Alt+H'
+Menu:   n/a
+
+   Display a help screen.  The screen can be customised by creating a
+`tde.hlp' file (DOS/Windows) or `.tdehlp' file (UNIX).  It will be
+loaded from the current directory, the directory contained in the
+`TDEHOME' or `HOME' environment variables, or the same directory as the
+executable, whichever exists first.  The file can contain two help
+screens: one for the normal editor and one for a read-only file; use a
+`<<<>>>' sequence to separate the two.  The screens can be a maximum of
+50 lines, with each line having a maximum of 100 characters.
+
+InsertFile
+==========
+
+Key:    `Shift+Alt+Insert'
+Menu:   File > Special > Insert File
+
+   Insert another file into the current file, below the current line.
+If the current file is binary, the inserted file will _not_
+automatically be loaded as binary.
+
+ISearchBackward
+===============
+
+Key:    `Shift+Ctrl+R'
+Menu:   Search > ISearch <
+
+   Start a backward incremental (interactive) search.  *Note
+ISearchForward::.
+
+ISearchForward
+==============
+
+Key:    `Shift+Ctrl+S'
+Menu:   Search > ISearch >
+
+   Incremental (or interactive) searching finds the search string as it
+is typed in.  TDE's isearch is based on Emacs.  The default keys are
+`Shift+Ctrl+S' for forward searching and `Shift+Ctrl+R' for backward;
+however, within isearch, `Ctrl+S' and `Ctrl+R' can be used.  Pressing
+these keys again will immediately start a search with the previous find
+string (not necessarily isearch); otherwise they will continue the
+search with the current string.  `LineUp' and `LineDown' will cycle
+through the find history.  `BackSpace' can be used to remove entered
+characters, returning to the previous position.  `CopyWord',
+`WordRight', `WordEndRight' and `Ctrl+W' will append the remainder of
+the word to the search string; likewise with the `String' functions and
+`Shift+Ctrl+W'.  If no search string has been entered, the complete
+word or string will be copied.  `ToggleSearchCase' will do the obvious.
+`Esc' will stop the search at the current position; `AbortCommand' and
+`Ctrl+G' will restore the original position before the search was
+started.  `Enter'/`Rturn' will stop the search when entering characters
+or using the ISearch functions to continue it; otherwise the search
+will be continued.  The previous position is set to the original
+position, not to the last matching instance; if aborted, it is set to
+the aborted position.
+
+JoinLine
+========
+
+Key:    `Alt+J'
+Menu:   Other > Join
+
+   Join the next line with the current, at the cursor position (any
+text after the cursor is deleted).
+
+JumpToPosition
+==============
+
+Key:    `Shift+Alt+J'
+Menu:   Move > Goto Position
+
+   Jump to a line number and/or column, or a binary offset.  A negative
+line number will be taken from the end of the file (`-1' is the last
+line); a negative column from the end of the line (`0' is EOL, `-1' is
+the last character).  The offset always uses a binary line ending, even
+if the file is not.  It can be specified in hexadecimal by prefixing
+with `0x' (thus `1024' and `0x400' are the same position).
+
+KopyBlock
+=========
+
+Key:    `Alt+K'
+Menu:   Block > Kopy
+
+   Like *Note CopyBlock::, but the block remains marked.
+
+KopyToClipboard
+===============
+
+Key:    `Shift+Ctrl+Insert'
+Menu:   Block > Clipboard > Kopy
+
+   Like *Note CopyToClipboard::, but the block remains marked.
+
+LeftJustify
+===========
+
+Key:    `Alt+F8'
+Menu:   Word > (Justify) Left
+
+   Adjust the beginning of the line to start at the left margin.
+
+LineDown
+========
+
+Key:    `Down'
+Key:    `Shift+Down'
+Key:    `Ctrl+X'
+Menu:   n/a
+
+   Move the cursor down one line; if at the bottom of the window,
+scroll the page down one line.
+
+LineUp
+======
+
+Key:    `Up'
+Key:    `Shift+Up'
+Key:    `Ctrl+E'
+Menu:   n/a
+
+   Move the cursor up one line; if at the top of the window, scroll the
+page up one line.
+
+LoadMacro
+=========
+
+Key:    `Shift+F3'
+Menu:   Other > File > Load
+
+   Load macro definitions from a file.  If the current window has syntax
+highlighting the macros will be local to that language.  The file can
+also contain any other configuration information, not just macros.
+
+Macro
+=====
+
+Key:    n/a
+Menu:   n/a
+
+   A configuration setting used to define a macro -- a group of
+functions assigned to one key.  Please see the `config/tde.cfg' file
+for details.
+
+MacroMark
+=========
+
+Key:    `Shift+Alt+M'
+Key:    `Ctrl+K M' (UNIX)
+Menu:   n/a
+
+   Mark the position where the cursor should be placed once the macro
+finishes.
+
+MakeHalfHorizontal
+==================
+
+Key:    `Shift+Ctrl+F12'
+Menu:   Window > Make half horiz.
+
+   Halve the height of the current window and select the function to be
+used to create the window in the other half.
+
+MakeHalfVertical
+================
+
+Key:    `Shift+Ctrl+F11'
+Menu:   Window > Make half vert.
+
+   Halve the width of the current window and select the function to be
+used to create the window in the other half.
+
+MakeHorizontal
+==============
+
+Key:    `Shift+Ctrl+F9'
+Menu:   Window > Make horizontal
+
+   Select a function to create a new window in the bottom of the
+current window.  The current line will become the header of the new
+window.
+
+MakeVertical
+============
+
+Key:    `Shift+Ctrl+F8'
+Menu:   Window > Make vertical
+
+   Select a function to create a new window in the right of the current
+window.  The current column will become the vertical separator.
+
+MarkBegin
+=========
+
+Key:    `Shift+Alt+['
+Key:    `Ctrl+K B' (UNIX)
+Menu:   n/a
+
+   Set the beginning of the block; if no block is marked, create a box
+block.  If the beginning is after the end, the positions will be
+swapped.
+
+MarkBox
+=======
+
+Key:    `Alt+B'
+Menu:   n/a
+
+   Mark a box block, either the beginning corner or the ending corner,
+depending on the relative position of the cursor.
+
+   The first press will mark one character; if used again immediately,
+it will mark the current word; then the string; and finally the
+paragraph.
+
+MarkEnd
+=======
+
+Key:    `Shift+Alt+]'
+Key:    `Ctrl+K K' (UNIX)
+Menu:   n/a
+
+   Set the end of the block; if no block is marked, create a box block.
+If the end is before the beginning, the positions will be swapped.
+
+MarkLine
+========
+
+Key:    `Alt+L'
+Menu:   n/a
+
+   Mark a line block, either the beginning line or the ending line,
+depending on the relative position of the cursor.  If a stream block
+(*note MarkStream:: is already defined, this function will mark the
+entire line, leaving the block as a stream; however, once the beginning
+line has been defined this way, defining it again will turn the block
+into a line block.
+
+   The first press will mark one line; if used again immediately, it
+will mark a region of equal or greater indentation, or a group of blank
+lines; then the top and bottom lines will be extended by one line;
+finally, it will mark the entire paragraph.
+
+MarkStream
+==========
+
+Key:    `Alt+X'
+Menu:   n/a
+
+   Mark a stream block, either the beginning line/column or the ending,
+depending on the relative position of the cursor.  A stream block is
+like a line block, except it can start or end anywhere within a line.
+Use *Note MarkLine:: to mark the last line as a complete line.
+
+   The first press will mark one character; if used again immediately,
+it will mark the line (without the leading or trailing blanks); and
+then it will mark the paragraph (likewise).
+
+MoveBlock
+=========
+
+Key:    `Alt+M'
+Menu:   Block > Move
+
+   Move the block to the cursor; a line block will be moved to the line
+below the cursor.  The block is then unmarked.
+
+MoveMark
+========
+
+Key:    `Ctrl+Alt+['
+Menu:   Block > Move
+
+   Move the block mark to the cursor.  For a stream block, the cursor
+will become the new start column, but the ending column will remain
+unchanged.
+
+NextBrowse
+==========
+
+Key:    `Ctrl+F7'
+Menu:   Move > Next Browse
+
+   Move the cursor to the position given in the next line of the
+current browser window.  If the last line has been reached, go back to
+the first.
+
+   The current window will become the current browser window if it is a
+results (*note DefineSearch::, *note DefineGrep::) or output (*note
+Execute::) window.  If there is no browser window, find the first
+results or output window after the current; the first before the
+current; or the current window if it is scratch.  If the current window
+becomes the current browser window, the current line will be used,
+rather than the next.
+
+   A line will be recognised as a browser line if it contains nothing
+but a filename, or a filename with at least one number.  The first
+number will assumed to be a line number; if there is another number, it
+will assumed to be a column.  Each item can be separated by a space,
+tab, colon, semicolon or comma.  Only the first four such items will be
+tested for a filename.
+
+NextDirtyLine
+=============
+
+Key:    `Alt+F5'
+Menu:   Move > Next Dirty Line
+
+   Move the cursor to the first line in the next group of lines that
+have been modified.
+
+NextHiddenWindow
+================
+
+Key:    `Ctrl+F10'
+Menu:   Window > Next Hidden
+
+   Select the window that is hidden/invisible in front of the current
+window.  The current window then becomes hidden.
+
+NextLine
+========
+
+Key:    `Shift+Enter'
+Menu:   n/a
+
+   Move the cursor to the first non-blank character of the next line.
+
+NextWindow
+==========
+
+Key:    `F10'
+Menu:   Window > Next
+
+   Select the next visible window.
+
+Null
+====
+
+Key:    n/a
+Menu:   n/a
+
+   Used in the configuration file to remove the default function of a
+key, allowing it to be defined as a macro within the editor.
+
+NumberBlock
+===========
+
+Key:    `Alt+N'
+Menu:   Block > Number
+
+   Place a number in each row of the box block, filling the remainder
+with either a space or a zero.  Only integers are supported, although
+decimals can be created by filling a column with the point and
+filling/numbering to the left and right of it.  The number and
+increment are given in the base shown (which is always decimal); valid
+bases are from 2 to 36, with only 10 being signed.
+
+OverlayBlock
+============
+
+Key:    `Alt+O'
+Menu:   Block > Overlay
+
+   Overwrite the cursor with the block.  The block remains marked.
+
+   This function is not available for a stream block.
+
+PanDn
+=====
+
+Key:    `Alt+Down'
+Key:    `Ctrl+Grey+'
+Menu:   n/a
+
+   Scroll the window down one line, but leave the cursor where it is.
+
+PanLeft
+=======
+
+Key:    `Alt+Left'
+Menu:   n/a
+
+   Scroll the window left one character, but leave the cursor where it
+is.
+
+PanRight
+========
+
+Key:    `Alt+Right'
+Menu:   n/a
+
+   Scroll the window right one character, but leave the cursor where it
+is.
+
+PanUp
+=====
+
+Key:    `Alt+Up'
+Key:    `Ctrl+Grey-'
+Menu:   n/a
+
+   Scroll the window up one line, but leave the cursor where it is.
+
+ParenBalance
+============
+
+Key:    `Ctrl+]'
+Menu:   n/a
+
+   Find the opposite bracket under the cursor.  It will match `(' with
+`)', `[' with `]', `{' with `}' and `<' with `>'; `"' will match with
+itself, prompting for the direction.  It can also be used with syntax
+highlighting block comments -- place the cursor on the first character
+of the opening comment and the last of the closing (nested comments are
+not taken into account).
+
+PasteFromClipboard
+==================
+
+Key:    `Shift+Insert'
+Menu:   Block > Clipboard > Paste
+
+   Insert (or overwrite) the contents of the Windows clipboard.  It is
+only available for the 32-bit DOS (`tdep.exe') and Windows (`tdew.exe')
+versions.
+
+Pause
+=====
+
+Key:    `Ctrl+P'
+Key:    `Ctrl+K P' (UNIX)
+Menu:   n/a
+
+   Pause the play back of a macro -- halt the macro, allowing `Esc' to
+then cancel it.  When used within a prompt or dialog, the macro will
+accept keyboard input from the user before continuing execution.
+
+PlayBack
+========
+
+Key:    n/a
+Menu:   n/a
+
+   Used in the configuration file to help define macros.  Please see the
+`config/tde.cfg' file for details.
+
+PopupRuler
+==========
+
+Key:    `Ctrl+='
+Menu:   Other > Popup Ruler
+
+   Creates a ruler at the current cursor position, which can be moved
+around the screen.  If the line number display is on (*note
+ToggleLineNumbers::) it will be used to count lines; if it is off, it
+can be turned on, but it can't be turned off.
+
+   The arrow keys will move the ruler; in conjunction with `Ctrl' the
+window will move (with the ruler maintaining its position in the file).
+`StartOfLine' will move the ruler to the first column.  `Home' will
+move the window to the first column; `End' will move the window to the
+end of the longest line currently visible.
+`(Half)ScreenUp/Down/Left/Right' and `Top/EndOfFile' will move the
+window appropriately.  `Esc' will remove the ruler and restore the
+original window position.
+
+PrevBrowse
+==========
+
+Key:    `Ctrl+F8'
+Menu:   Move > Prev Browse
+
+   Move the cursor to the position given in the previous line of the
+current browser window.  If the first line has been reached, go back to
+the last.
+
+   *Note NextBrowse::, for details of the current browser window.
+
+PrevDirtyLine
+=============
+
+Key:    `Alt+F6'
+Menu:   Move > Prev Dirty Line
+
+   Move the cursor to the last line in the previous group of lines that
+have been modified.
+
+PrevHiddenWindow
+================
+
+Key:    `Shift+Ctrl+F10'
+Menu:   Window > Prev Hidden
+
+   Select the window that is hidden/invisible behind the current
+window.  The current window then becomes hidden.
+
+PreviousPosition
+================
+
+Key:    `Alt+`'
+Menu:   n/a
+
+   Certain movement functions remember where they came from -- this
+function will restore that position (and remember where _it_ came from).
+
+PreviousWindow
+==============
+
+Key:    `Shift+F10'
+Menu:   Window > Previous
+
+   Select the previous visible window.
+
+PrintBlock
+==========
+
+Key:    `Alt+P'
+Menu:   File > Special > Print
+
+   Write the block or file to the printer (DOS only; Windows and UNIX
+will write to `stderr').
+
+PseudoMacro
+===========
+
+Key:    `Alt+Enter'
+Key:    `Ctrl+Space'
+Menu:   Macro > Pseudo-macro
+
+   A pseudo-macro is identical to a macro, except in the way it's
+started.  Where a normal macro is assigned to a key, a pseudo-macro is
+assigned to a "trigger".  The trigger is the two characters before the
+cursor.  Please see the `config/tde.cfg' file for details.
+
+PullDown
+========
+
+Key:    `Ctrl+\'
+Menu:   n/a
+
+   Bring up a pop-up pull-down menu, containing most of the editor
+functions.  Even though it is not displayed, the headings can be
+selected by number (the left-most is `1').  The menu and the names
+given to the keys are configurable -- see `config/menu.cfg' and the end
+of `config/tde.cfg' for usage.
+
+Quit
+====
+
+Key:    `F3'
+Key:    `Alt+Q'
+Key:    `Ctrl+K Q' (UNIX)
+Menu:   Window > Close
+
+   Close the current window, prompting to abandon changes.  If it is the
+last window, the next file on the command line will be opened, or the
+editor will exit if none.  If there are multiple windows or files, then
+if there is a hidden window, it becomes the current; otherwise the
+window above or below, or to the left or right, will grow to accomodate
+the closed window; if this is not possible, the window will not be
+closed.
+
+QuitAll
+=======
+
+Key:    `Shift+Ctrl+Q'
+Menu:   File > Exit
+
+   Prompt to discard changes to all files and exit the editor (any
+files left on the command line are ignored).
+
+ReadConfig
+==========
+
+Key:    `Alt+F11'
+Key:    `Ctrl+K N' (UNIX)
+Menu:   File > Read Config
+
+   Read a configuration file from within the editor.
+
+RecordMacro
+===========
+
+Key:    `Alt+F3'
+Menu:   Other > Record/Stop
+
+   Record a macro -- a series of functions and characters that can be
+played back with a single key.  This function serves to both start the
+recording and then stop it.  The recording will also stop when the
+assigned key is pressed -- this is a recursive macro, that will
+continue to execute until an error condition occurs (typically hitting
+the end of the file).  If the *Note PseudoMacro:: key is used for the
+assignment, a pseudo-macro will be recorded using the two characters to
+the left of the cursor as the trigger.
+
+   Most prompts will be stored with the macro, but certain critical
+choices will not, for example: `Overwrite existing file (y/n)?'.
+
+Redo
+====
+
+Key:    `Shift+Alt+Backspace'
+Menu:   n/a
+
+   [This function is not yet implemented.]
+
+   Redo changes made by previous undos.
+
+RedrawScreen
+============
+
+Key:    `Ctrl+6'
+Menu:   Window > Redraw Screen
+
+   Completely redisplay every part of the editor.
+
+RegXBackward
+============
+
+Key:    `Shift+Alt+F7'
+Menu:   Search > Regx backward
+
+   Start a regular expression search, going backwards from the current
+cursor position.  If it could not be found, the search will continue
+from the end of the file.  *Note RepeatRegXBackward::.
+
+RegXForward
+===========
+
+Key:    `Shift+F7'
+Menu:   Search > Regx forward
+
+   Start a regular expression search, going forwards from the current
+cursor position.  If it could not be found, the search will continue
+from the start of the file.  *Note RepeatRegXForward::.
+
+Repeat
+======
+
+Key:    `Shift+Alt+R'
+Menu:   Other > Repeat
+
+   Repeat a key a certain number of times.  If the repeat value is `0',
+the key will be repeated until an error condition occurs or the break
+point (*note SetBreakPoint::) is reached; if the value is negative, it
+is taken as a line number and the count is the difference from the
+current line.
+
+RepeatDiff
+==========
+
+Key:    `F11'
+Key:    `Shift+Alt+D'
+Menu:   Search > Next Diff
+
+   Find the next difference.  *Note DefineDiff::.
+
+RepeatFindBackward
+==================
+
+Key:    `F6'
+Menu:   Search > Repeat <
+
+   Find the previous occurrence of the text search pattern.  If it
+could not be found, the search will continue from the end of the file.
+If no pattern has been defined, ask for it.
+
+RepeatFindForward
+=================
+
+Key:    `F5'
+Menu:   Search > Repeat >
+
+   Find the next occurrence of the text search pattern.  If it could
+not be found, the search will continue from the beginning of the file.
+If no pattern has been defined, ask for it.
+
+RepeatGrep
+==========
+
+Key:    `F12'
+Menu:   File > Grep > Next File
+
+   Find the next file that contains the pattern (either text or regular
+expression, depending on the defining function).  *Note DefineGrep::.
+
+RepeatRegXBackward
+==================
+
+Key:    `Alt+F7'
+Menu:   Search > Repeat <
+
+   Find the previous occurrence of the regular expression search
+pattern.  If it could not be found, the search will continue from the
+end of the file.  If no pattern has been defined, ask for it.
+
+RepeatRegXForward
+=================
+
+Key:    `F7'
+Key:    `Alt+F12'
+Menu:   Search > Repeat >
+
+   Find the next occurrence of the regular expression search pattern.
+If it could not be found, the search will continue from the beginning
+of the file.  If no pattern has been defined, ask for it.
+
+RepeatSearch
+============
+
+Key:    `Shift+Ctrl+F6'
+Menu:   Search > Repeat
+
+   Repeat the previously defined search (*note DefineSearch::).  If no
+search has been defined, then define it.  If the results option was
+selected, the new matching lines will be appended to the existing
+window; if all files was also selected, the dialog will be displayed,
+instead.
+
+ReplaceString
+=============
+
+Key:    `Shift+F8'
+Menu:   Search > Replace
+
+   Search for a string and replace it with another (or possibly
+nothing), or search for a regular expression and manipulate matching
+portions of it (press *Note Help:: to see how).  To search the block it
+must be marked in the current file.  Checking `All files' will perform
+the replace across all currently loaded files; non-file (scratch)
+windows will be ignored.
+
+RestoreLine
+===========
+
+Key:    `Esc'
+Menu:   Other > Undo/redo
+
+   Changes to a line are made in an internal buffer -- the original
+line remains until the changes need to be committed (such as moving off
+the line).  This function will swap the modified line with the original
+line, thus undoing the changes, but also allowing them to be restored
+in turn.
+
+RetrieveLine
+============
+
+Key:    `Alt+Y'
+Key:    `Ctrl+U'
+Menu:   Other > Retrieve
+
+   Recover a previously deleted line.  The line is placed above the
+current line.  It is limited to 200 lines for `tder.exe', with the
+other systems being limited only by available memory.
+
+Revert
+======
+
+Key:    `Shift+Alt+F4'
+Menu:   File > Special > Revert
+
+   Discard any modifications made to the file by reloading the file
+from disk.
+
+RightJustify
+============
+
+Key:    `Alt+F9'
+Menu:   Word > (Justify) Right
+
+   Adjust the line so it ends at the right margin.
+
+Rturn
+=====
+
+Key:    `Enter'
+Key:    `GreyEnter'
+Key:    `Ctrl+M'
+Menu:   n/a
+
+   Insert a new line below the current line and move to it.  If the
+cursor is within the line, the line will be split at that position.  In
+indent or dynamic word wrap modes, the new line will line up with the
+current line's indentation; in fixed wrap mode, with the paragraph or
+left margin.  If the file is binary, this function will only move to
+the next line, not insert a line.
+
+   `Enter' is usually temporarily remapped to this function when
+performing other functions.
+
+Save
+====
+
+Key:    `F2'
+Menu:   File > Save
+
+   Save changes to the file, overwriting the previous version.
+
+SaveAll
+=======
+
+Key:    `Ctrl+Alt+F2'
+Menu:   File > Special > Save all
+
+   Save all files, except scratch windows and files marked read-only.
+
+SaveAs
+======
+
+Key:    `Shift+F2'
+Menu:   File > Save as
+
+   Save the file using a different name and continue editing under that
+name.  If the file exists, prompt to overwrite.
+
+SaveMacro
+=========
+
+Key:    `Shift+F1'
+Menu:   Other > File > Save
+
+   Save all macro definitions to a file.  If syntax highlighting is in
+effect, the default name is the name of the language, with a `.tdm'
+extension, and only those macros will be saved; otherwise it is
+`global.tdm'.
+
+SaveTo
+======
+
+Key:    `Shift+Ctrl+F2'
+Menu:   File > Special > Save to
+
+   Save the file using another name; the current file and its changes
+remain unmodified.
+
+SaveUntouched
+=============
+
+Key:    `Shift+Alt+F2'
+Menu:   File > Special > Save untouched
+
+   The same as *Note Save::, but it preserves the original file's
+timestamp.
+
+SaveWorkspace
+=============
+
+Key:    `Shift+Alt+W'
+Menu:   File > Save Workspace
+
+   Save the current workspace, prompting for a filename.  The workspace
+includes all windows (which includes cursor position), files (which
+includes block and markers) and the prompt histories.  It does not save
+the editor settings.
+
+ScratchWindow
+=============
+
+Key:    `Shift+Ctrl+F4'
+Menu:   File > Scratch
+
+   Create a scratch window, making it the current window.  A scratch
+window is one that does not prompt to abandon changes; it is indicated
+by a `#' in the window header.
+
+ScreenDown
+==========
+
+Key:    `PgDn'
+Key:    `Ctrl+C'
+Menu:   n/a
+
+   Move the file down one page.  There is one line of overlap (the
+bottom line will become the top line).
+
+ScreenLeft
+==========
+
+Key:    `Alt+PgUp'
+Menu:   Move > Window left
+
+   Move the file left one page.  There is one column of overlap only if
+the show long lines mode is on (*note ToggleEOL::).
+
+ScreenRight
+===========
+
+Key:    `Alt+PgDn'
+Menu:   Move > Window right
+
+   Move the file right one page.  There is one column of overlap only
+if the show long lines mode is on (*note ToggleEOL::).
+
+ScreenUp
+========
+
+Key:    `PgUp'
+Key:    `Ctrl+R'
+Menu:   n/a
+
+   Move the file up one page.  There is one line of overlap (the top
+line will become the bottom line).
+
+ScrollDnLine
+============
+
+Key:    `Ctrl+Down'
+Key:    `Ctrl+Z'
+Key:    `Grey+'
+Menu:   n/a
+
+   Scroll the file down one line, moving the cursor with it.
+
+ScrollUpLine
+============
+
+Key:    `Ctrl+Up'
+Key:    `Ctrl+W'
+Key:    `Grey-'
+Menu:   n/a
+
+   Scroll the file up one line, moving the cursor with it.
+
+SetBreakPoint
+=============
+
+Key:    `Shift+Esc'
+Menu:   Toggles > Break point
+
+   Set or clear the break point.  The break point is used to stop
+recursive macros or infinitely repeated keys.  It only works on exactly
+the line of the break point, not before or after it.
+
+SetDirectory
+============
+
+Key:    `Shift+Alt+='
+Menu:   File > Set directory
+
+   Set the current directory to the same path as the current file.
+
+SetMargins
+==========
+
+Key:    `Ctrl+F6'
+Menu:   Word > Margins
+
+   Set the columns of the left, right and paragraph margins, and
+whether the right margin should be justified.  All columns must be
+greater than zero; the left and paragraph margins must be less than the
+right margin; the right margin must be less than the maximum line
+length.  The paragraph margin can be less than the left margin, to
+produce a hanging indent.
+
+SetMark<N>
+==========
+
+Key:    `Alt+<N>'
+Key:    `Ctrl+K Shift+<N>' (UNIX)
+Menu:   n/a
+
+   Remember the current position.  There are three markers available,
+so replace `<N>' with `1', `2', or `3'.
+
+SetTabs
+=======
+
+Key:    `Ctrl+Tab'
+Menu:   Word > Tabs > Set tabs
+
+   Set the logical and physical tab sizes.  The logical tab size
+determines the number of spaces used when the tab key is pressed (in
+fixed tab mode); the physical tab size determines the number of spaces
+used by the actual tab character.  For example, setting logical tab
+size to `4', but physical tab size to `8', would mean `Tab' would have
+to be pressed twice to generate one tab character.
+
+Shell
+=====
+
+Key:    `Shift+Ctrl+P'
+Menu:   Other > Shell
+
+   Temporarily leave the editor by running the system's shell program.
+Type `exit' to return to TDE.  *Caution*: TDE will not recognise screen
+size changes made during the shell, so any changes made should be
+restored prior to returning to TDE.  (No harm will result in returning
+with a different size, but nothing will display correctly.)
+
+SizeWindow
+==========
+
+Key:    `Shift+F9'
+Menu:   Window > Size
+
+   Size the current window (and any related windows).  It will usually
+change the top and/or left edges, but a top- and/or left-most window
+will change the bottom and/or right edges.
+
+SortBoxBlock
+============
+
+Key:    `Alt+S'
+Menu:   Block > Sort
+
+   Sort the lines in the block, prompting to sort ascending or
+descending.  If a line block is marked, the entire line acts as the
+key; a box block will use the contents of the block as the key; this
+function is not available for a stream block.  To sort multiple
+columns, sort the least significant column first.  The case mode (*note
+ToggleSearchCase::) controls the case sensitivity of the sort.
+
+SplitHalfHorizontal
+===================
+
+Key:    `Shift+Alt+F12'
+Menu:   Window > Split half horiz.
+
+   Split the current window in half, creating two views of the one
+file.  The new window will be the bottom half of the current window and
+will then become the current window.
+
+SplitHalfVertical
+=================
+
+Key:    `Shift+Alt+F11'
+Menu:   Window > Split half vert.
+
+   Split the current window in half, creating two views of the one
+file.  The new window will be the right half of the current window and
+will then become the current window.
+
+SplitHorizontal
+===============
+
+Key:    `F9'
+Menu:   Window > Split horizontal
+
+   Split the current window at the cursor, creating two views of the
+one file.  The current line will become the header of the new window.
+
+SplitLine
+=========
+
+Key:    `Ctrl+-'
+Menu:   Other > Split
+
+   Split the current line at the cursor.  If indent or dynamic word
+wrap mode is on, the new line will match the indentation of the
+current; if fixed wrap, the line will start at the left margin.
+
+SplitVertical
+=============
+
+Key:    `F8'
+Menu:   Window > Split vertical
+
+   Split the current window at the cursor, creating two views of the
+one file.  The current column will become the vertical separator
+between the windows.
+
+StampFormat
+===========
+
+Key:    `Shift+Alt+F'
+Menu:   Stamp Format
+
+   Set the format for how the time will be displayed (*note
+DateTimeStamp::).  The default format can be configured -- please see
+`config/tde.cfg'.
+
+StartOfLine
+===========
+
+Key:    `Shift+Home'
+Menu:   n/a
+
+   Move the cursor to column 1.
+
+Statistics
+==========
+
+Key:    `Shift+GreyEnter'
+Menu:   File > Statistics
+
+   Display certain statistics about the current file, such as the
+number of lines, words and strings, the size of the file on disk (using
+the current line ending format) and the amount of memory the file uses
+(including windows and syntax highlighting).
+
+Status
+======
+
+Key:    `Ctrl+GreyEnter'
+Menu:   File > Status
+
+   Display the status of the current file, such as where and what type
+of block is marked and where the markers are located.
+
+StreamCharLeft
+==============
+
+Key:    `Shift+Left'
+Menu:   n/a
+
+   Move the cursor one character to the left; if the cursor is on the
+first column, move to the end of the previous line.
+
+StreamCharRight
+===============
+
+Key:    `Shift+Right'
+Menu:   n/a
+
+   Move the cursor one character to the right; if the cursor is at (or
+beyond) the end of the line, move to the first column of the next line.
+
+StreamDeleteChar
+================
+
+Key:    `Ctrl+Delete'
+Menu:   n/a
+
+   Delete the character under the cursor, shifting all remaining
+characters back one; if the cursor is at (or beyond) the end of the
+line, join the next line with the current.
+
+StringEndLeft
+=============
+
+Key:    `Shift+Alt+;'
+Menu:   n/a
+
+   Move the cursor to the end of the previous string.
+
+StringEndRight
+==============
+
+Key:    `Shift+Alt+''
+Menu:   n/a
+
+   Move the cursor to the end of the next string.
+
+StringLeft
+==========
+
+Key:    `Shift+Ctrl+Left'
+Menu:   n/a
+
+   Move the cursor to the start of the previous string.
+
+StringRight
+===========
+
+Key:    `Shift+Ctrl+Right'
+Menu:   n/a
+
+   Move the cursor to the start of the next string.
+
+SumBlock
+========
+
+Key:    `Alt+Grey+'
+Menu:   Block > Sum
+
+   Sum the numbers in a box block.  The numbers are treated as signed
+decimal.  If the cursor is at TOF or EOF, or if the file is read-only,
+the sum will be displayed in a message; otherwise it will be inserted
+(or overwritten) into the file.
+
+SwapBlock
+=========
+
+Key:    `Shift+Alt+S'
+Menu:   Block > Swap
+
+   Mark another region in the file and swap it with the block.  This
+function is not available for a stream block.
+
+   Swapping a box block has two separate operations, depending on the
+size of the block and the location of the cursor.  If the cursor is
+above the block, within range of the number of lines in the block (i.e.
+if the block was at the cursor, it would overlap itself) then the rows
+of the block will swap with the rows of the swap region (the width
+remains the same).  In any other case, the swap region will have the
+same number of rows, allowing a different number of columns to be
+swapped.
+
+   The swap region can be sized by using the arrow keys; in conjunction
+with `Ctrl' the swap will be made the same size as the block.  `Home'
+will move to the first line or column of the swap and `End' to the last.
+`Enter' will accept the swap, `Esc' will cancel it.
+
+SyntaxSelect
+============
+
+Key:    `Shift+Alt+L'
+Menu:   File > Select Language
+
+   Select the language to be used for syntax highlighting.  If the same
+language is chosen it will be re-read from file.  If no language is
+chosen (i.e. an empty string) a list of all languages will be
+displayed.  This is similar to the directory list (*note DirList::).
+It displays the selected language, with its parent language in
+brackets, if present; a semicolon- (DOS, Win32) or colon- (UNIX)
+separated list of patterns; and how the language treats case (`inherit'
+indicates the parent language determines case).  Sometimes you may see
+duplicated languages; this is due to the language being defined both
+locally and globally.
+
+Tab
+===
+
+Key:    `Tab'
+Key:    `Ctrl+I'
+Menu:   n/a
+
+   Move the cursor to the next tab stop and, in insert mode, insert
+spaces.  *Note ToggleSmartTabs::, for how tab stops are determined.
+
+TitleWindow
+===========
+
+Key:    `Ctrl+`'
+Menu:   Window > Title
+
+   Use something other than the file name to identify the window.  The
+default name is the complete path, which won't be split like it usually
+is (i.e. as `name - path').
+
+ToggleCRLF
+==========
+
+Key:    `Ctrl+F3'
+Menu:   Toggles > Line ending
+
+   Change the line ending used when writing the file.  It alternates
+between `crlf' (native DOS and Windows), `lf' (native UNIX) and `BIN'
+(no line ending).
+
+ToggleCursorCross
+=================
+
+Key:    `Shift+Alt+X'
+Menu:   Toggles > Cursor cross
+
+   Turn the cursor cross on or off.  The cross is horizontal and
+vertical lines intersecting at the cursor.
+
+ToggleCWD
+=========
+
+Key:    `Ctrl+/'
+Menu:   Toggles > Cur. directory
+
+   Turn the current directory display on or off.  When on, the current
+directory will always be displayed at the top of the screen.
+
+ToggleDraw
+==========
+
+Key:    `Alt+Insert'
+Menu:   Toggles > Drawing
+
+   Turn drawing mode on or off.  In drawing mode, the
+`(Stream)CharLeft/Right' and `LineUp/Down' functions will draw a line
+(or corner or intersection, as appropriate) using the current graphic
+set (*note ToggleGraphicChars::).  Turning on draw mode will
+automatically turn on the graphic characters.
+
+ToggleEOL
+=========
+
+Key:    `Ctrl+F2'
+Menu:   Toggles > EOL display
+
+   Indicate whether a special character should be displayed at the end
+of each line (and also display tab characters), or at the end of the
+window if the line is longer, or if nothing should be displayed
+(default).
+
+ToggleGraphicChars
+==================
+
+Key:    `Shift+Alt+G'
+Menu:   Toggles > Graphic characters
+
+   Turn graphic characters on or off.  When using graphic characters,
+the numbers and minus are translated to drawing characters, with the
+function keys controlling the type:
+
+     `F1'      single line
+     `F2'      double line
+     `F3'      single horizontal, double vertical
+     `F4'      double horizontal, single vertical
+     `F5'      solid
+     `F6'      ASCII
+
+   Imagine a grid overlaid the numbers of the keypad to see how they are
+translated, with `0' as the vertical line and `-' as the horizontal.
+Solid mode is slightly different, though (for codepage 437):
+
+     `0'       light shade
+     `1'       medium shade
+     `2'       lower half block
+     `3'       heavy shade
+     `4'       right half block
+     `5'       full block
+     `6'       left half block
+     `7'       left-pointing double angle quotation mark
+     `8'       upper half block
+     `9'       right-pointing double angle quotation mark
+     `-'       black square
+
+ToggleIndent
+============
+
+Key:    `Alt+I'
+Menu:   Toggles > Indent
+
+   Turn indent mode on or off.  In indent mode, creating a new line
+will line it up with the previous line's indentation.
+
+ToggleLineNumbers
+=================
+
+Key:    `Shift+Alt+N'
+Menu:   Toggles > Line numbers
+
+   Turn the display of line numbers on or off.  The left side of the
+window is used to display the line numbers.
+
+ToggleOverWrite
+===============
+
+Key:    `Insert'
+Key:    `Ctrl+V'
+Menu:   n/a
+
+   Change between insert or overwrite mode.
+
+ToggleQuickEdit
+===============
+
+Key:    `Ctrl+Alt+Q'
+Menu:   n/a
+
+   Change the state of the Win32 console's QuickEdit mode.  This
+controls how the mouse will be used.  It is only available to
+`tdew.exe'.
+
+ToggleReadOnly
+==============
+
+Key:    `Alt+\'
+Menu:   Toggles > Read only
+
+   Allow the file to be edited or not.  If the file is read only an `!'
+is displayed in the window's header.  A read only file also allows keys
+usually used as characters to be used as functions.
+
+ToggleRuler
+===========
+
+Key:    `Alt+R'
+Menu:   Toggles > Ruler
+
+   Turn the ruler on or off.  The ruler is displayed at the top of each
+window, indicating the current cursor position and the margins.
+
+ToggleSearchCase
+================
+
+Key:    `Ctrl+F5'
+Menu:   Search > Toggle Case
+
+   Alternate the search case between ignoring and matching.  This
+option also applies to diffing (*note DefineDiff::) and sorting (*note
+SortBoxBlock::).
+
+ToggleSmartTabs
+===============
+
+Key:    `Alt+Tab'
+Key:    `Shift+Ctrl+I'
+Menu:   Word > Tabs > Smart tabs
+
+   Alternate between fixed tabs and smart tabs.  Fixed tabs use the
+logical tab size to determine the next (or previous) tab stop; smart
+tabs use the next (or previous) string in the previous non-blank line.
+
+ToggleSync
+==========
+
+Key:    `Ctrl+F1'
+Menu:   Move > Cursor sync
+
+   Turn cursor synchronisation on or off.  With sync on, most movement
+functions will be applied to every visible window.
+
+ToggleSyntax
+============
+
+Key:    `Ctrl+L'
+Menu:   Toggles > Syntax highlight
+
+   Turn syntax highlighting on or off (for the current window).
+
+ToggleTabInflate
+================
+
+Key:    `Shift+Alt+T'
+Menu:   Word > Tabs > Inflate tabs
+
+   Select one of three tab modes: deflate tabs treats tabs as normal
+characters; inflate tabs expands tabs to spaces when editing, then
+compresses spaces to tabs when done; real tabs edits with the tab
+characters, when possible.  Spaces are not compressed after a quote
+character (either `"' or `'').  The tab mode is separate for each file.
+
+ToggleTrailing
+==============
+
+Key:    `Ctrl+F4'
+Menu:   Toggles > Trim trailing
+
+   Turn trim trailing on or off.  When on, any trailing space at the
+end of the line will be removed.  This only applies to the line being
+edited; trailing space is not removed when a file is loaded or saved,
+*Note BlockTrimTrailing::, to do that.
+
+ToggleUndoGroup
+===============
+
+Key:    `Shift+Alt+U'
+Menu:   Toggles > Group undo
+
+   Alternate between individual or group undo.  In group undo, every
+instance of a repeated function is undone in one go.
+
+ToggleUndoMove
+==============
+
+Key:    `Shift+Alt+Y'
+Menu:   Toggles > Undo movement
+
+   Determine if movement should be undone.  If movement is not undone,
+`Undo' will move to the position being undone, before actually undoing.
+
+ToggleWordWrap
+==============
+
+Key:    `Alt+V'
+Menu:   Toggles > Word wrap
+
+   Word wrap will move words to the next line if they exceed the right
+margin.  There are two methods: fixed wrap will move the word to the
+left margin; dynamic wrap will align with the previous line's
+indentation.
+
+ToggleZ
+=======
+
+Key:    `Alt+Z'
+Menu:   Toggles > Control Z
+
+   Control whether a control-Z (EOF) character is written at the end of
+the file.
+
+TopLine
+=======
+
+Key:    `Alt+Home'
+Menu:   Move > Line to top
+
+   Move the current line and the cursor to the top line of the window.
+
+TopOfFile
+=========
+
+Key:    `Ctrl+Home'
+Menu:   Move > Top of File
+
+   Move the cursor to the first page of the file (place TOF at the top
+of the window); the cursor will remain at the same screen position.
+
+TopOfScreen
+===========
+
+Key:    `Ctrl+PgUp'
+Menu:   Move > Top line
+
+   Move the cursor to the first line of the window.
+
+Transpose
+=========
+
+Key:    `Shift+Ctrl+T'
+Menu:   n/a
+
+   Swap the character before the cursor with the character before that;
+if on the first or second column, swap those two characters.
+
+TwoCharKey
+==========
+
+Key:    `Ctrl+K'
+Menu:   n/a
+
+   A configuration setting to indicate that this key will be followed
+by another.
+
+Undo
+====
+
+Key:    `Alt+Backspace'
+Menu:   n/a
+
+   [This function is not yet implemented.]
+
+   Undo each function in turn.
+
+UnMarkBlock
+===========
+
+Key:    `Alt+U'
+Menu:   n/a
+
+   Unmark the block (in any file).  If no block is marked, restore the
+previous block in the current file.
+
+UserScreen
+==========
+
+Key:    `Shift+Ctrl+U'
+Menu:   Other > User Screen
+
+   Display the screen prior to running TDE, or from the shell or
+command; press any key to return to TDE.  It is not available in an
+xterm.
+
+WordDelete
+==========
+
+Key:    `Ctrl+T'
+Menu:   n/a
+
+   Delete from the cursor to the beginning of the next word.
+
+WordDeleteBack
+==============
+
+Key:    `Ctrl+Backspace'
+Menu:   n/a
+
+   Delete from the cursor to the beginning of the current or previous
+word.
+
+WordEndLeft
+===========
+
+Key:    `Alt+;'
+Menu:   n/a
+
+   Move the cursor to the end of the previous word.
+
+WordEndRight
+============
+
+Key:    `Alt+''
+Menu:   n/a
+
+   Move the cursor to the end of the next word.
+
+WordLeft
+========
+
+Key:    `Ctrl+A'
+Key:    `Ctrl+Left'
+Menu:   n/a
+
+   Move the cursor to the start of the previous word.
+
+WordRight
+=========
+
+Key:    `Ctrl+F'
+Key:    `Ctrl+Right'
+Menu:   n/a
+
+   Move the cursor to the start of the next word.
+
+ZoomWindow
+==========
+
+Key:    `Ctrl+F9'
+Menu:   Window > Zoom
+
+   Resize the current window to the maximum possible, hiding all other
+visible windows.
+
+Dialogs & Prompts
+*****************
+
+Dialogs
+=======
+
+Dialogs in TDE are quite simple, consisting only of edit fields and
+check boxes.  Use `Tab'/`PgDn' and `Shift+Tab'/`PgUp' to switch between
+edit fields and the function keys to toggle check boxes; `GotoMark<N>'
+will move to the <N>th edit field.  To accept the values press `Enter';
+`Esc' will cancel the dialog.  Cancelling a dialog will _not_
+necessarily restore the original values (for example, turning on `RegX'
+in `DefineSearch', then cancelling, will still leave the `RegX' option
+on the next time).
+
+   When a dialog is opened from a macro (either recording or playing),
+all the check boxes will be cleared and the focus will be set to the
+first edit field (however, a macro definition can include the flag
+`UsesDialog' to prevent this).
+
+Prompts
+=======
+
+Prompts (and edit fields) can be edited in much the same way as any
+text in the editor.  If the first key is a character, `DeleteChar' or
+`StreamDeleteChar', the initial answer will be erased.  The following
+functions have the same meaning as their main editor counterpart:
+
+     `BackSpace'          `EndOfLine'                 `Transpose'
+     `BegOfLine'          `SetDirectory'              `WordDelete'
+     `CharLeft'           `StreamCharLeft'            `WordDeleteBack'
+     `CharRight'          `StreamCharRight'           `WordLeft'
+     `DelBegOfLine'       `StreamDeleteChar'          `WordRight'
+     `DelEndOfLine'       `ToggleOverWrite'           
+     `DeleteChar'         `ToggleSearchCase'          
+
+The following functions are also available:
+
+     `AbortCommand'        cancel the prompt, keep original answer
+     `BackTab'             filename completion
+     `BegNextLine'         copy the string from the current window
+     `CopyToClipboard'     copy the answer to the clipboard
+     `CutToClipboard'      copy the answer to the clipboard
+     `DeleteLine'          erase the answer, but add it to the history
+     `Help'                display help for the command, if any
+     `KopyToClipboard'     copy the answer to the clipboard
+     `LineDown'            retrieve the next answer from the history
+     `LineUp'              retrieve the previous answer from the history
+     `NextLine'            copy the word from the current window
+     `PasteFromClipboard'  copy the first line from the clipboard
+     `Rturn'               accept the answer and add it to the history
+     `ScrollDnLine'        complete next entry from the history
+     `ScrollUpLine'        complete previous entry from the history
+     `Tab'                 filename completion
+     `ToggleCWD'           if the `DisplayCWD' option is off, display
+                           the current directory above the prompt, or at
+                           the bottom of the screen in a dialog
+
+   The clipboard functions are only available to `tdep.exe' and
+`tdew.exe'.
+
+   Copying the word or string from the current window, or the line from
+the clipboard, will use the insert or overwrite mode.  If it is the
+first key pressed, the current answer will be erased.
+
+   Filename completion is only available to functions that expect a
+filename.  If the answer contains wildcard characters, each matching
+filename will become the answer.  If there are no wildcards, the entire
+answer will form the prefix of a filename.  The first completion will
+add the characters common to all matching files; each subsequent
+completion will be the filename itself.  Once all names have been
+displayed, the common characters will again be shown.
+
+   History completion will search the history for a line that matches
+the answer up to the current cursor position.  The search mode case
+will be used.
+
+   Prompts that expect a filename (more specifically, any prompt that
+uses the file history) will recognise a leading `~/' and substitute it
+for TDE's home directory (`TDEHOME', `HOME' or the same path as the
+executable).
+
+Issues
+******
+
+Most users should have no problem running TDE, but there a few
+situations that cause troubles.
+
+TDEW & TZ
+     If you need to use the `TZ' environment variable, include the
+     abbreviation, otherwise the current time will be wrong.  Eg: use
+     `set TZ=EST-10', not `set TZ=-10'.
+
+TDEP & DR-DOS
+     The built-in DPMI server needs to be used, otherwise the keyboard
+     will not function correctly.
+
+Cygwin/MSYS
+     TDE will not run correctly in the shells of these environments.
+     Use `start' to run TDE in a new console window.
+
+
+Glossary
+********
+
+arrow keys     the up, down, left and right keys (see below)
+BOL            beginning of line -- the first column
+CRLF           a text file where each line ends with a carriage return
+               and line feed pair
+EOF            end of file -- one more than the last line
+EOL            end of line -- one more than the last character
+LF             a text file where each line ends with a line feed
+n/a            not available
+paragraph      a group of lines between blank lines
+string         a group of characters separated by space or tab
+TOF            top of file -- the "zeroth" line
+word           a group of letters, numbers and underscore
+
+   Functions that reference keys are actually referring to the default
+functions assigned to those keys:
+
+`Down'         LineDown
+`End'          EndOfLine
+`Enter'        Rturn (`Enter' is usually temporarily remapped)
+`Esc'          AbortCommand (`Esc' is usually temporarily remapped)
+`F1'           Help (`F1' is usually temporarily remapped)
+`Home'         BegOfLine
+`Left'         CharLeft or StreamCharLeft
+`PgDn'         ScreenDown
+`PgUp'         ScreenUp
+`Right'        CharRight or StreamCharRight
+`Tab'          Tab
+`Up'           LineUp
+`Ctrl+Down'    ScrollDnLine
+`Ctrl+Left'    WordLeft
+`Ctrl+Right'   WordRight
+`Ctrl+Up'      ScrollUpLine
+`Shift+Tab'    BackTab
+

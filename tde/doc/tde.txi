@@ -1,0 +1,4384 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename tde.info
+@settitle TDE 5.1v Manual
+@c %**end of header
+
+@copying
+This manual is for the Thomson-Davis Editor, version 5.1v.
+
+Copyright @copyright{} 2003,2004,2005,2006,2007 Jason Hood.
+
+@quotation
+Permission is granted to freely modify and distribute this document.
+@end quotation
+@end copying
+
+@titlepage
+@title TDE 5.1v Manual
+@author Jason Hood
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@ifplaintext
+@shortcontents
+@end ifplaintext
+@ifnotplaintext
+@contents
+@end ifnotplaintext
+
+@ifnottex
+@node Top
+@top TDE Manual
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Overview::                Description and Introduction
+* Usage::                   Command line options
+* Screen Layout::           Describes the items seen on the screen
+* Configuration::           The files used to customise @acronym{TDE}
+* Alphabetical List::       List of all functions recognised by @acronym{TDE}
+* Dialogs & Prompts::       How @acronym{TDE} handles user input
+* Issues::                  Why isn't it working?
+* Glossary::                An explanation of some terms
+@end menu
+
+
+@node Overview
+@unnumbered Overview
+
+@unnumberedsec Description
+
+  @acronym{TDE} is a simple, public domain, multi-file/multi-window binary and
+text file editor written for @acronym{IBM} @acronym{PC}s and close compatibles
+running either @acronym{DOS}, Windows or Linux.  @acronym{TDE} is suitable for
+editing batch files, binary files, text files, and various computer language
+source code files.  The only limit on the number and size of files that
+@acronym{TDE} can handle is the amount of memory.  Likewise, the only limit on
+the number of windows is the amount of memory.  There is no preset maximum
+number of files or windows that may be open at any one time.
+
+
+@unnumberedsec Introduction
+
+  I (Frank Davis) work with data files, computer source code, and various text
+files quite a bit.  Most of the features in @acronym{TDE} are related, in some
+way, to handling those types of files.  The various window and cursor commands
+in @acronym{TDE} are really nice for comparing and editing source code or output
+files.  A good collection of block commands is available for use on source code
+and formatted data files.  For what little word processing I do, @acronym{TDE}
+has a few simple commands for formatting text and paragraphs.  In short,
+@acronym{TDE} contains most of the features that I use most of the time in an
+easy to use, easy to remember, and easy to configure editor.  I hope you find
+@acronym{TDE} as easy to use for most of your routine editing as me.
+
+
+@node Usage
+@unnumbered Usage
+
+  The general format for running @acronym{TDE} is:
+
+@example
+tde [-v] [-i @var{config}] [-w [@var{workspace}]]
+    [options] [filename(s)] [options] [-f|F|g|G[=] @var{pattern} filename(s)]
+@end example
+
+@noindent
+Everything is optional --- running without any parameters will either
+bring up a prompt to load a filename (or display the directory list for a
+pattern), or automatically load the workspace if @file{tde.wsp} is present in
+the current directory (@file{.tdewsp} in @acronym{UNIX}).  The three options
+@option{-v}, @option{-i} and @option{-w} must be first, but can appear in any
+order amongst themselves.
+
+@table @code
+@item -v
+
+  Enter viewer mode, where every file is loaded read-only.
+
+@item -i
+
+  Read the specified configuration file (after reading the global and local
+files; @pxref{Configuration}).
+
+@item -w
+
+  If this is used by itself, @acronym{TDE} will load the workspace from its home
+directory; if it doesn't exist the usual prompt is displayed.  If
+@var{workspace} is present, but no other options, @acronym{TDE} will load the
+given workspace.  When used with other options, @acronym{TDE} will load as
+normal, using @var{workspace} as the filename of the workspace.
+
+@item  -f
+@itemx -F
+@itemx -g
+@itemx -G
+
+  These options cause @acronym{TDE} to search files for @var{pattern}.  The
+lower case letter will ignore case, whilst the upper case letter will match it.
+@option{F} will perform a text-based search; @option{G} will perform a regular
+expression search.  The normal operation is to load the first matching file,
+positioned at the first match; adding @option{=} immediately after the letter
+will instead create a window containing the matching lines from all files.
+If a directory is specified all files in that directory will be searched.
+
+@end table
+
+  Filenames (and directories) can include wildcards (@pxref{DirList},
+@pxref{DefineGrep}).  If a directory is specified, the directory list will be
+brought up for it.
+
+  Options begin with either @option{-} or @option{+}.  An option starting with
+@option{-} will apply to all following files; an option starting with @option{+}
+will apply to only one file.  A lower case option letter will apply to the
+file(s) coming after it; an upper case letter will apply to the file before it
+(and possibly those after it).  For options that apply to following files, the
+normal behavior can be restored by adding @option{-} after the letter.
+
+@table @code
+@item a
+
+  Usually files are only loaded into the editor at the request of the user (by
+closing the current file or explicitly loading the next); this option will load
+all files into the editor immediately.
+
+@item  b[@var{n}]
+@itemx b!
+
+  Load files as binary, using @var{n} as the line length (default is 64); if
+@var{n} is zero, force loading files as text; if @var{n} is negative, load text
+files as normal and use the positive value of @var{n} as the line length for
+binary files (without prompting).  Alternatively, skip binary files altogether.
+
+@item c @var{title}
+
+  Name the window @var{title}; use @samp{.} for the filename (which won't be
+split like it usually is).  This option always applies to only one file.
+
+@item e @var{macro}
+
+  Execute @var{macro} after loading each file.  If @var{macro} refers to an
+existing file, it will be read as a macro file.
+
+@item l[@var{lang}]
+
+  If @var{lang} is absent, syntax highlighting will be disabled; otherwise it
+will be used as the language, overriding the filename test.
+
+@item n
+
+  Create a new (scratch) window.
+
+@item r
+
+  Load files as read-only.
+
+@item s
+
+  Set the scratch flag for files.
+
+@item t[@var{n}]
+
+  Use a physical tab size of @var{n} (default is 8; 0 will deflate tabs).
+
+@item [@var{line}][:@var{col}]
+
+  Start at the specified position.  If @var{line} is negative it will be taken
+from the end of the file (i.e. @samp{-1} is the last line, @samp{-2} is the
+second last, etc.).  If @var{col} is negative it will be taken from the end of
+the line (i.e. @samp{0} is @acronym{EOL}, @samp{-1} is the last character,
+@samp{-2} is the second last, etc.).  This option always applies to only one
+file --- start with @option{+} for the next file, @option{-} for the previous
+(sic).
+
+@item +@var{offset}
+
+  Move to the specified offset (prefix with @samp{0x} for hexadecimal) in the
+file.  It can be used with text files, but @var{offset} is not the same as the
+file offset, since line endings are not counted.  This option always applies to
+only one file, as above.
+
+@end table
+
+  There are also a number of help options.  These options must be the only
+argument present.
+
+@table @code
+@item  /?
+@itemx -?
+@itemx --help
+
+  Display a (long) help screen, including version and contact information.
+
+@item --version
+
+  Just display the current version and release date.
+
+@item  -g?
+@itemx -G?
+
+  Display the regular expression help screen.
+
+@item -??
+
+  Display the wildcard help screen.
+
+@end table
+
+
+  Finally, @acronym{TDE} can be used as a filter, where it reads from standard
+input and writes to standard output.  In this instance, input is treated as an
+implicit (scratch) file after the command, so it is always read first and the
+upper case version of options is required.
+
+@unnumberedsec Examples
+
+@example
+tde -b @var{file1} -b- @var{file2}
+tde @var{file1} +B @var{file2}
+@end example
+
+  Both load @var{file1} as binary (using the default line length of 64) and
+auto-detect the type of @var{file2}.
+
+@example
+dir | tde >dir.lst
+@end example
+
+  Pipe the output of @command{dir} into @acronym{TDE} and save its output into
+@file{dir.lst}.
+
+@example
+unzip -c tde51ss | tdv -Lc
+@end example
+
+  View @acronym{TDE}'s source using C syntax highlighting (@command{tdv} is
+equivalent to @samp{tde -v}).
+
+@example
+tde -lpascal file.c file.bat -l file.for -l- file.cbl
+@end example
+
+  This will load @file{file.c} and @file{file.bat} using Pascal syntax
+highlighting, disable syntax highlighting for @file{file.for} and use the
+filename to determine if @file{file.cbl} should have it.
+
+@example
+tdv -b! ...
+@end example
+
+  View every text file in the current directory and all subdirectories.
+
+@example
+tde -F s_output .;[dwu]*/*.[ch]
+@end example
+
+  Do a case-sensitive, text-based search for @samp{s_output}, in all the
+@file{.c} and @file{.h} files in the current directory and the subdirectories
+starting with @file{d}, @file{w} and @file{u}.  @acronym{UNIX} users can use
+@samp{:} instead of @samp{;}.
+
+@example
+tde -e "JumpToPosition \"-1:0\" Rturn LineDown BottomLine LineUp" @var{file}
+@end example
+
+  Load @var{file}, moving to @acronym{EOL} of the last line, with @acronym{EOF}
+at the bottom of the window.
+
+
+@node Screen Layout
+@unnumbered Screen Layout
+
+@ifnothtml
+@display
+   ÚÄÄÄ File number - each window opened to same file has same number
+   ³ ÚÄÄÄ Window letter
+   ³ ³  ÚÄÄÄ Read-only indicator - exclamation mark
+   ³ ³  ³ ÚÄÄÄ Dirty/scratch file indicator - asterisk or hash
+   ³ ³  ³ ³ ÚÄÄÄ File name
+   ³ ³  ³ ³ ³                    ÚÄÄÄÄ File attributes
+   ³ ³  ³ ³ ³                    ³    ÚÄÄÄÄ CRLF, LF, BIN mode
+   ³ ³  ³ ³ ³                    ³    ³    ÚÄÄÄ Total number of lines
+   ³ ³  ³ ³ ³                    ³    ³    ³             ÚÄÄÄ line:column
+@ifplaintext
+                                                 
+@end ifplaintext
+@ifnotplaintext
+   v v  v v v                    v    v    v             v
+@end ifnotplaintext
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³    The first line on the screen contains file information    ³
+ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+@ifplaintext
+³........1......    Optional ruler line    ......7........8³
+@end ifplaintext
+@ifnotplaintext
+³....*....1....*..    Optional ruler line    ..*....7....*....8³
+@end ifnotplaintext
+ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+³                                                              ³
+³                                                              ³
+³                          File area                           ³
+³                                                              ³
+³                                                              ³
+ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+³                 Editor modes and information                 ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+@ifplaintext
+                                                   Insert
+@end ifplaintext
+@ifnotplaintext
+  ^   ^    ^    ^    ^    ^    ^     ^        ^  ^     ^  ^  ^  Insert
+@end ifnotplaintext
+  ³   ³    ³    ³    ³    ³    ³     ³        ³  ³     ³  ³  ÀÄ Overwrite
+  ³   ³    ³    ³    ³    ³    ³     ³        ³  ³     ³  ÀÄÄ ^Z at eof?
+  ³   ³    ³    ³    ³    ³    ³     ³        ³  ³     ÀÄÄÄÄÄ markers
+  ³   ³    ³    ³    ³    ³    ³     ³        ³  ³
+  ³   ³    ³    ³    ³    ³    ³     ³        ³  ÀÄÄÄÄÄÄ trim trailing
+  ³   ³    ³    ³    ³    ³    ³     ³        ³          space at EOL?
+  ³   ³    ³    ³    ³    ³    ³     ³        ÀÄÄÄÄ character under cursor
+  ³   ³    ³    ³    ³    ³    ³     ÀÄÄÄÄÄ word wrap indicator
+  ³   ³    ³    ³    ³    ³    ÀÄÄÄÄÄ Sync cursor in all windows?
+  ³   ³    ³    ³    ³    ÀÄÄÄÄÄ Ignore / Match search case?
+  ³   ³    ³    ³    ÀÄÄÄÄÄ Indent mode?
+  ³   ³    ³    ÀÄÄÄÄÄ Tab modes = Smart/Fixed, In/Deflate, size
+  ³   ³    ÀÄÄÄÄÄ Available memory for editing files
+  ³   ÀÄÄÄÄÄ Total number of windows, including hidden
+  ÀÄÄÄÄÄ Total number of open files
+@end display
+@end ifnothtml
+
+@html
+@c adapted from the HTML version of TDE.DOC by Arnold Wiegert.
+<table cellpadding="2" cellspacing="2" border="1" width="100%">
+    <tbody>
+      <tr align="center">
+        <td valign="top">FN</td>
+        <td valign="top">WL</td>
+        <td valign="top">!</td>
+        <td valign="top">*/#</td>
+        <td valign="top" colspan="6" align="left">FN</td>
+        <td valign="top">AT</td>
+        <td valign="top">MO</td>
+        <td valign="top">TL</td>
+        <td valign="top" colspan="2" align="right">L:C</td>
+      </tr>
+      <tr align="center">
+        <td valign="top" colspan="100%">Optional ruler line</td>
+      </tr>
+      <tr>
+        <td valign="top" colspan="100%" align="center">
+        <br><br>File Area<br><br><br></td>
+      </tr>
+      <tr align="center">
+        <td valign="top">NO</td>
+        <td valign="top">NW</td>
+        <td valign="top" colspan="2">AM</td>
+        <td valign="top" colspan="2">TM</td>
+        <td valign="top">IM</td>
+        <td valign="top">MS</td>
+        <td valign="top">SC</td>
+        <td valign="top">WW</td>
+        <td valign="top">CC</td>
+        <td valign="top">TT</td>
+        <td valign="top">MA</td>
+        <td valign="top">^Z</td>
+        <td valign="top">IO</td>
+      </tr>
+  </tbody>  
+</table>
+<br>
+
+<blockquote>
+  <table cellpadding="2" cellspacing="2" border="0" width="100%">
+    <tr><td valign="top">
+      <table cellpadding="2" cellspacing="2" border="1">
+        <tbody>
+          <tr>
+            <td align="center">FN</td><td>File number</td>
+          </tr><tr>
+            <td align="center">WL</td><td>Window letter</td>
+          </tr><tr>
+            <td align="center">!</td><td>Read-only file flag</td>
+          </tr><tr>
+            <td align="center">*/#</td><td>Dirty or scratch file flag</td>
+          </tr><tr>
+            <td align="center">FN</td><td>File name and path</td>
+          </tr><tr>
+            <td align="center">AT</td><td>File attributes</td>
+          </tr><tr>
+            <td align="center">MO</td><td><acronym>CRLF</acronym>/<acronym>LF</acronym>/Bin mode</td>
+          </tr><tr>
+            <td align="center">TL</td><td>Total lines in file</td>
+          </tr><tr>
+            <td align="center">L:C</td><td>Current cursor line and column</td>
+          </tr>
+        </tbody>
+      </table>
+    </td><td>
+      <table cellpadding="2" cellspacing="2" border="1">
+        <tbody>
+          <tr>
+            <td align="center">NO</td><td>Total number of open files</td>
+          </tr><tr>
+            <td align="center">NW</td><td>Total number of windows, including hidden</td>
+          </tr><tr>
+            <td align="center">AM</td><td>Available memory for editing files</td>
+          </tr><tr>
+            <td align="center">TM</td><td>Tab modes = Smart/Fixed, In/Deflate, size</td>
+          </tr><tr>
+            <td align="center">IM</td><td>Indent mode?</td>
+          </tr><tr>
+            <td align="center">MS</td><td>Ignore / Match search case?</td>
+          </tr><tr>
+            <td align="center">SC</td><td>Sync cursor in all windows?</td>
+          </tr><tr>
+            <td align="center">WW</td><td>word wrap indicator</td>
+          </tr><tr>
+            <td align="center">CC</td><td>character under cursor</td>
+          </tr><tr>
+            <td align="center">TT</td><td>trim trailing space at <acronym>EOL</acronym>?</td>
+          </tr><tr>
+            <td align="center">MA</td><td>markers</td>
+          </tr><tr>
+            <td align="center">^Z</td><td>^Z at <acronym>EOF</acronym>?</td>
+          </tr><tr>
+            <td align="center">IO</td><td>Insert/Overwrite mode</td>
+          </tr>
+        </tbody>
+      </table>
+    </td></tr>
+  </table>
+</blockquote>
+@end html
+
+
+@node Configuration
+@unnumbered Configuration
+
+  @acronym{TDE} uses three external files: @file{tde.cfg}, @file{tde.hlp} and
+@file{tde.shl} (in @acronym{UNIX} the dot is at the front).  These files are
+read from the home directory (the @dfn{global} file) and/or the current
+directory (the @dfn{local} file).  The home directory is determined by the
+environment variables @env{TDEHOME} or @env{HOME}, or the same path as
+@acronym{TDE} itself, whichever exists first (however, in order for @env{HOME}
+to be used in @acronym{DOS} or Windows, @file{tde.cfg} must already exist in
+it).  The default @file{tde.cfg} and @file{tde.hlp} files can be found in the
+@file{config} directory (without any dot for @acronym{UNIX}); the default
+@file{tde.shl} is called @file{tdedist.shl} in the source distribution (its
+@file{tde.shl} includes @acronym{TDE}'s own highlighting).
+
+@table @file
+
+@item tde.cfg
+
+  This file defines what key performs what function (including macros) and the
+initial state of the editor (mode settings and colors).  It can also define
+upper and lower case letters and the sort sequence.  Please see the default file
+for more information.  It is loaded globally first and then locally (i.e. both
+locations, not one or the other).
+
+@item tde.hlp
+
+  This file contains the screen(s) displayed when @ref{Help} is pressed.  It is
+at most 50 lines, with at most 100 characters per line; any more than this will
+be ignored.  Lines need not be the same length, as all lines will be
+space-padded to the length of the longest.  Two screens are present, one for the
+normal help and another for read-only files; separate the two with a
+@samp{<<<>>>} sequence.  If @file{tde.hlp} doesn't exist locally it will be read
+globally.  A local file need only define one type of screen; the other will
+still be read globally.
+
+@item tde.shl
+
+  This file supplies the colors used for syntax highlighting and the information
+required to assign those colors to a particular file.  It searches for the
+language locally first and then tries globally.  Note that when a local language
+is found, all the patterns are prefixed with the current directory.
+
+@end table
+
+@unnumberedsec Syntax Highlighting
+
+  The colors always come first in the file.  They are global for all languages.
+Colors are defined in the same manner as in the configuration file (see
+@file{config/tde.cfg}).  Following are all the recognized colors, with their
+default color in brackets.
+
+@table @code
+
+@item background
+
+  The default background color for all the following (blue).
+
+@item normal
+
+  The color for any text that is not explicitly highlighted (yellow).
+
+@item bad
+
+  The color for invalid components, such as malformed numbers, character
+literals containing too many characters, or unterminated string and character
+literals (bright red).
+
+@item keyword
+
+  The color of keywords (white).
+
+@item comment
+
+  The color of comments (grey).
+
+@item function
+
+  The color of function names (bright green).
+
+@item string
+
+  The color of string literals (bright cyan).
+
+@item character
+
+  The color of character literals (bright cyan).
+
+@item integer
+
+  The color of numbers (in decimal, without a point; bright cyan).
+
+@item binary
+
+  The color of binary (base 2) numbers (bright cyan).
+
+@item octal
+
+  The color of octal (base 8) numbers (bright cyan).
+
+@item hex
+
+  The color of hexadecimal (base 16) numbers (bright cyan).
+
+@item real
+
+  The color of numbers with a decimal point (bright cyan).
+
+@item preprocessor
+
+  The color of preprocessor statements (cyan).
+
+@item symbol
+
+  The color of any non-alphanumeric that is otherwise unrecognized (white).
+
+@end table
+
+
+The language definitions follow the colors.  Each definition is started with
+@code{language} and continues until the next @code{language} or @acronym{EOF}.
+The following keywords can be used to define a language (where @samp{[]}
+indicates an optional component and @samp{|} indicates one or the other):
+
+@table @code
+
+@item language @var{name} [from] @var{parent}
+
+  Associates @var{name} with the syntax highlighting information.  This is what
+is used to select a particular syntax highlight (@pxref{SyntaxSelect}).  If
+@var{parent} exists, this language will inherit all of @var{parent}'s language
+definitions.
+
+@item pattern @var{wildcards}
+
+  Must follow immediately after @code{language}.  It is a space-separated list
+of wildcards to identify a language from a file's extension (or name, or even
+path).
+
+@item case match | ignore
+
+  Determines if keywords will be case sensitive or insensitive.  The default is
+@option{match}.
+
+@item  startword @var{list}
+@itemx inword    @var{list}
+@itemx innumber  @var{list}
+
+  A list (or range) of characters that may start a word (or, more correctly, an
+identifier), be found within a word and be found within numbers.
+
+@item  comment @var{string}
+@itemx comment @var{string1} @var{string2}
+
+  Indicates @var{string} will begin a line comment (stops at the end of the
+line), or that @var{string1} and @var{string2} will begin and end a block
+comment (can extend across multiple lines).  Each string can be up to four
+characters and there can be two of each type of comment.
+
+@item function @var{char}
+
+  Identifiers that are followed by @var{char} (allowing for whitespace, but
+not across line boundaries) are given the @code{function} color.
+
+@item preprocessor @var{char2} [spanline @var{char}]
+
+  Lines that begin with @var{char2} (one or two characters) are given the
+@code{preprocessor} color.  If the line ends in @var{char}, the preprocessor
+will continue on the next line.
+
+@item  binary @var{char2}- | -@var{char2}
+@itemx octal  @var{char2}- | -@var{char2}
+@itemx hex    @var{char2}- | -@var{char2}
+
+  Define the format of binary, octal and hexadecimal numbers.  The first form
+indicates a prefix (such as C's @samp{0x123}), the second a suffix (such as
+assembly's @samp{123h}).
+
+@item  string    @var{c1} [@var{c2}]       [spanline @var{char}] [newline]
+@itemx character @var{c1} [@var{c2}] [@var{num}] [spanline @var{char}] [newline]
+
+  Define the starting and closing characters of string and character literals.
+If @var{c2} is missing, it is taken the same as @var{c1}.  @option{spanline}
+indicates the literal will continue onto the next line if this line
+ends in @var{char}; @option{newline} indicates that it will continue onto the
+next line, regardless.  @var{num} is the maximum number of characters permitted
+in a character literal.  The default is one; if it is zero, @code{character}
+functions identically to @code{string}.
+
+@item escape @var{char}
+
+  When @var{char} is encountered within a string or character literal, the
+following character is skipped over.
+
+@item keyword @var{list}
+
+  The words in @var{list} will be displayed in the @code{keyword} color.  Note
+that all of the color keywords can be used in this fashion (when @var{list}
+starts with a character from @code{startword}).
+
+@item @var{color} @var{list}
+
+  Use @var{color} to display the words in @var{list}.
+
+@item  InflateTabs
+@itemx LTabSize
+@itemx Macro
+@itemx PseudoMacro
+@itemx PTabSize
+@itemx UserMenu
+
+  The same as the configuration file, although macros must be defined using a
+two-key combination.
+
+@end table
+
+
+@node Alphabetical List
+@unnumbered Alphabetical List
+
+@menu
+@c Use <pre> to separate the definitions from the name, since HTML jams them
+@c together (IMHO, makeinfo should be generating a table).
+@html
+<pre>
+@end html
+* AbortCommand::            Abort editor functions
+* About::                   Display version and credits
+* AddLine::                 Insert a blank line under the cursor
+* BackSpace::               Delete previous character
+* BackTab::                 Move cursor to previous tab and delete if insert
+* BalanceHorizontal::       Make adjacent windows the same height
+* BalanceVertical::         Make adjacent windows the same width
+* BegNextLine::             Move cursor to first column in next line
+* BegOfLine::               Move cursor to first character in line or column 1
+* BlockBegin::              Move cursor to start of block
+* BlockBlockComment::       Place block comments around block
+* BlockCapitalise::         First letter of each word is upper, rest is lower
+* BlockCenterJustify::      Center justify lines in block
+* BlockCompressTabs::       Compress space to tabs in line block
+* BlockEmailReply::         Prepend @samp{>} to included mail blocks
+* BlockEnd::                Move cursor to end of block
+* BlockExpandTabs::         Expand tabs in marked line block using tab setting
+* BlockFixUUE::             Fix the @acronym{ASCII}-@acronym{EBCDIC} translation problem
+* BlockIndent::             Tab the first line and carry the change through
+* BlockIndentN::            Add a number of spaces to beginning of block
+* BlockIndentTabs::         Compress leading space to tabs in line block
+* BlockInvertCase::         Invert the case of each letter in block
+* BlockLeftJustify::        Left justify lines in block
+* BlockLineComment::        Place line comments on each line in block
+* BlockLowerCase::          Convert all upper case in block to lower case
+* BlockRightJustify::       Right justify lines in block
+* BlockRot13::              Rotate alpha characters by 13
+* BlockStripHiBit::         Strip the high bit from all characters in block
+* BlockToFile::             Write or append a marked block to a file
+* BlockTrimTrailing::       Trim trailing space from all lines in line block
+* BlockUnComment::          Remove the comments from a block
+* BlockUndent::             Backspace the first line and carry change through
+* BlockUndentN::            Remove spaces from the beginning of block
+* BlockUpperCase::          Convert all lower case in block to upper case
+* BorderBlock::             Draw a border inside a box block
+* BorderBlockEx::           Draw a configurable border inside a box block
+* BotOfScreen::             Move cursor to bottom of current window
+* BottomLine::              Move current line and cursor to bottom of window
+* CenterJustify::           Center justify a line
+* CenterLine::              Move current line and cursor to center of window
+* CenterWindow::            Move cursor to center of current window
+* ChangeCurDir::            Change the direction of character movement
+* CharacterSet::            Display the current character set
+* CharLeft::                Move cursor left one character
+* CharRight::               Move cursor right one character
+* ClearAllMacros::          Clear the macro buffer
+* CloseWindow::             Close or remove a window
+* ContextHelp::             Loads and searches a file for the word under cursor
+* CopyBlock::               Copy a block to cursor and unmark block
+* CopyString::              Copy the string in current window to the prompt
+* CopyToClipboard::         Copy the block to the clipboard and umark block
+* CopyWord::                Copy the word in current window to the prompt
+* CutToClipboard::          Copy the block to the clipboard and delete block
+* DateTimeStamp::           Insert system time and date
+* DefineDiff::              Define starting difference options
+* DefineGrep::              Initialize text pattern and search files
+* DefineSearch::            Initialize a search
+* DelBegOfLine::            Delete from the cursor to first character/column
+* DelEndOfLine::            Delete from the cursor to end of line
+* DeleteBlock::             Delete the block
+* DeleteChar::              Delete current character, but do not join lines
+* DeleteLine::              Delete current line
+* DirList::                 List matching files in subdirectories
+* DuplicateLine::           Duplicate the current line
+* DynamicTabSize::          Interactively change the physical tab size
+* EditFile::                Editor prompts for file to edit
+* EditNextFile::            Edit next file on command line
+* EndNextLine::             Move cursor to end of next line
+* EndOfFile::               Move to the last page in a file
+* EndOfLine::               Move cursor to end of line
+* EraseBegOfLine::          Fill with spaces from first column up to cursor
+* Execute::                 Run an external command
+* File::                    Save file and quit window
+* FileAll::                 Save all files and exit editor
+* FileAttributes::          Set current file attributes/permissions
+* FillBlock::               Fill box block with prompted character
+* FillBlockDown::           Repeat first line of box block throughout block
+* FillBlockPattern::        Repeat a pattern throughout box block
+* FindBackward::            Prompt for pattern and search backward
+* FindForward::             Prompt for pattern and search forward
+* FormatParagraph::         Format the entire paragraph according to margins
+* FormatText::              Format from the cursor line to end of paragraph
+* GotoMark<N>::             Move cursor to previously defined marker
+* GotoWindow::              Prompt to select a different window
+* HalfScreenDown::          Page half the screen down
+* HalfScreenLeft::          Page half the screen left
+* HalfScreenRight::         Page half the screen right
+* HalfScreenUp::            Page half the screen up
+* Help::                    Display instantaneous help screen
+* InsertFile::              Prompt for a file and insert it into the current
+* ISearchBackward::         Interactively (incrementally) search backwards
+* ISearchForward::          Incrementally (interactively) search forwards
+* JoinLine::                Join next line with current line at the cursor
+* JumpToPosition::          Move cursor to line/column/offset entered by user
+* KopyBlock::               Copy block to cursor and leave block marked
+* KopyToClipboard::         Copy block to the clipboard and leave block marked
+* LeftJustify::             Left justify a line
+* LineDown::                Move cursor down a line
+* LineUp::                  Move cursor up a line
+* LoadMacro::               Load macro(s) from a file
+* Macro::                   Define a series of functions and keystrokes
+* MacroMark::               Set cursor position when macro finishes
+* MakeHalfHorizontal::      Create a new window half the height of current
+* MakeHalfVertical::        Create a new window half the width of current
+* MakeHorizontal::          Create a new window below the cursor
+* MakeVertical::            Create a new window to the right of the cursor
+* MarkBegin::               Mark the beginning of a block
+* MarkBox::                 Mark start or end of a box block
+* MarkEnd::                 Mark the end of a block
+* MarkLine::                Mark start or end of a line block
+* MarkStream::              Mark start or end of a stream block
+* MoveBlock::               Move block to cursor and unmark block
+* MoveMark::                Move block mark to cursor
+* NextBrowse::              Move cursor to next browser line
+* NextDirtyLine::           Move cursor to next group of dirty lines
+* NextHiddenWindow::        Switch to next hidden window
+* NextLine::                Move cursor to first character in next line
+* NextWindow::              Move to next window
+* Null::                    No function
+* NumberBlock::             Fill box block with starting number using increment
+* OverlayBlock::            Overlay cursor with block
+* PanDn::                   Scroll screen down 1 line and cursor does not move
+* PanLeft::                 Pan screen one character left
+* PanRight::                Pan screen one character right
+* PanUp::                   Scroll screen up 1 line and cursor does not move
+* ParenBalance::            Match @samp{()}, @samp{@{@}}, @samp{[]} or @samp{<>} under the cursor
+* PasteFromClipboard::      Copy the clipboard contents to the current file
+* Pause::                   Pause a macro
+* PlayBack::                Used in config file - play back keystrokes
+* PopupRuler::              Movable ruler
+* PrevBrowse::              Move cursor to previous browser line
+* PrevDirtyLine::           Move cursor to previous group of dirty lines
+* PrevHiddenWindow::        Switch to previous hidden window
+* PreviousPosition::        Move cursor to the previous position
+* PreviousWindow::          Move to previous window
+* PrintBlock::              Print a block or file
+* PseudoMacro::             Play back a pseudo-macro
+* PullDown::                Pop-up Pull-down menu
+* Quit::                    Quit current window and file and abandon changes
+* QuitAll::                 Quit all windows and files
+* ReadConfig::              Read a configuration file
+* RecordMacro::             Record keystrokes
+* Redo::                    Redo an undo (not implemented)
+* RedrawScreen::            Redraw the screen
+* RegXBackward::            Prompt for regular expression and search backward
+* RegXForward::             Prompt for regular expression and search forward
+* Repeat::                  Repeat a key a number of times
+* RepeatDiff::              Find the next difference
+* RepeatFindBackward::      Repeat find backward and adjust cursor if needed
+* RepeatFindForward::       Repeat find forward and adjust cursor if needed
+* RepeatGrep::              Search and load next file that contains pattern
+* RepeatRegXBackward::      Find previous regular expression
+* RepeatRegXForward::       Find next regular expression
+* RepeatSearch::            Continue a previously defined search
+* ReplaceString::           Search and replace pattern forward/backward
+* RestoreLine::             Get back the original contents of current line
+* RetrieveLine::            Get back deleted lines
+* Revert::                  Reload the last-saved contents of current file
+* RightJustify::            Right justify a line
+* Rturn::                   Insert newline and move down while matching indent
+* Save::                    Save file
+* SaveAll::                 Save all files
+* SaveAs::                  Save and rename file to a new file name
+* SaveMacro::               Save macros to a file
+* SaveTo::                  Save file to a new name or append to existing file
+* SaveUntouched::           Save file, preserving the time stamp
+* SaveWorkspace::           Save the current workspace to a file
+* ScratchWindow::           Create a new window that doesn't prompt to quit
+* ScreenDown::              Page screen down
+* ScreenLeft::              Page screen left
+* ScreenRight::             Page screen right
+* ScreenUp::                Page screen up
+* ScrollDnLine::            Scroll screen down 1 line, cursor moves with line
+* ScrollUpLine::            Scroll screen up 1 line, cursor moves with line
+* SetBreakPoint::           Set or remove the break point
+* SetDirectory::            Set current directory to that of current file
+* SetMargins::              Set left, paragraph, right margins, justification
+* SetMark<N>::              Set a file marker
+* SetTabs::                 Set file tabs
+* Shell::                   Run @command{command.com} or equivalent
+* SizeWindow::              Change size of current window
+* SortBoxBlock::            Sort line according to keys in box block
+* SplitHalfHorizontal::     Split current window in half horizontally
+* SplitHalfVertical::       Split current window in half vertically
+* SplitHorizontal::         Split current window horizontally
+* SplitLine::               Split the current line at the cursor
+* SplitVertical::           Split current window vertically
+* StampFormat::             Set the format used for the date-time stamp
+* StartOfLine::             Move cursor to column 1
+* Statistics::              Display some statistics about the current file
+* Status::                  Display the status of the current file
+* StreamCharLeft::          Move cursor left 1 char. or to end of previous line
+* StreamCharRight::         Move cursor right 1 char. or to start of next line
+* StreamDeleteChar::        Delete current character or join lines if at @acronym{EOL}
+* StringEndLeft::           Move cursor to end of previous string
+* StringEndRight::          Move cursor to end of next string
+* StringLeft::              Move cursor to beginning of previous string
+* StringRight::             Move cursor to beginning of next string
+* SumBlock::                Add the numbers in box block
+* SwapBlock::               Swap contents of box/line block w/ cursor
+* SyntaxSelect::            Select a language to use for syntax highlighting
+* Tab::                     Move cursor to next tab and add spaces if insert
+* TitleWindow::             Change the header of the current window
+* ToggleCRLF::              Toggle @acronym{CRLF}/@acronym{LF} at @acronym{EOL} when writing file to disk
+* ToggleCursorCross::       Toggle cursor cross
+* ToggleCWD::               Toggle current working directory display
+* ToggleDraw::              Toggle drawing mode
+* ToggleEOL::               Toggle display of @acronym{EOL} character
+* ToggleGraphicChars::      Toggle graphic characters
+* ToggleIndent::            Toggle indent mode
+* ToggleLineNumbers::       Toggle line number display
+* ToggleOverWrite::         Toggle insert/overwrite mode
+* ToggleQuickEdit::         Toggle the Win32 QuickEdit console mode
+* ToggleReadOnly::          Toggle read-only file status
+* ToggleRuler::             Toggle ruler display
+* ToggleSearchCase::        Toggle match/ignore search case or sort case
+* ToggleSmartTabs::         Toggle smart tab mode
+* ToggleSync::              Toggle cursor synchronisation
+* ToggleSyntax::            Toggle syntax highlighting
+* ToggleTabInflate::        Toggle expanding tabs in display
+* ToggleTrailing::          Toggle trim trailing space at @acronym{EOL}
+* ToggleUndoGroup::         Toggle group undoing (not implemented)
+* ToggleUndoMove::          Toggle movement undoing (not implemented)
+* ToggleWordWrap::          Toggle word wrap
+* ToggleZ::                 Toggle writing ^Z at @acronym{EOF}
+* TopLine::                 Move current line and cursor to top of window
+* TopOfFile::               Move to the first page in a file
+* TopOfScreen::             Move cursor to top of current window
+* Transpose::               Swap the current character with the previous
+* TwoCharKey::              Indicate this key is followed by another key
+* Undo::                    Recover from mistakes (not implemented)
+* UnMarkBlock::             Unmark block
+* UserScreen::              View the user screen
+* WordDelete::              Delete from the cursor to the end of word
+* WordDeleteBack::          Delete from the cursor to the start of word
+* WordEndLeft::             Move cursor to end of previous word
+* WordEndRight::            Move cursor to end of next word
+* WordLeft::                Move cursor to beginning of previous word
+* WordRight::               Move cursor to beginning of next word
+* ZoomWindow::              Make current window the maximum window size
+@html
+</pre>
+@end html
+@end menu
+
+
+@node AbortCommand
+@unnumberedsec AbortCommand
+
+@multitable {Menu:} {@kbd{Ctrl+[}}
+@item Key:  @tab @kbd{Ctrl+[}
+@item Menu: @tab n/a
+@end multitable
+
+  Cancel a function, usually leaving the original value of a prompt unchanged.
+
+  @kbd{Esc} is usually temporarily remapped to this function when performing
+other functions.
+
+
+@node About
+@unnumberedsec About
+
+@multitable {Menu:} {Help > About}
+@item Key:  @tab n/a
+@item Menu: @tab Help > About
+@end multitable
+
+  Display the version, authors and release date of @acronym{TDE}.  This
+information is also displayed when @acronym{TDE} is started without any
+parameters (and no workspace is present).
+
+
+@node AddLine
+@unnumberedsec AddLine
+
+@multitable {Menu:} {Other > Add}
+@item Key:  @tab @kbd{Ctrl+N}
+@item Key:  @tab @kbd{Alt+A}
+@item Menu: @tab Other > Add
+@end multitable
+
+  Add a blank line below the current line; if the current line is @acronym{EOF},
+add it above.
+
+
+@node BackSpace
+@unnumberedsec BackSpace
+
+@multitable {Menu:} {@kbd{Shift+Backspace}}
+@item Key:  @tab @kbd{Backspace}
+@item Key:  @tab @kbd{Shift+Backspace}
+@item Key:  @tab @kbd{Ctrl+H}
+@item Menu: @tab n/a
+@end multitable
+
+  Delete the character to the left of the cursor; join with the previous line if
+the cursor is at @acronym{BOL}.  If the cursor is on the first non-blank
+character of the line and indent mode is on, match the indentation of previous
+lines.
+
+  Has no effect at @acronym{TOF}, but at @acronym{EOF} it will delete the
+previous line if it is blank.
+
+
+@node BackTab
+@unnumberedsec BackTab
+
+@multitable {Menu:} {@kbd{Shift+Tab}}
+@item Key:  @tab @kbd{Shift+Tab}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor back to the previous tab stop (@pxref{ToggleSmartTabs}).  In
+insert mode the intervening characters are deleted.
+
+
+@node BalanceHorizontal
+@unnumberedsec BalanceHorizontal
+
+@multitable {Menu:} {Window > Balance horiz.}
+@item Key:  @tab @kbd{Shift+Ctrl+H}
+@item Menu: @tab Window > Balance horiz.
+@end multitable
+
+  All windows that have the same left and right edge as the current window will
+be resized to have an equal height.
+
+
+@node BalanceVertical
+@unnumberedsec BalanceVertical
+
+@multitable {Menu:} {Window > Balance vert.}
+@item Key:  @tab @kbd{Shift+Ctrl+V}
+@item Menu: @tab Window > Balance vert.
+@end multitable
+
+  All windows that have the same top and bottom edge as the current window will
+be resized to have an equal width.
+
+
+@node BegNextLine
+@unnumberedsec BegNextLine
+
+@multitable {Menu:} {@kbd{Ctrl+Enter}}
+@item Key:  @tab @kbd{Ctrl+Enter}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the first column of the next line.
+
+
+@node BegOfLine
+@unnumberedsec BegOfLine
+
+@multitable {Menu:} {@kbd{Shift+Home}}
+@item Key:  @tab @kbd{Home}
+@item Key:  @tab @kbd{Shift+Home}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the first non-blank character on the line, or the first
+column.  If already at one, move to the other.
+
+
+@node BlockBegin
+@unnumberedsec BlockBegin
+
+@multitable {Menu:} {@kbd{Ctrl+K Ctrl+B} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Alt+[}
+@item Key:  @tab @kbd{Ctrl+K Ctrl+B} (@acronym{UNIX})
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the beginning of the block.  For a box block, it will move
+to the left edge first, then the right.  For a line block, the column will be
+the same as when the block was marked.
+
+
+@node BlockBlockComment
+@unnumberedsec BlockBlockComment
+
+@multitable {Menu:} {Block > Comment > Block}
+@item Key:  @tab @kbd{Shift+Ctrl+C}
+@item Menu: @tab Block > Comment > Block
+@end multitable
+
+  Surround the block with block comments; if the language does not have block
+comments a warning is displayed.  For a stream block, the comments will be added
+to the beginning and end of the stream; for a line block, the comments will be
+new lines added to the beginning and end of the block; for a box block, the
+comments will be added to each line in the block, at the left and right edges of
+the block.  In all cases, the block will be extended to contain the comments.
+
+
+@node BlockCapitalise
+@unnumberedsec BlockCapitalise
+
+@multitable {Menu:} {Block > Conversions > Capitalise}
+@item Key:  @tab @kbd{Ctrl+Alt+.}
+@item Menu: @tab Block > Conversions > Capitalise
+@end multitable
+
+  For each word in the block, upper case the first letter and lower case the
+rest.
+
+
+@node BlockCenterJustify
+@unnumberedsec BlockCenterJustify
+
+@multitable {Menu:} {Word > (Block Justify) Center}
+@item Key:  @tab @kbd{Shift+Alt+F10}
+@item Menu: @tab Word > (Block Justify) Center
+@end multitable
+
+  Center justify the contents of the block.  For a line block, each line is
+centered according to the current margins; for a box block, text within the
+block is centered according to the left and right edges of the block; this
+function is not available for a stream block.
+
+
+@node BlockCompressTabs
+@unnumberedsec BlockCompressTabs
+
+@multitable {Menu:} {Block > Compress Tab}
+@item Key:  @tab @kbd{Shift+Alt+C}
+@item Menu: @tab Block > Compress Tab
+@end multitable
+
+  Compress spaces in the block to tabs, using the current physical tab size
+(@pxref{SetTabs}).  Spaces after a @samp{"} or @samp{'} will not be compressed.
+This function is only available for a line block.
+
+
+@node BlockEmailReply
+@unnumberedsec BlockEmailReply
+
+@multitable {Menu:} {Block > E-mail '>'}
+@item Key:  @tab @kbd{Shift+Alt+/}
+@item Menu: @tab Block > E-mail '>'
+@end multitable
+
+  Insert @samp{>@ } to the beginning of each line in the block.  If the line
+already starts with @samp{>}, just insert another @samp{>}.  This function is
+only available for a line block.
+
+
+@node BlockEnd
+@unnumberedsec BlockEnd
+
+@multitable {Menu:} {@kbd{Ctrl+K Ctrl+K} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Alt+]}
+@item Key:  @tab @kbd{Ctrl+K Ctrl+K} (@acronym{UNIX})
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the end of the block.  For a box block, it will move to the
+right edge first, then the left.  For a line block, the column will be the same
+as when the block was marked.
+
+
+@node BlockExpandTabs
+@unnumberedsec BlockExpandTabs
+
+@multitable {Menu:} {Block > Expand Tabs}
+@item Key:  @tab @kbd{Alt+E}
+@item Menu: @tab Block > Expand Tabs
+@end multitable
+
+  Expand the tabs in the block to the appropriate number of spaces, using the
+current physical tab size (@pxref{SetTabs}).  This function is only available
+for a line block.
+
+
+@node BlockFixUUE
+@unnumberedsec BlockFixUUE
+
+@multitable {Menu:} {Block > Conversions > Fix @acronym{UUE} Prob}
+@item Key:  @tab @kbd{Shift+Alt+.}
+@item Menu: @tab Block > Conversions > Fix @acronym{UUE} Prob
+@end multitable
+
+  Fixes the @acronym{EBCDIC} to @acronym{ASCII} problem with text e-mail.
+
+
+@node BlockIndent
+@unnumberedsec BlockIndent
+
+@multitable {Menu:} {Word > Indentation > Indent}
+@item Key:  @tab @kbd{Ctrl+K Ctrl+I}
+@item Menu: @tab Word > Indentation > Indent
+@end multitable
+
+  Perform a tab (@pxref{Tab}) on the first line of the block and add the same
+number of spaces to the remaining lines.  The tab is added at the first
+non-blank character and initial blank lines are skipped.  A box block
+effectively treats the left edge as the beginning of the line; this function is
+not available for a stream block.
+
+
+@node BlockIndentN
+@unnumberedsec BlockIndentN
+
+@multitable {Menu:} {Word > Indentation > Indent spaces}
+@item Key:  @tab @kbd{Ctrl+K I}
+@item Menu: @tab Word > Indentation > Indent spaces
+@end multitable
+
+  Ask for a number and add that many spaces to the beginning of the block.  If
+the number is zero, the first line will be used to align the remaining lines.  A
+box block effectively treats the left edge as the beginning of the line; this
+function is not available for a stream block.
+
+
+@node BlockIndentTabs
+@unnumberedsec BlockIndentTabs
+
+@multitable {Menu:} {Block > Indent Tabs}
+@item Key:  @tab @kbd{Shift+Alt+I}
+@item Menu: @tab Block > Indent Tabs
+@end multitable
+
+  Compress initial spaces in the line to tabs, leaving remaining spaces alone.
+This function is only available for line blocks.
+
+
+@node BlockInvertCase
+@unnumberedsec BlockInvertCase
+
+@multitable {Menu:} {Block > Conversions > Invert Case}
+@item Key:  @tab @kbd{Ctrl+Alt+`}
+@item Menu: @tab Block > Conversions > Invert Case
+@end multitable
+
+  Convert lower case characters in the block to upper case and vice versa.
+
+
+@node BlockLeftJustify
+@unnumberedsec BlockLeftJustify
+
+@multitable {Menu:} {Word > (Block Justify) Left}
+@item Key:  @tab @kbd{Shift+Alt+F8}
+@item Menu: @tab Word > (Block Justify) Left
+@end multitable
+
+  Left justify the contents of the block.  For a line block, each line is
+adjusted to start at the left margin; for a box block, text within the block is
+moved to the left edge of the block; a stream block will generate a warning.
+
+
+@node BlockLineComment
+@unnumberedsec BlockLineComment
+
+@multitable {Menu:} {Block > Comment > Line}
+@item Key:  @tab @kbd{Shift+Ctrl+L}
+@item Menu: @tab Block > Comment > Line
+@end multitable
+
+  Place line comments on each line of the block.  For a line block, the comments
+will be inserted at the column of the left-most non-blank character of the lines
+in the block; for a box block, the comments will be inserted at the left edge of
+the block; this function is not available for a stream block.
+
+
+@node BlockLowerCase
+@unnumberedsec BlockLowerCase
+
+@multitable {Menu:} {Block > Conversions > Lower Case}
+@item Key:  @tab @kbd{Alt+.}
+@item Menu: @tab Block > Conversions > Lower Case
+@end multitable
+
+  Convert every letter in the block to lower case.
+
+
+@node BlockRightJustify
+@unnumberedsec BlockRightJustify
+
+@multitable {Menu:} {Word > (Block Justify) Right}
+@item Key:  @tab @kbd{Shift+Alt+F9}
+@item Menu: @tab Word > (Block Justify) Right
+@end multitable
+
+  Right justify the contents of the block.  For a line block, each line is
+adjusted to end at the right margin; for a box block, text within the block is
+moved to the right edge of the block; a stream block will generate a warning.
+
+
+@node BlockRot13
+@unnumberedsec BlockRot13
+
+@multitable {Menu:} {Block > Conversion > Rot13}
+@item Key:  @tab @kbd{Shift+Alt+,}
+@item Menu: @tab Block > Conversion > Rot13
+@end multitable
+
+  Rotate the English letters thirteen places.  This has the effect of swapping
+@samp{A}..@samp{M} with @samp{N}..@samp{Z}.
+
+
+@node BlockStripHiBit
+@unnumberedsec BlockStripHiBit
+
+@multitable {Menu:} {Block > Conversions > Strip hi bit}
+@item Key:  @tab @kbd{Alt+/}
+@item Menu: @tab Block > Conversions > Strip hi bit
+@end multitable
+
+  Zero the high (eighth) bit of all characters in the block.  This function is
+useful when editing files created by WordStar.
+
+
+@node BlockToFile
+@unnumberedsec BlockToFile
+
+@multitable {Menu:} {File > Special > Write Block}
+@item Key:  @tab @kbd{Alt+W}
+@item Menu: @tab File > Special > Write Block
+@end multitable
+
+  Write the block to a file, using the current line ending (@pxref{ToggleCRLF}).
+
+
+@node BlockTrimTrailing
+@unnumberedsec BlockTrimTrailing
+
+@multitable {Menu:} {Block > Trim Trail}
+@item Key:  @tab @kbd{Alt+T}
+@item Menu: @tab Block > Trim Trail
+@end multitable
+
+  Remove all spaces from the end of each line in the block.  This function is
+only available for line blocks.
+
+
+@node BlockUnComment
+@unnumberedsec BlockUnComment
+
+@multitable {Menu:} {Block > Comment > Remove}
+@item Key:  @tab @kbd{Shift+Ctrl+E}
+@item Menu: @tab Block > Comment > Remove
+@end multitable
+
+  Remove the comments (line or block, but not both) from the block.  The
+comments must be part of the block.  The first line of the block must have a
+comment, but it is not necessary for every line to have one.
+
+  For line comments, the comment will be removed from the beginning of the line
+(or box), as well as the space after it, if one; a stream block will only remove
+the comment from the first line of the stream.
+
+  For block comments, the comments will be removed from the beginning and end of
+a stream or the left and right edge of each line in a box.  A line block depends
+on the first line: if it has both start and end comments, each line is tested;
+if the start and end comments are on lines by themselves, those lines are
+deleted; otherwise it is assumed to be like a stream, with the comment ending at
+the last line.
+
+
+@node BlockUndent
+@unnumberedsec BlockUndent
+
+@multitable {Menu:} {Word > Indentation > Undent}
+@item Key:  @tab @kbd{Ctrl+K Ctrl+U}
+@item Menu: @tab Word > Indentation > Undent
+@end multitable
+
+  Perform a @code{BackSpace} or @code{BackTab} (depending on the indent mode) on
+the first non-blank line of the block and carry that change throughout the
+remaining lines.  A box block effectively treats the left edge as the beginning
+of the line; this function is not available for a stream block.
+
+  If there are lines in the block that begin before the first line, the initial
+characters will be deleted and the lines will be placed in the undo buffer
+(@pxref{RetrieveLine}).  Example:
+
+@example
+@ @ line1
+line2
+@end example
+
+@noindent
+Undenting these two lines would remove the two spaces from @samp{line1}, but
+also the first two characters of @samp{line2}:
+
+@example
+line1
+ne2
+@end example
+
+
+@node BlockUndentN
+@unnumberedsec BlockUndentN
+
+@multitable {Menu:} {Word > Indentation > Undent spaces}
+@item Key:  @tab @kbd{Ctrl+K U}
+@item Menu: @tab Word > Indentation > Undent spaces
+@end multitable
+
+  Ask for a number and remove that many spaces from the beginning of the block.
+If the number is greater than the number of spaces on the first non-blank line,
+use that number instead.  @xref{BlockUndent}, for a side-effect.
+
+  This function is not available for a stream block.
+
+
+@node BlockUpperCase
+@unnumberedsec BlockUpperCase
+
+@multitable {Menu:} {Block > Conversions > Upper Case}
+@item Key:  @tab @kbd{Alt+,}
+@item Menu: @tab Block > Conversions > Upper Case
+@end multitable
+
+  Convert every letter in the block to upper case.
+
+
+@node BorderBlock
+@unnumberedsec BorderBlock
+
+@multitable {Menu:} {Block > Border > Standard}
+@item Key:  @tab @kbd{Shift+Alt+B}
+@item Menu: @tab Block > Border > Standard
+@end multitable
+
+  Draw a border/frame within the confines of a box block.  The characters used
+to generate the border are configurable (press the @ref{Help} key for how).
+This function will always draw each corner and side (use a space to ``hide''
+one) using one character; @ref{BorderBlockEx}, for a multi-character border,
+with optional corners and sides.
+
+  The graphic characters (@pxref{ToggleGraphicChars}) are automatically turned
+on at the start of this function; once completed, they are turned off again (if
+they were not already on).
+
+
+@node BorderBlockEx
+@unnumberedsec BorderBlockEx
+
+@multitable {Menu:} {Block > Border > Enhanced}
+@item Key:  @tab @kbd{Ctrl+Alt+B}
+@item Menu: @tab Block > Border > Enhanced
+@end multitable
+
+  Draw a border/frame within the confines of a box block.  Each corner and side
+can be any number of characters, or none, in which case that item is not drawn
+(although if there are no top or bottom items, the left or right items will be
+drawn at the corners).
+
+  The graphic characters (@pxref{ToggleGraphicChars}) are automatically turned
+on at the start of this function; once completed, they are turned off again (if
+they were not already on).
+
+
+@node BotOfScreen
+@unnumberedsec BotOfScreen
+
+@multitable {Menu:} {Move > Bottom line}
+@item Key:  @tab @kbd{Ctrl+PgDn}
+@item Menu: @tab Move > Bottom line
+@end multitable
+
+  Move the cursor to the bottom line of the window.
+
+
+@node BottomLine
+@unnumberedsec BottomLine
+
+@multitable {Menu:} {Move > Line to bottom}
+@item Key:  @tab @kbd{Alt+End}
+@item Menu: @tab Move > Line to bottom
+@end multitable
+
+  Move the current line and the cursor to the bottom line of the window.
+
+
+@node CenterJustify
+@unnumberedsec CenterJustify
+
+@multitable {Menu:} {Word > (Justify) Center}
+@item Key:  @tab @kbd{Alt+F10}
+@item Menu: @tab Word > (Justify) Center
+@end multitable
+
+  The current line is centered between the left and right margins.
+
+
+@node CenterLine
+@unnumberedsec CenterLine
+
+@multitable {Menu:} {Move > Line to center}
+@item Key:  @tab @kbd{Alt+End}
+@item Menu: @tab Move > Line to center
+@end multitable
+
+  Move the current line and the cursor to the center line of the window.
+
+
+@node CenterWindow
+@unnumberedsec CenterWindow
+
+@multitable {Menu:} {Move > Center line}
+@item Key:  @tab @kbd{Center}
+@item Menu: @tab Move > Center line
+@end multitable
+
+  Move the cursor to the center line of the window.
+
+
+@node ChangeCurDir
+@unnumberedsec ChangeCurDir
+
+@multitable {Menu:} {Toggles > Cursor direction}
+@item Key:  @tab @kbd{Shift+Ctrl+D}
+@item Menu: @tab Toggles > Cursor direction
+@end multitable
+
+  Change the direction the cursor moves after typing a character or backspace.
+The direction can be selected by any of the arrow keys; @kbd{Enter} will restore
+the normal direction.
+
+  When the cursor is not updating the usual way, overwrite mode is always on and
+the new direction is indicated in the mode line.  @code{BackSpace} will move in
+the opposite direction and overwrite the character with a space.
+
+
+@node CharacterSet
+@unnumberedsec CharacterSet
+
+@multitable {Menu:} {Other > Character set}
+@item Key:  @tab @kbd{Shift+Alt+H}
+@item Menu: @tab Other > Character set
+@end multitable
+
+  Display the current character set.  The decimal code for each character can be
+found by adding the number on the left to the number on the top (add another ten
+for the second @samp{0} to @samp{5}).
+
+  Due to limitations in the @acronym{UNIX} console, not all characters will be
+displayed on that system.
+
+
+@node CharLeft
+@unnumberedsec CharLeft
+
+@multitable {Menu:} {@kbd{Ctrl+S}}
+@item Key:  @tab @kbd{Left}
+@item Key:  @tab @kbd{Ctrl+S}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor one character to the left; has no effect if the cursor is
+already on the first column.
+
+
+@node CharRight
+@unnumberedsec CharRight
+
+@multitable {Menu:} {@kbd{Ctrl+D}}
+@item Key:  @tab @kbd{Right}
+@item Key:  @tab @kbd{Ctrl+D}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor one character to the right; has no effect if the cursor is on
+the 1040th column.
+
+
+@node ClearAllMacros
+@unnumberedsec ClearAllMacros
+
+@multitable {Menu:} {Other > File > Clear}
+@item Key:  @tab @kbd{Ctrl+Esc}
+@item Key:  @tab @kbd{Shift+Ctrl+M}
+@item Menu: @tab Other > File > Clear
+@end multitable
+
+  Wipe all the macro definitions.  If the current window has syntax highlighting
+only its language macros will be wiped; otherwise only the global macros.
+
+
+@node CloseWindow
+@unnumberedsec CloseWindow
+
+@multitable {Menu:} {Window > Close}
+@item Key:  @tab @kbd{Shift+Ctrl+F3}
+@item Menu: @tab Window > Close
+@end multitable
+
+  This function has two uses, depending on when it used.  If used on a zoomed
+(full-screen) window, it will close only that window (unlike @ref{Quit}, which
+will also close all hidden windows).  If used on a split window, it will remove
+and hide the window, increasing the window above or below, or left or right, and
+making it current.
+
+
+@node ContextHelp
+@unnumberedsec ContextHelp
+
+@multitable {Menu:} {Help > Context Help}
+@item Key:  @tab @kbd{Shift+Ctrl+F1}
+@item Menu: @tab Help > Context Help
+@end multitable
+
+  Loads a file into the editor (or switches to it if it is already loaded) and,
+if the cursor is on a word, searches it for that word (using a regular
+expression).  The default file is @file{tde.txt} and the default expression is
+@samp{^<~>} (where @samp{~} is replaced with the word); these can be changed in
+the configuration.  The file can have a relative path, but if it exists when the
+editor is started, or once it has been loaded, it will be made absolute.
+
+
+@node CopyBlock
+@unnumberedsec CopyBlock
+
+@multitable {Menu:} {Block > Copy}
+@item Key:  @tab @kbd{Alt+C}
+@item Menu: @tab Block > Copy
+@end multitable
+
+  Copy the block to the cursor and then unmark the block.  For a line block, the
+block will be copied to the line below the cursor; if the cursor is inside the
+block, the block will be copied to the line after the last line in the block.
+
+
+@node CopyString
+@unnumberedsec CopyString
+
+@multitable {Menu:} {@kbd{Ctrl+Enter}}
+@item Key:  @tab @kbd{Ctrl+Enter}
+@item Menu: @tab n/a
+@end multitable
+
+  Copy the string at the cursor in the current window to the prompt; if the
+cursor is on a blank, do nothing.  It is an alias for @code{BegNextLine},
+intended for use in macros.
+
+
+@node CopyToClipboard
+@unnumberedsec CopyToClipboard
+
+@multitable {Menu:} {Block > Clipboard > Copy}
+@item Key:  @tab @kbd{Ctrl+Insert}
+@item Menu: @tab Block > Clipboard > Copy
+@end multitable
+
+  Copy the block to the Windows clipboard and then unmark the block.  It is only
+available for the 32-bit @acronym{DOS} (@file{tdep.exe}) and Windows
+(@file{tdew.exe}) versions.
+
+
+@node CopyWord
+@unnumberedsec CopyWord
+
+@multitable {Menu:} {@kbd{Shift+Enter}}
+@item Key:  @tab @kbd{Shift+Enter}
+@item Menu: @tab n/a
+@end multitable
+
+  Copy the word (using the syntax highlighting definitions of a word) at the
+cursor in the current window to the prompt; if the cursor is not on a word, do
+nothing.  It is an alias for @code{NextLine}, intended for use in macros.
+
+
+@node CutToClipboard
+@unnumberedsec CutToClipboard
+
+@multitable {Menu:} {Block > Clipboard > Cut}
+@item Key:  @tab @kbd{Shift+Delete}
+@item Menu: @tab Block > Clipboard > Cut
+@end multitable
+
+  Copy the block to the Windows clipboard and then delete the block (if the copy
+was successful).  It is only available for the 32-bit @acronym{DOS}
+(@file{tdep.exe}) and Windows (@file{tdew.exe}) versions.
+
+
+@node DateTimeStamp
+@unnumberedsec DateTimeStamp
+
+@multitable {Menu:} {Other > Date Stamp}
+@item Key:  @tab @kbd{Ctrl+2}
+@item Menu: @tab Other > Date Stamp
+@end multitable
+
+  Insert (or overwrite) the current system time and/or date to the cursor.
+@xref{StampFormat}, for how to configure the format.
+
+
+@node DefineDiff
+@unnumberedsec DefineDiff
+
+@multitable {Menu:} {Search > Begin Diff}
+@item Key:  @tab @kbd{Shift+F11}
+@item Menu: @tab Search > Begin Diff
+@end multitable
+
+  Start a @dfn{diff}, the difference between two visible windows.  The diff is
+capable of ignoring all space, or just leading space, on a line; it can also
+ignore blank lines, and line endings (usually in conjunction with ignore all
+space).  The case mode (@pxref{ToggleSearchCase}) determines if the diff will
+ignore or match case.
+
+
+@node DefineGrep
+@unnumberedsec DefineGrep
+
+@multitable {Menu:} {File > Grep > File Find}
+@item Key:  @tab @kbd{Shift+F12}
+@item Key:  @tab @kbd{Ctrl+F12}
+@item Key:  @tab @kbd{Shift+Alt+Q}
+@item Menu: @tab File > Grep > File Find
+@end multitable
+
+  Search a list of filenames and/or wildcards for a pattern.  If @option{RegX}
+is checked, the pattern will be a regular expression; if unchecked, straight
+text.  If @option{Results} is checked, all matching lines will be copied to a
+new window, prefixed with the filename, line number and column; otherwise it
+will load the first file that matches and position the cursor at the match.
+If @option{Load all} is checked, all matching files will be loaded into the
+editor, positioned either at the first match (@option{Results} unchecked), or at
+the beginning of the file (@option{Results} checked).  If @option{Binary} is
+checked, files determined to be binary will autoload using the last value of
+@option{-b} (@pxref{Usage}); otherwise binary files will be ignored.
+
+  This function will also define the search string (@pxref{RepeatFindForward},
+@pxref{RepeatRegXForward}), but changing the search string will not affect the
+grep.  @xref{RepeatGrep}.
+
+  @xref{DirList}, for a description of wildcards.  Wildcards for this function
+can also be used for directories and the special path @file{...} will traverse
+subdirectories.  For example, @samp{d*/.../*.c} will find all the @file{.c}
+files in all the directories starting with @file{d} and all their
+subdirectories.  The files will be sorted according to the current directory
+list order.
+
+
+@node DefineSearch
+@unnumberedsec DefineSearch
+
+@multitable {Menu:} {Search > Search}
+@item Key:  @tab @kbd{Shift+Ctrl+F5}
+@item Menu: @tab Search > Search
+@end multitable
+
+  Start a search.  The pattern can be either plain text, or check @option{RegX}
+for a regular expression.  To search the block it must be marked in the current
+file.  The @option{All files} option will search across all currently loaded
+files; it will ignore non-file (scratch) windows (unless one happens to be
+current).  Since it is not possible to search both the block and all files,
+checking one will uncheck the other.  The @option{Results} option will create a
+new window containing all matching lines of the search (prompting to continue if
+wrap occurred), prefixed by filename, line number and column.  Generating
+results across all files will always start the search from the beginning.
+@xref{RepeatSearch}.
+
+
+@node DelBegOfLine
+@unnumberedsec DelBegOfLine
+
+@multitable {Menu:} {Other > Delete begin}
+@item Key:  @tab @kbd{Shift+Alt+-}
+@item Menu: @tab Other > Delete begin
+@end multitable
+
+  Move the cursor to the first non-blank character, or the first column,
+deleting everything in the way.
+
+
+@node DelEndOfLine
+@unnumberedsec DelEndOfLine
+
+@multitable {Menu:} {Other > Delete end}
+@item Key:  @tab @kbd{Alt+-}
+@item Menu: @tab Other > Delete end
+@end multitable
+
+  Truncate the line at the cursor.
+
+
+@node DeleteBlock
+@unnumberedsec DeleteBlock
+
+@multitable {Menu:} {Block > Delete}
+@item Key:  @tab @kbd{Alt+G}
+@item Menu: @tab Block > Delete
+@end multitable
+
+  Delete the block.  The block does not have to be in the current file.
+
+
+@node DeleteChar
+@unnumberedsec DeleteChar
+
+@multitable {Menu:} {@kbd{Ctrl+G}}
+@item Key:  @tab @kbd{Delete}
+@item Key:  @tab @kbd{Ctrl+G}
+@item Menu: @tab n/a
+@end multitable
+
+  Delete the character under the cursor, shifting all remaining characters back
+one.  This function will not join lines; @ref{StreamDeleteChar} will do that.
+
+
+@node DeleteLine
+@unnumberedsec DeleteLine
+
+@multitable {Menu:} {Other > Delete}
+@item Key:  @tab @kbd{Ctrl+Y}
+@item Key:  @tab @kbd{Alt+D}
+@item Menu: @tab Other > Delete
+@end multitable
+
+  Delete the current line, placing it in the undo buffer.  @xref{RetrieveLine}.
+
+
+@node DirList
+@unnumberedsec DirList
+
+@multitable {Menu:} {File > Directory}
+@item Key:  @tab @kbd{Alt+F1}
+@item Menu: @tab File > Directory
+@end multitable
+
+  Select a subdirectory (or the current if none) and/or a wildcard pattern and
+list the matching files and all subdirectories.  Select a directory (placed
+first and indicated by a trailing slash (@samp{/}) to move into it (provided it
+is not empty).  The parent directory can be selected by the @samp{../} entry, or
+by using @code{BackSpace}; another drive can be selected by typing the drive
+letter, followed by a colon (@samp{:}), or vice versa (colon then letter).  The
+files can be sorted by filename or extension by using the @code{SortBoxBlock}
+key (@kbd{Alt+S} by default).  Typing a character will select each file that
+begins with that character; additional characters (within half a second) will
+then narrow the selection down.  A new path and/or pattern can be entered by
+pressing @code{Tab}.
+
+  The wildcards might be a bit more flexible than @acronym{DOS}/Windows users
+are accustomed to.  The @samp{*} character can be used anywhere (so @samp{a*z}
+matches all files that start with @samp{a} and end in @samp{z}).  Brackets can
+be used to match a character in a list (so @samp{[aeiou]*} matches any file that
+starts with a vowel).  If the list starts with @samp{!} or @samp{^} it matches
+any character not in the list (so @samp{[!aeiou]*} matches any file that does
+@emph{not} start with a vowel).  The list may also contain a range ---
+@samp{[a-z]} represents all lower case letters.  Multiple patterns can be
+specified by separating with @samp{;} (or @samp{:} in @acronym{UNIX}), so
+@samp{*.txt;*.doc} will find all @file{.txt} and @file{.doc} files.  Exclusions
+can be achieved by separating with @samp{!}, thus @samp{!*.exe;*.com} will find
+everything @emph{except} @file{.exe} and @file{.com} files and
+@samp{*.txt;*.doc!r*} will find all @file{.txt} and @file{.doc} files, except
+those starting with @file{r}.  To find a literal @samp{;} or @samp{!} place it
+inside a list.
+
+  @strong{Caution}: the extension dot is just a normal character, so @samp{*.*}
+will only match files that have an extension; to match all files only a single
+@samp{*} is required.  To match files without an extension use @samp{!*.*} (the
+@acronym{DOS} method of @samp{*.} will not work).
+
+
+@node DuplicateLine
+@unnumberedsec DuplicateLine
+
+@multitable {Menu:} {Other > Duplicate}
+@item Key:  @tab @kbd{Alt+=}
+@item Menu: @tab Other > Duplicate
+@end multitable
+
+  Make a copy of the current line and insert it below the cursor.
+
+
+@node DynamicTabSize
+@unnumberedsec DynamicTabSize
+
+@multitable {Menu:} {Word > Tabs > Dynamic size}
+@item Key:  @tab @kbd{Shift+Ctrl+Tab}
+@item Menu: @tab Word > Tabs > Dynamic size
+@end multitable
+
+  Interactively choose the physical tab size, instantaneously changing the
+display to reflect the new size.  @kbd{Left} or @kbd{Right} will change the size
+by one, @kbd{Up} or @kbd{Down} will change by four.  Press @kbd{Enter} to accept
+the new size, or @kbd{Esc} to restore the original.
+
+
+@node EditFile
+@unnumberedsec EditFile
+
+@multitable {Menu:} {File > Load}
+@item Key:  @tab @kbd{Shift+F4}
+@item Menu: @tab File > Load
+@end multitable
+
+  Prompt for a name and load the file into the editor.  If the name is a
+subdirectory or contains wildcards then bring up the directory list
+(@pxref{DirList}); if the name is @samp{=} the name of the current file will be
+used.  The file will be made the current window, with the previous window
+becoming hidden.
+
+
+@node EditNextFile
+@unnumberedsec EditNextFile
+
+@multitable {Menu:} {File > Load Next}
+@item Key:  @tab @kbd{Alt+F4}
+@item Menu: @tab File > Load Next
+@end multitable
+
+  The same as @ref{EditFile}, but uses the next file (or next matching file) on
+the command line, instead of prompting for a name.
+
+
+@node EndNextLine
+@unnumberedsec EndNextLine
+
+@multitable {Menu:} {@kbd{Shift+Ctrl+Enter}}
+@item Key:  @tab @kbd{Shift+Ctrl+Enter}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the end of the next line.
+
+
+@node EndOfFile
+@unnumberedsec EndOfFile
+
+@multitable {Menu:} {Move > End of File}
+@item Key:  @tab @kbd{Ctrl+End}
+@item Menu: @tab Move > End of File
+@end multitable
+
+  Move the cursor to the last page of the file (place @acronym{EOF} at the
+bottom of the window, if possible); the cursor will remain at the same screen
+position.
+
+
+@node EndOfLine
+@unnumberedsec EndOfLine
+
+@multitable {Menu:} {End}
+@item Key:  @tab @kbd{End}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the end of the line.
+
+
+@node EraseBegOfLine
+@unnumberedsec EraseBegOfLine
+
+@multitable {Menu:} {Other > Erase begin}
+@item Key:  @tab @kbd{Shift+Ctrl+-}
+@item Menu: @tab Other > Erase begin
+@end multitable
+
+  Fill the line with blanks, from the first column up to the cursor.
+
+
+@node Execute
+@unnumberedsec Execute
+
+@multitable {Menu:} {Other > Execute}
+@item Key:  @tab @kbd{Shift+Alt+E}
+@item Menu: @tab Other > Execute
+@end multitable
+
+  Run an external command.  The command can contain a number of variables:
+
+@quotation
+@multitable @columnfractions .1 .9
+@item @code{%f} @tab copy the current filename to the command, using a relative
+path
+@item @code{%F} @tab copy the current filename to the command, using the
+absolute path
+@item @code{%p} @tab prompt for a parameter for the command
+@item @code{%w} @tab copy the current word to the command
+@item @code{%W} @tab copy the current string to the command
+@end multitable
+@end quotation
+
+  The filename will be automatically quoted if it contains a space or any of the
+characters @samp{+;,=%} and there is no quote (@samp{"} or @samp{'}) before it;
+insert an equal sign after the percent symbol to prevent that (@samp{%=f}).  The
+function will fail if either @samp{%f} or @samp{%F} is used and the current file
+is a scratch window.  If the cursor is not on a word or string, it will prompt
+for one.
+
+  There are also a few options:
+
+@quotation
+@multitable @columnfractions .24 .76
+@item Capture output @tab capture the output of the command (@file{stderr}
+first, followed by @file{stdout}) into a new window (or replace the current
+output) and make it the current window; there is never a pause
+@item No echo @tab don't output the command
+@item No pause @tab return immediately, don't wait for a key
+@item Original files @tab don't save the files in the editor, use the originals
+still on disk
+@item Reload files @tab reload modified files without prompting
+@end multitable
+@end quotation
+
+  A blank command will run the shell, always with no echo and no pause, but
+unlike @ref{Shell}, files can be saved and automatically reloaded.
+
+
+@node File
+@unnumberedsec File
+
+@multitable {Menu:} {Window > Close & Save}
+@item Key:  @tab @kbd{F4}
+@item Menu: @tab Window > Close & Save
+@end multitable
+
+  Save the current file (@pxref{Save}) then close the window (@pxref{Quit}).  If
+@acronym{TDE} has its output redirected, though, the block if one is marked,
+otherwise the entire file, will be written to @file{stdout}.
+
+
+@node FileAll
+@unnumberedsec FileAll
+
+@multitable {Menu:} {File > Save and Exit}
+@item Key:  @tab @kbd{Ctrl+Q}
+@item Menu: @tab File > Save and Exit
+@end multitable
+
+  Save all files then exit the editor (any files remaining on the command line
+will not be loaded).  If any file could not be saved, all files will remain
+open.
+
+
+@node FileAttributes
+@unnumberedsec FileAttributes
+
+@multitable {Menu:} {File > File attr}
+@item Key:  @tab @kbd{Alt+F2}
+@item Menu: @tab File > File attr
+@end multitable
+
+  Change the attributes (@acronym{DOS}/Windows) or permissions (@acronym{UNIX})
+of a file.  The edit field takes precedence over the check boxes.  For
+@acronym{UNIX}, using a string will apply the permissions to all groups; use the
+three-digit octal number to set the groups independently.
+
+
+@node FillBlock
+@unnumberedsec FillBlock
+
+@multitable {Menu:} {Block > Fill > Character}
+@item Key:  @tab @kbd{Alt+F}
+@item Menu: @tab Block > Fill > Character
+@end multitable
+
+  Completely fill the box block with a single character.
+
+
+@node FillBlockDown
+@unnumberedsec FillBlockDown
+
+@multitable {Menu:} {Block > Fill > Down}
+@item Key:  @tab @kbd{Shift+Ctrl+F}
+@item Menu: @tab Block > Fill > Down
+@end multitable
+
+  Duplicate the first row of the box block throughout the rest of the block.
+
+
+@node FillBlockPattern
+@unnumberedsec FillBlockPattern
+
+@multitable {Menu:} {Block > Fill > Pattern}
+@item Key:  @tab @kbd{Ctrl+Alt+F}
+@item Menu: @tab Block > Fill > Pattern
+@end multitable
+
+  Completely fill the box block with some text.  If the text is not the same
+width as the block, it will be repeated and will wrap to continue onto the next
+row.
+
+
+@node FindBackward
+@unnumberedsec FindBackward
+
+@multitable {Menu:} {Search > Find backward}
+@item Key:  @tab @kbd{Shift+F6}
+@item Menu: @tab Search > Find backward
+@end multitable
+
+  Start a text search, going backwards from the current cursor position.  If it
+could not be found, the search will continue from the end of the file.
+@xref{RepeatFindBackward}.
+
+
+@node FindForward
+@unnumberedsec FindForward
+
+@multitable {Menu:} {Search > Find forward}
+@item Key:  @tab @kbd{Shift+F5}
+@item Menu: @tab Search > Find forward
+@end multitable
+
+  Start a text search, going forwards from the current cursor position.  If it
+could not be found, the search will continue from the start of the file.
+@xref{RepeatFindForward}.
+
+
+@node FormatParagraph
+@unnumberedsec FormatParagraph
+
+@multitable {Menu:} {Word > Format Paragraph}
+@item Key:  @tab @kbd{Shift+Ctrl+B}
+@item Menu: @tab Word > Format Paragraph
+@end multitable
+
+  Format the current paragraph (a group of lines between blank lines) according
+to the current margins.
+
+
+@node FormatText
+@unnumberedsec FormatText
+
+@multitable {Menu:} {Word > Format forward}
+@item Key:  @tab @kbd{Ctrl+B}
+@item Menu: @tab Word > Format forward
+@end multitable
+
+  Format the text from the current line to the first blank line, according to
+the current margins.
+
+
+@node GotoMark<N>
+@unnumberedsec GotoMark<N>
+
+@multitable {Menu:} {@kbd{Ctrl+K <N>} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Shift+Alt+<N>}
+@item Key:  @tab @kbd{Ctrl+K <N>} (@acronym{UNIX})
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to a previously defined position.  There are three markers
+available, so replace @samp{<N>} with @kbd{1}, @kbd{2}, or @kbd{3}.  The
+markers are local to each file.
+
+
+@node GotoWindow
+@unnumberedsec GotoWindow
+
+@multitable {Menu:} {Window > Goto}
+@item Key:  @tab @kbd{Ctrl+F11}
+@item Menu: @tab Window > Goto
+@end multitable
+
+  Select a window by number and letter, or filename.  If the string starts with
+a digit, it is assumed to be the file number; if there is no following letter,
+find the first (visible) window.  If the string does not start with a digit, it
+is assumed to be the start of the filename (the name itself, not the path).  If
+no window is chosen (i.e. an empty string) a window list is displayed.  This is
+similar to the directory list (@pxref{DirList}).  This list uses symbols to
+indicate the type of window.  The first symbol is @samp{!} for the current
+window, @samp{-} for a hidden window and @samp{+} for a visible window.  Then
+comes the window number and letter and the three file indicators: @samp{!} for
+read-only, @samp{#} for scratch and @samp{*} for modified.  The window title or
+relative file name is last, which also determines the sorting.  Typing a number
+will select that window number; typing anything else will select the name.
+
+
+@node HalfScreenDown
+@unnumberedsec HalfScreenDown
+
+@multitable {Menu:} {Move > Half window down}
+@item Key:  @tab @kbd{Shift+PgDn}
+@item Menu: @tab Move > Half window down
+@end multitable
+
+  Move the file down half a page, leaving the cursor where it is.
+
+
+@node HalfScreenLeft
+@unnumberedsec HalfScreenLeft
+
+@multitable {Menu:} {Move > Half window left}
+@item Key:  @tab @kbd{Shift+Alt+PgUp}
+@item Menu: @tab Move > Half window left
+@end multitable
+
+  Move the file half a page to the left, leaving the cursor where it is.
+
+
+@node HalfScreenRight
+@unnumberedsec HalfScreenRight
+
+@multitable {Menu:} {Move > Half window right}
+@item Key:  @tab @kbd{Shift+Alt+PgDn}
+@item Menu: @tab Move > Half window right
+@end multitable
+
+  Move the file half a page to the right, leaving the cursor where it is.
+
+
+@node HalfScreenUp
+@unnumberedsec HalfScreenUp
+
+@multitable {Menu:} {Move > Half window up}
+@item Key:  @tab @kbd{Shift+PgUp}
+@item Menu: @tab Move > Half window up
+@end multitable
+
+  Move the file up half a page, leaving the cursor where it is.
+
+
+@node Help
+@unnumberedsec Help
+
+@multitable {Menu:} {@kbd{Ctrl+J}}
+@item Key:  @tab @kbd{F1}
+@item Key:  @tab @kbd{Ctrl+J}
+@item Key:  @tab @kbd{Alt+H}
+@item Menu: @tab n/a
+@end multitable
+
+  Display a help screen.  The screen can be customised by creating a
+@file{tde.hlp} file (@acronym{DOS}/Windows) or @file{.tdehlp} file
+(@acronym{UNIX}).  It will be loaded from the current directory, the directory
+contained in the @env{TDEHOME} or @env{HOME} environment variables, or the same
+directory as the executable, whichever exists first.  The file can contain two
+help screens: one for the normal editor and one for a read-only file; use a
+@samp{<<<>>>} sequence to separate the two.  The screens can be a maximum of 50
+lines, with each line having a maximum of 100 characters.
+
+
+@node InsertFile
+@unnumberedsec InsertFile
+
+@multitable {Menu:} {File > Special > Insert File}
+@item Key:  @tab @kbd{Shift+Alt+Insert}
+@item Menu: @tab File > Special > Insert File
+@end multitable
+
+  Insert another file into the current file, below the current line.  If the
+current file is binary, the inserted file will @emph{not} automatically be
+loaded as binary.
+
+
+@node ISearchBackward
+@unnumberedsec ISearchBackward
+
+@multitable {Menu:} {Search > ISearch <}
+@item Key:  @tab @kbd{Shift+Ctrl+R}
+@item Menu: @tab Search > ISearch <
+@end multitable
+
+  Start a backward incremental (interactive) search.  @xref{ISearchForward}.
+
+
+@node ISearchForward
+@unnumberedsec ISearchForward
+
+@multitable {Menu:} {Search > ISearch >}
+@item Key:  @tab @kbd{Shift+Ctrl+S}
+@item Menu: @tab Search > ISearch >
+@end multitable
+
+  Incremental (or interactive) searching finds the search string as it is typed
+in.  @acronym{TDE}'s isearch is based on Emacs.  The default keys are
+@kbd{Shift+Ctrl+S} for forward searching and @kbd{Shift+Ctrl+R} for backward;
+however, within isearch, @kbd{Ctrl+S} and @kbd{Ctrl+R} can be used.  Pressing
+these keys again will immediately start a search with the previous find string
+(not necessarily isearch); otherwise they will continue the search with the
+current string.  @code{LineUp} and @code{LineDown} will cycle through the find
+history.  @code{BackSpace} can be used to remove entered characters, returning
+to the previous position.  @code{CopyWord}, @code{WordRight},
+@code{WordEndRight} and @kbd{Ctrl+W} will append the remainder of the word to
+the search string; likewise with the @code{String} functions and
+@kbd{Shift+Ctrl+W}.  If no search string has been entered, the complete word or
+string will be copied.  @code{ToggleSearchCase} will do the obvious.  @kbd{Esc}
+will stop the search at the current position; @code{AbortCommand} and
+@kbd{Ctrl+G} will restore the original position before the search was started.
+@kbd{Enter}/@code{Rturn} will stop the search when entering characters or using
+the ISearch functions to continue it; otherwise the search will be continued.
+The previous position is set to the original position, not to the last matching
+instance; if aborted, it is set to the aborted position.
+
+
+@node JoinLine
+@unnumberedsec JoinLine
+
+@multitable {Menu:} {Other > Join}
+@item Key:  @tab @kbd{Alt+J}
+@item Menu: @tab Other > Join
+@end multitable
+
+  Join the next line with the current, at the cursor position (any text after
+the cursor is deleted).
+
+
+@node JumpToPosition
+@unnumberedsec JumpToPosition
+
+@multitable {Menu:} {Move > Goto Position}
+@item Key:  @tab @kbd{Shift+Alt+J}
+@item Menu: @tab Move > Goto Position
+@end multitable
+
+  Jump to a line number and/or column, or a binary offset.  A negative line
+number will be taken from the end of the file (@samp{-1} is the last line); a
+negative column from the end of the line (@samp{0} is @acronym{EOL}, @samp{-1}
+is the last character).  The offset always uses a binary line ending, even if
+the file is not.  It can be specified in hexadecimal by prefixing with @samp{0x}
+(thus @samp{1024} and @samp{0x400} are the same position).
+
+
+@node KopyBlock
+@unnumberedsec KopyBlock
+
+@multitable {Menu:} {Block > Kopy}
+@item Key:  @tab @kbd{Alt+K}
+@item Menu: @tab Block > Kopy
+@end multitable
+
+  Like @ref{CopyBlock}, but the block remains marked.
+
+
+@node KopyToClipboard
+@unnumberedsec KopyToClipboard
+
+@multitable {Menu:} {Block > Clipboard > Kopy}
+@item Key:  @tab @kbd{Shift+Ctrl+Insert}
+@item Menu: @tab Block > Clipboard > Kopy
+@end multitable
+
+  Like @ref{CopyToClipboard}, but the block remains marked.
+
+
+@node LeftJustify
+@unnumberedsec LeftJustify
+
+@multitable {Menu:} {Word > (Justify) Left}
+@item Key:  @tab @kbd{Alt+F8}
+@item Menu: @tab Word > (Justify) Left
+@end multitable
+
+  Adjust the beginning of the line to start at the left margin.
+
+
+@node LineDown
+@unnumberedsec LineDown
+
+@multitable {Menu:} {@kbd{Shift+Down}}
+@item Key:  @tab @kbd{Down}
+@item Key:  @tab @kbd{Shift+Down}
+@item Key:  @tab @kbd{Ctrl+X}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor down one line; if at the bottom of the window, scroll the page
+down one line.
+
+
+@node LineUp
+@unnumberedsec LineUp
+
+@multitable {Menu:} {@kbd{Shift+Up}}
+@item Key:  @tab @kbd{Up}
+@item Key:  @tab @kbd{Shift+Up}
+@item Key:  @tab @kbd{Ctrl+E}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor up one line; if at the top of the window, scroll the page up
+one line.
+
+
+@node LoadMacro
+@unnumberedsec LoadMacro
+
+@multitable {Menu:} {Other > File > Load}
+@item Key:  @tab @kbd{Shift+F3}
+@item Menu: @tab Other > File > Load
+@end multitable
+
+  Load macro definitions from a file.  If the current window has syntax
+highlighting the macros will be local to that language.  The file can also
+contain any other configuration information, not just macros.
+
+
+@node Macro
+@unnumberedsec Macro
+
+@multitable {Menu:} {n/a}
+@item Key:  @tab n/a
+@item Menu: @tab n/a
+@end multitable
+
+  A configuration setting used to define a macro --- a group of functions
+assigned to one key.  Please see the @file{config/tde.cfg} file for details.
+
+
+@node MacroMark
+@unnumberedsec MacroMark
+
+@multitable {Menu:} {@kbd{Ctrl+K M} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Shift+Alt+M}
+@item Key:  @tab @kbd{Ctrl+K M} (@acronym{UNIX})
+@item Menu: @tab n/a
+@end multitable
+
+  Mark the position where the cursor should be placed once the macro finishes.
+
+
+@node MakeHalfHorizontal
+@unnumberedsec MakeHalfHorizontal
+
+@multitable {Menu:} {Window > Make half horiz.}
+@item Key:  @tab @kbd{Shift+Ctrl+F12}
+@item Menu: @tab Window > Make half horiz.
+@end multitable
+
+  Halve the height of the current window and select the function to be used to
+create the window in the other half.
+
+
+@node MakeHalfVertical
+@unnumberedsec MakeHalfVertical
+
+@multitable {Menu:} {Window > Make half vert.}
+@item Key:  @tab @kbd{Shift+Ctrl+F11}
+@item Menu: @tab Window > Make half vert.
+@end multitable
+
+  Halve the width of the current window and select the function to be used to
+create the window in the other half.
+
+
+@node MakeHorizontal
+@unnumberedsec MakeHorizontal
+
+@multitable {Menu:} {Window > Make horizontal}
+@item Key:  @tab @kbd{Shift+Ctrl+F9}
+@item Menu: @tab Window > Make horizontal
+@end multitable
+
+  Select a function to create a new window in the bottom of the current window.
+The current line will become the header of the new window.
+
+
+@node MakeVertical
+@unnumberedsec MakeVertical
+
+@multitable {Menu:} {Window > Make vertical}
+@item Key:  @tab @kbd{Shift+Ctrl+F8}
+@item Menu: @tab Window > Make vertical
+@end multitable
+
+  Select a function to create a new window in the right of the current window.
+The current column will become the vertical separator.
+
+
+@node MarkBegin
+@unnumberedsec MarkBegin
+
+@multitable {Menu:} {@kbd{Ctrl+K B} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Shift+Alt+[}
+@item Key:  @tab @kbd{Ctrl+K B} (@acronym{UNIX})
+@item Menu: @tab n/a
+@end multitable
+
+  Set the beginning of the block; if no block is marked, create a box block.
+If the beginning is after the end, the positions will be swapped.
+
+
+@node MarkBox
+@unnumberedsec MarkBox
+
+@multitable {Menu:} {@kbd{Alt+B}}
+@item Key:  @tab @kbd{Alt+B}
+@item Menu: @tab n/a
+@end multitable
+
+  Mark a box block, either the beginning corner or the ending corner, depending
+on the relative position of the cursor.
+
+  The first press will mark one character; if used again immediately, it will
+mark the current word; then the string; and finally the paragraph.
+
+
+@node MarkEnd
+@unnumberedsec MarkEnd
+
+@multitable {Menu:} {@kbd{Ctrl+K K} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Shift+Alt+]}
+@item Key:  @tab @kbd{Ctrl+K K} (@acronym{UNIX})
+@item Menu: @tab n/a
+@end multitable
+
+  Set the end of the block; if no block is marked, create a box block.  If the
+end is before the beginning, the positions will be swapped.
+
+
+@node MarkLine
+@unnumberedsec MarkLine
+
+@multitable {Menu:} {@kbd{Alt+L}}
+@item Key:  @tab @kbd{Alt+L}
+@item Menu: @tab n/a
+@end multitable
+
+  Mark a line block, either the beginning line or the ending line, depending on
+the relative position of the cursor.  If a stream block (@pxref{MarkStream} is
+already defined, this function will mark the entire line, leaving the block as a
+stream; however, once the beginning line has been defined this way, defining
+it again will turn the block into a line block.
+
+  The first press will mark one line; if used again immediately, it will mark a
+region of equal or greater indentation, or a group of blank lines; then the top
+and bottom lines will be extended by one line; finally, it will mark the entire
+paragraph.
+
+
+@node MarkStream
+@unnumberedsec MarkStream
+
+@multitable {Menu:} {@kbd{Alt+X}}
+@item Key:  @tab @kbd{Alt+X}
+@item Menu: @tab n/a
+@end multitable
+
+  Mark a stream block, either the beginning line/column or the ending, depending
+on the relative position of the cursor.  A stream block is like a line block,
+except it can start or end anywhere within a line.  Use @ref{MarkLine} to mark
+the last line as a complete line.
+
+  The first press will mark one character; if used again immediately, it will
+mark the line (without the leading or trailing blanks); and then it will mark
+the paragraph (likewise).
+
+
+@node MoveBlock
+@unnumberedsec MoveBlock
+
+@multitable {Menu:} {Block > Move}
+@item Key:  @tab @kbd{Alt+M}
+@item Menu: @tab Block > Move
+@end multitable
+
+  Move the block to the cursor; a line block will be moved to the line below
+the cursor.  The block is then unmarked.
+
+
+@node MoveMark
+@unnumberedsec MoveMark
+
+@multitable {Menu:} {Block > Move Mark}
+@item Key:  @tab @kbd{Ctrl+Alt+[}
+@item Menu: @tab Block > Move
+@end multitable
+
+  Move the block mark to the cursor.  For a stream block, the cursor will become
+the new start column, but the ending column will remain unchanged.
+
+
+@node NextBrowse
+@unnumberedsec NextBrowse
+
+@multitable {Menu:} {Move > Next Browse}
+@item Key:  @tab @kbd{Ctrl+F7}
+@item Menu: @tab Move > Next Browse
+@end multitable
+
+  Move the cursor to the position given in the next line of the current browser
+window.  If the last line has been reached, go back to the first.
+
+  The current window will become the current browser window if it is a results
+(@pxref{DefineSearch}, @pxref{DefineGrep}) or output (@pxref{Execute}) window.
+If there is no browser window, find the first results or output window after the
+current; the first before the current; or the current window if it is scratch.
+If the current window becomes the current browser window, the current line will
+be used, rather than the next.
+
+  A line will be recognised as a browser line if it contains nothing but a
+filename, or a filename with at least one number.  The first number will assumed
+to be a line number; if there is another number, it will assumed to be a column.
+Each item can be separated by a space, tab, colon, semicolon or comma.  Only the
+first four such items will be tested for a filename.
+
+
+@node NextDirtyLine
+@unnumberedsec NextDirtyLine
+
+@multitable {Menu:} {Move > Next Dirty Line}
+@item Key:  @tab @kbd{Alt+F5}
+@item Menu: @tab Move > Next Dirty Line
+@end multitable
+
+  Move the cursor to the first line in the next group of lines that have been
+modified.
+
+
+@node NextHiddenWindow
+@unnumberedsec NextHiddenWindow
+
+@multitable {Menu:} {Window > Next Hidden}
+@item Key:  @tab @kbd{Ctrl+F10}
+@item Menu: @tab Window > Next Hidden
+@end multitable
+
+  Select the window that is hidden/invisible in front of the current window.
+The current window then becomes hidden.
+
+
+@node NextLine
+@unnumberedsec NextLine
+
+@multitable {Menu:} {@kbd{Shift+Enter}}
+@item Key:  @tab @kbd{Shift+Enter}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the first non-blank character of the next line.
+
+
+@node NextWindow
+@unnumberedsec NextWindow
+
+@multitable {Menu:} {Window > Next}
+@item Key:  @tab @kbd{F10}
+@item Menu: @tab Window > Next
+@end multitable
+
+  Select the next visible window.
+
+
+@node Null
+@unnumberedsec Null
+
+@multitable {Menu:} {n/a}
+@item Key:  @tab n/a
+@item Menu: @tab n/a
+@end multitable
+
+  Used in the configuration file to remove the default function of a key,
+allowing it to be defined as a macro within the editor.
+
+
+@node NumberBlock
+@unnumberedsec NumberBlock
+
+@multitable {Menu:} {Block > Number}
+@item Key:  @tab @kbd{Alt+N}
+@item Menu: @tab Block > Number
+@end multitable
+
+  Place a number in each row of the box block, filling the remainder with either
+a space or a zero.  Only integers are supported, although decimals can be
+created by filling a column with the point and filling/numbering to the left and
+right of it.  The number and increment are given in the base shown (which is
+always decimal); valid bases are from 2 to 36, with only 10 being signed.
+
+
+@node OverlayBlock
+@unnumberedsec OverlayBlock
+
+@multitable {Menu:} {Block > Overlay}
+@item Key:  @tab @kbd{Alt+O}
+@item Menu: @tab Block > Overlay
+@end multitable
+
+  Overwrite the cursor with the block.  The block remains marked.
+
+  This function is not available for a stream block.
+
+
+@node PanDn
+@unnumberedsec PanDn
+
+@multitable {Menu:} {@kbd{Ctrl+Grey+}}
+@item Key:  @tab @kbd{Alt+Down}
+@item Key:  @tab @kbd{Ctrl+Grey+}
+@item Menu: @tab n/a
+@end multitable
+
+  Scroll the window down one line, but leave the cursor where it is.
+
+
+@node PanLeft
+@unnumberedsec PanLeft
+
+@multitable {Menu:} {@kbd{Alt+Left}}
+@item Key:  @tab @kbd{Alt+Left}
+@item Menu: @tab n/a
+@end multitable
+
+  Scroll the window left one character, but leave the cursor where it is.
+
+
+@node PanRight
+@unnumberedsec PanRight
+
+@multitable {Menu:} {@kbd{Alt+Right}}
+@item Key:  @tab @kbd{Alt+Right}
+@item Menu: @tab n/a
+@end multitable
+
+  Scroll the window right one character, but leave the cursor where it is.
+
+
+@node PanUp
+@unnumberedsec PanUp
+
+@multitable {Menu:} {@kbd{Ctrl+Grey-}}
+@item Key:  @tab @kbd{Alt+Up}
+@item Key:  @tab @kbd{Ctrl+Grey-}
+@item Menu: @tab n/a
+@end multitable
+
+  Scroll the window up one line, but leave the cursor where it is.
+
+
+@node ParenBalance
+@unnumberedsec ParenBalance
+
+@multitable {Menu:} {@kbd{Ctrl+]}}
+@item Key:  @tab @kbd{Ctrl+]}
+@item Menu: @tab n/a
+@end multitable
+
+  Find the opposite bracket under the cursor.  It will match @samp{(} with
+@samp{)}, @samp{[} with @samp{]}, @samp{@{} with @samp{@}} and @samp{<} with
+@samp{>}; @samp{"} will match with itself, prompting for the direction.  It can
+also be used with syntax highlighting block comments --- place the cursor on the
+first character of the opening comment and the last of the closing (nested
+comments are not taken into account).
+
+
+@node PasteFromClipboard
+@unnumberedsec PasteFromClipboard
+
+@multitable {Menu:} {Block > Clipboard > Paste}
+@item Key:  @tab @kbd{Shift+Insert}
+@item Menu: @tab Block > Clipboard > Paste
+@end multitable
+
+  Insert (or overwrite) the contents of the Windows clipboard.  It is only
+available for the 32-bit @acronym{DOS} (@file{tdep.exe}) and Windows
+(@file{tdew.exe}) versions.
+
+
+@node Pause
+@unnumberedsec Pause
+
+@multitable {Menu:} {@kbd{Ctrl+K P} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Ctrl+P}
+@item Key:  @tab @kbd{Ctrl+K P} (@acronym{UNIX})
+@item Menu: @tab n/a
+@end multitable
+
+  Pause the play back of a macro --- halt the macro, allowing @kbd{Esc} to then
+cancel it.  When used within a prompt or dialog, the macro will accept keyboard
+input from the user before continuing execution.
+
+
+@node PlayBack
+@unnumberedsec PlayBack
+
+@multitable {Menu:} {n/a}
+@item Key:  @tab n/a
+@item Menu: @tab n/a
+@end multitable
+
+  Used in the configuration file to help define macros.  Please see the
+@file{config/tde.cfg} file for details.
+
+
+@node PopupRuler
+@unnumberedsec PopupRuler
+
+@multitable {Menu:} {Other > Popup Ruler}
+@item Key:  @tab @kbd{Ctrl+=}
+@item Menu: @tab Other > Popup Ruler
+@end multitable
+
+  Creates a ruler at the current cursor position, which can be moved around the
+screen.  If the line number display is on (@pxref{ToggleLineNumbers}) it will be
+used to count lines; if it is off, it can be turned on, but it can't be turned
+off.
+
+  The arrow keys will move the ruler; in conjunction with @kbd{Ctrl} the window
+will move (with the ruler maintaining its position in the file).
+@code{StartOfLine} will move the ruler to the first column.  @kbd{Home} will
+move the window to the first column; @kbd{End} will move the window to the end
+of the longest line currently visible.  @code{(Half)ScreenUp/Down/Left/Right}
+and @code{Top/EndOfFile} will move the window appropriately.  @kbd{Esc} will
+remove the ruler and restore the original window position.
+
+
+@node PrevBrowse
+@unnumberedsec PrevBrowse
+
+@multitable {Menu:} {Move > Prev Browse}
+@item Key:  @tab @kbd{Ctrl+F8}
+@item Menu: @tab Move > Prev Browse
+@end multitable
+
+  Move the cursor to the position given in the previous line of the current
+browser window.  If the first line has been reached, go back to the last.
+
+  @xref{NextBrowse}, for details of the current browser window.
+
+
+@node PrevDirtyLine
+@unnumberedsec PrevDirtyLine
+
+@multitable {Menu:} {Move > Prev Dirty Line}
+@item Key:  @tab @kbd{Alt+F6}
+@item Menu: @tab Move > Prev Dirty Line
+@end multitable
+
+  Move the cursor to the last line in the previous group of lines that have
+been modified.
+
+
+@node PrevHiddenWindow
+@unnumberedsec PrevHiddenWindow
+
+@multitable {Menu:} {Window > Prev Hidden}
+@item Key:  @tab @kbd{Shift+Ctrl+F10}
+@item Menu: @tab Window > Prev Hidden
+@end multitable
+
+  Select the window that is hidden/invisible behind the current window.  The
+current window then becomes hidden.
+
+
+@node PreviousPosition
+@unnumberedsec PreviousPosition
+
+@multitable {Menu:} {@kbd{Alt+`}}
+@item Key:  @tab @kbd{Alt+`}
+@item Menu: @tab n/a
+@end multitable
+
+  Certain movement functions remember where they came from --- this function
+will restore that position (and remember where @emph{it} came from).
+
+
+@node PreviousWindow
+@unnumberedsec PreviousWindow
+
+@multitable {Menu:} {Window > Previous}
+@item Key:  @tab @kbd{Shift+F10}
+@item Menu: @tab Window > Previous
+@end multitable
+
+  Select the previous visible window.
+
+
+@node PrintBlock
+@unnumberedsec PrintBlock
+
+@multitable {Menu:} {File > Special > Print}
+@item Key:  @tab @kbd{Alt+P}
+@item Menu: @tab File > Special > Print
+@end multitable
+
+  Write the block or file to the printer (@acronym{DOS} only; Windows and
+@acronym{UNIX} will write to @file{stderr}).
+
+
+@node PseudoMacro
+@unnumberedsec PseudoMacro
+
+@multitable {Menu:} {Macro > Pseudo-macro}
+@item Key:  @tab @kbd{Alt+Enter}
+@item Key:  @tab @kbd{Ctrl+Space}
+@item Menu: @tab Macro > Pseudo-macro
+@end multitable
+
+  A pseudo-macro is identical to a macro, except in the way it's started.
+Where a normal macro is assigned to a key, a pseudo-macro is assigned to a
+@dfn{trigger}.  The trigger is the two characters before the cursor.  Please see
+the @file{config/tde.cfg} file for details.
+
+
+@node PullDown
+@unnumberedsec PullDown
+
+@multitable {Menu:} {@kbd{Ctrl+\}}
+@item Key:  @tab @kbd{Ctrl+\}
+@item Menu: @tab n/a
+@end multitable
+
+  Bring up a pop-up pull-down menu, containing most of the editor functions.
+Even though it is not displayed, the headings can be selected by number (the
+left-most is @samp{1}).  The menu and the names given to the keys are
+configurable --- see @file{config/menu.cfg} and the end of @file{config/tde.cfg}
+for usage.
+
+
+@node Quit
+@unnumberedsec Quit
+
+@multitable {Menu:} {@kbd{Ctrl+K Q} (@acronym{UNIX})}
+@item Key:  @tab @kbd{F3}
+@item Key:  @tab @kbd{Alt+Q}
+@item Key:  @tab @kbd{Ctrl+K Q} (@acronym{UNIX})
+@item Menu: @tab Window > Close
+@end multitable
+
+  Close the current window, prompting to abandon changes.  If it is the
+last window, the next file on the command line will be opened, or the editor
+will exit if none.  If there are multiple windows or files, then if there is a
+hidden window, it becomes the current; otherwise the window above or below, or
+to the left or right, will grow to accomodate the closed window; if this is not
+possible, the window will not be closed.
+
+
+@node QuitAll
+@unnumberedsec QuitAll
+
+@multitable {Menu:} {@kbd{Shift+Ctrl+Q}}
+@item Key:  @tab @kbd{Shift+Ctrl+Q}
+@item Menu: @tab File > Exit
+@end multitable
+
+  Prompt to discard changes to all files and exit the editor (any files left on
+the command line are ignored).
+
+
+@node ReadConfig
+@unnumberedsec ReadConfig
+
+@multitable {Menu:} {@kbd{Ctrl+K N} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Alt+F11}
+@item Key:  @tab @kbd{Ctrl+K N} (@acronym{UNIX})
+@item Menu: @tab File > Read Config
+@end multitable
+
+  Read a configuration file from within the editor.
+
+
+@node RecordMacro
+@unnumberedsec RecordMacro
+
+@multitable {Menu:} {Other > Record/Stop}
+@item Key:  @tab @kbd{Alt+F3}
+@item Menu: @tab Other > Record/Stop
+@end multitable
+
+  Record a macro --- a series of functions and characters that can be played
+back with a single key.  This function serves to both start the recording and
+then stop it.  The recording will also stop when the assigned key is pressed ---
+this is a recursive macro, that will continue to execute until an error
+condition occurs (typically hitting the end of the file).  If the
+@ref{PseudoMacro} key is used for the assignment, a pseudo-macro will be
+recorded using the two characters to the left of the cursor as the trigger.
+
+  Most prompts will be stored with the macro, but certain critical choices will
+not, for example: @samp{Overwrite existing file (y/n)?}.
+
+
+@node Redo
+@unnumberedsec Redo
+
+@multitable {Menu:} {@kbd{Shift+Alt+Backspace}}
+@item Key:  @tab @kbd{Shift+Alt+Backspace}
+@item Menu: @tab n/a
+@end multitable
+
+  [This function is not yet implemented.]
+
+  Redo changes made by previous undos.
+
+
+@node RedrawScreen
+@unnumberedsec RedrawScreen
+
+@multitable {Menu:} {Window > Redraw Screen}
+@item Key:  @tab @kbd{Ctrl+6}
+@item Menu: @tab Window > Redraw Screen
+@end multitable
+
+  Completely redisplay every part of the editor.
+
+
+@node RegXBackward
+@unnumberedsec RegXBackward
+
+@multitable {Menu:} {Search > Regx backward}
+@item Key:  @tab @kbd{Shift+Alt+F7}
+@item Menu: @tab Search > Regx backward
+@end multitable
+
+  Start a regular expression search, going backwards from the current cursor
+position.  If it could not be found, the search will continue from the end of
+the file.  @xref{RepeatRegXBackward}.
+
+
+@node RegXForward
+@unnumberedsec RegXForward
+
+@multitable {Menu:} {Search > Regx forward}
+@item Key:  @tab @kbd{Shift+F7}
+@item Menu: @tab Search > Regx forward
+@end multitable
+
+  Start a regular expression search, going forwards from the current cursor
+position.  If it could not be found, the search will continue from the start of
+the file.  @xref{RepeatRegXForward}.
+
+
+@node Repeat
+@unnumberedsec Repeat
+
+@multitable {Menu:} {Other > Repeat}
+@item Key:  @tab @kbd{Shift+Alt+R}
+@item Menu: @tab Other > Repeat
+@end multitable
+
+  Repeat a key a certain number of times.  If the repeat value is @samp{0}, the
+key will be repeated until an error condition occurs or the break point
+(@pxref{SetBreakPoint}) is reached; if the value is negative, it is taken as a
+line number and the count is the difference from the current line.
+
+
+@node RepeatDiff
+@unnumberedsec RepeatDiff
+
+@multitable {Menu:} {Search > Next Diff}
+@item Key:  @tab @kbd{F11}
+@item Key:  @tab @kbd{Shift+Alt+D}
+@item Menu: @tab Search > Next Diff
+@end multitable
+
+  Find the next difference.  @xref{DefineDiff}.
+
+
+@node RepeatFindBackward
+@unnumberedsec RepeatFindBackward
+
+@multitable {Menu:} {Search > Repeat <}
+@item Key:  @tab @kbd{F6}
+@item Menu: @tab Search > Repeat <
+@end multitable
+
+  Find the previous occurrence of the text search pattern.  If it could not be
+found, the search will continue from the end of the file.
+If no pattern has been defined, ask for it.
+
+
+@node RepeatFindForward
+@unnumberedsec RepeatFindForward
+
+@multitable {Menu:} {Search > Repeat >}
+@item Key:  @tab @kbd{F5}
+@item Menu: @tab Search > Repeat >
+@end multitable
+
+  Find the next occurrence of the text search pattern.  If it could not be
+found, the search will continue from the beginning of the file.
+If no pattern has been defined, ask for it.
+
+
+@node RepeatGrep
+@unnumberedsec RepeatGrep
+
+@multitable {Menu:} {File > Grep > Next File}
+@item Key:  @tab @kbd{F12}
+@item Menu: @tab File > Grep > Next File
+@end multitable
+
+  Find the next file that contains the pattern (either text or regular
+expression, depending on the defining function).  @xref{DefineGrep}.
+
+
+@node RepeatRegXBackward
+@unnumberedsec RepeatRegXBackward
+
+@multitable {Menu:} {Search > Repeat <}
+@item Key:  @tab @kbd{Alt+F7}
+@item Menu: @tab Search > Repeat <
+@end multitable
+
+  Find the previous occurrence of the regular expression search pattern.  If it
+could not be found, the search will continue from the end of the file.
+If no pattern has been defined, ask for it.
+
+
+@node RepeatRegXForward
+@unnumberedsec RepeatRegXForward
+
+@multitable {Menu:} {Search > Repeat >}
+@item Key:  @tab @kbd{F7}
+@item Key:  @tab @kbd{Alt+F12}
+@item Menu: @tab Search > Repeat >
+@end multitable
+
+  Find the next occurrence of the regular expression search pattern.  If it
+could not be found, the search will continue from the beginning of the file.
+If no pattern has been defined, ask for it.
+
+
+@node RepeatSearch
+@unnumberedsec RepeatSearch
+
+@multitable {Menu:} {@kbd{Shift+Ctrl+F6}}
+@item Key:  @tab @kbd{Shift+Ctrl+F6}
+@item Menu: @tab Search > Repeat
+@end multitable
+
+  Repeat the previously defined search (@pxref{DefineSearch}).  If no search has
+been defined, then define it.  If the results option was selected, the new
+matching lines will be appended to the existing window; if all files was also
+selected, the dialog will be displayed, instead.
+
+
+@node ReplaceString
+@unnumberedsec ReplaceString
+
+@multitable {Menu:} {Search > Replace}
+@item Key:  @tab @kbd{Shift+F8}
+@item Menu: @tab Search > Replace
+@end multitable
+
+  Search for a string and replace it with another (or possibly nothing), or
+search for a regular expression and manipulate matching portions of it (press
+@ref{Help} to see how).  To search the block it must be marked in the current
+file.  Checking @option{All files} will perform the replace across all currently
+loaded files; non-file (scratch) windows will be ignored.
+
+
+@node RestoreLine
+@unnumberedsec RestoreLine
+
+@multitable {Menu:} {Other > Undo/redo}
+@item Key:  @tab @kbd{Esc}
+@item Menu: @tab Other > Undo/redo
+@end multitable
+
+  Changes to a line are made in an internal buffer --- the original line remains
+until the changes need to be committed (such as moving off the line).  This
+function will swap the modified line with the original line, thus undoing the
+changes, but also allowing them to be restored in turn.
+
+
+@node RetrieveLine
+@unnumberedsec RetrieveLine
+
+@multitable {Menu:} {Other > Retrieve}
+@item Key:  @tab @kbd{Alt+Y}
+@item Key:  @tab @kbd{Ctrl+U}
+@item Menu: @tab Other > Retrieve
+@end multitable
+
+  Recover a previously deleted line.  The line is placed above the current line.
+It is limited to 200 lines for @file{tder.exe}, with the other systems being
+limited only by available memory.
+
+
+@node Revert
+@unnumberedsec Revert
+
+@multitable {Menu:} {File > Special > Revert}
+@item Key:  @tab @kbd{Shift+Alt+F4}
+@item Menu: @tab File > Special > Revert
+@end multitable
+
+  Discard any modifications made to the file by reloading the file from disk.
+
+
+@node RightJustify
+@unnumberedsec RightJustify
+
+@multitable {Menu:} {Word > (Justify) Right}
+@item Key:  @tab @kbd{Alt+F9}
+@item Menu: @tab Word > (Justify) Right
+@end multitable
+
+  Adjust the line so it ends at the right margin.
+
+
+@node Rturn
+@unnumberedsec Rturn
+
+@multitable {Menu:} {@kbd{GreyEnter}}
+@item Key:  @tab @kbd{Enter}
+@item Key:  @tab @kbd{GreyEnter}
+@item Key:  @tab @kbd{Ctrl+M}
+@item Menu: @tab n/a
+@end multitable
+
+  Insert a new line below the current line and move to it.  If the cursor is
+within the line, the line will be split at that position.  In indent or dynamic
+word wrap modes, the new line will line up with the current line's indentation;
+in fixed wrap mode, with the paragraph or left margin.  If the file is binary,
+this function will only move to the next line, not insert a line.
+
+  @kbd{Enter} is usually temporarily remapped to this function when performing
+other functions.
+
+
+@node Save
+@unnumberedsec Save
+
+@multitable {Menu:} {File > Save}
+@item Key:  @tab @kbd{F2}
+@item Menu: @tab File > Save
+@end multitable
+
+  Save changes to the file, overwriting the previous version.
+
+
+@node SaveAll
+@unnumberedsec SaveAll
+
+@multitable {Menu:} {File > Special > Save all}
+@item Key:  @tab @kbd{Ctrl+Alt+F2}
+@item Menu: @tab File > Special > Save all
+@end multitable
+
+  Save all files, except scratch windows and files marked read-only.
+
+
+@node SaveAs
+@unnumberedsec SaveAs
+
+@multitable {Menu:} {File > Save as}
+@item Key:  @tab @kbd{Shift+F2}
+@item Menu: @tab File > Save as
+@end multitable
+
+  Save the file using a different name and continue editing under that name.  If
+the file exists, prompt to overwrite.
+
+
+@node SaveMacro
+@unnumberedsec SaveMacro
+
+@multitable {Menu:} {Other > File > Save}
+@item Key:  @tab @kbd{Shift+F1}
+@item Menu: @tab Other > File > Save
+@end multitable
+
+  Save all macro definitions to a file.  If syntax highlighting is in effect,
+the default name is the name of the language, with a @file{.tdm} extension, and
+only those macros will be saved; otherwise it is @file{global.tdm}.
+
+
+@node SaveTo
+@unnumberedsec SaveTo
+
+@multitable {Menu:} {File > Special > Save to}
+@item Key:  @tab @kbd{Shift+Ctrl+F2}
+@item Menu: @tab File > Special > Save to
+@end multitable
+
+  Save the file using another name; the current file and its changes remain
+unmodified.
+
+
+@node SaveUntouched
+@unnumberedsec SaveUntouched
+
+@multitable {Menu:} {File > Special > Save untouched}
+@item Key:  @tab @kbd{Shift+Alt+F2}
+@item Menu: @tab File > Special > Save untouched
+@end multitable
+
+  The same as @ref{Save}, but it preserves the original file's timestamp.
+
+
+@node SaveWorkspace
+@unnumberedsec SaveWorkspace
+
+@multitable {Menu:} {File > Save Workspace}
+@item Key:  @tab @kbd{Shift+Alt+W}
+@item Menu: @tab File > Save Workspace
+@end multitable
+
+  Save the current workspace, prompting for a filename.  The workspace includes
+all windows (which includes cursor position), files (which includes block and
+markers) and the prompt histories.  It does not save the editor settings.
+
+
+@node ScratchWindow
+@unnumberedsec ScratchWindow
+
+@multitable {Menu:} {@kbd{Shift+Ctrl+F4}}
+@item Key:  @tab @kbd{Shift+Ctrl+F4}
+@item Menu: @tab File > Scratch
+@end multitable
+
+  Create a scratch window, making it the current window.  A scratch window is
+one that does not prompt to abandon changes; it is indicated by a @samp{#} in
+the window header.
+
+
+@node ScreenDown
+@unnumberedsec ScreenDown
+
+@multitable {Menu:} {@kbd{Ctrl+C}}
+@item Key:  @tab @kbd{PgDn}
+@item Key:  @tab @kbd{Ctrl+C}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the file down one page.  There is one line of overlap (the bottom line
+will become the top line).
+
+
+@node ScreenLeft
+@unnumberedsec ScreenLeft
+
+@multitable {Menu:} {Move > Window left}
+@item Key:  @tab @kbd{Alt+PgUp}
+@item Menu: @tab Move > Window left
+@end multitable
+
+  Move the file left one page.  There is one column of overlap only if the show
+long lines mode is on (@pxref{ToggleEOL}).
+
+
+@node ScreenRight
+@unnumberedsec ScreenRight
+
+@multitable {Menu:} {Move > Window right}
+@item Key:  @tab @kbd{Alt+PgDn}
+@item Menu: @tab Move > Window right
+@end multitable
+
+  Move the file right one page.  There is one column of overlap only if the show
+long lines mode is on (@pxref{ToggleEOL}).
+
+
+@node ScreenUp
+@unnumberedsec ScreenUp
+
+@multitable {Menu:} {@kbd{Ctrl+R}}
+@item Key:  @tab @kbd{PgUp}
+@item Key:  @tab @kbd{Ctrl+R}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the file up one page.  There is one line of overlap (the top line will
+become the bottom line).
+
+
+@node ScrollDnLine
+@unnumberedsec ScrollDnLine
+
+@multitable {Menu:} {@kbd{Ctrl+Down}}
+@item Key:  @tab @kbd{Ctrl+Down}
+@item Key:  @tab @kbd{Ctrl+Z}
+@item Key:  @tab @kbd{Grey+}
+@item Menu: @tab n/a
+@end multitable
+
+  Scroll the file down one line, moving the cursor with it.
+
+
+@node ScrollUpLine
+@unnumberedsec ScrollUpLine
+
+@multitable {Menu:} {@kbd{Ctrl+Up}}
+@item Key:  @tab @kbd{Ctrl+Up}
+@item Key:  @tab @kbd{Ctrl+W}
+@item Key:  @tab @kbd{Grey-}
+@item Menu: @tab n/a
+@end multitable
+
+  Scroll the file up one line, moving the cursor with it.
+
+
+@node SetBreakPoint
+@unnumberedsec SetBreakPoint
+
+@multitable {Menu:} {Toggles > Break point}
+@item Key:  @tab @kbd{Shift+Esc}
+@item Menu: @tab Toggles > Break point
+@end multitable
+
+  Set or clear the break point.  The break point is used to stop recursive
+macros or infinitely repeated keys.  It only works on exactly the line of the
+break point, not before or after it.
+
+
+@node SetDirectory
+@unnumberedsec SetDirectory
+
+@multitable {Menu:} {File > Set directory}
+@item Key:  @tab @kbd{Shift+Alt+=}
+@item Menu: @tab File > Set directory
+@end multitable
+
+  Set the current directory to the same path as the current file.
+
+
+@node SetMargins
+@unnumberedsec SetMargins
+
+@multitable {Menu:} {Word > Margins}
+@item Key:  @tab @kbd{Ctrl+F6}
+@item Menu: @tab Word > Margins
+@end multitable
+
+  Set the columns of the left, right and paragraph margins, and whether the
+right margin should be justified.  All columns must be greater than zero; the
+left and paragraph margins must be less than the right margin; the right margin
+must be less than the maximum line length.  The paragraph margin can be less
+than the left margin, to produce a hanging indent.
+
+
+@node SetMark<N>
+@unnumberedsec SetMark<N>
+
+@multitable {Menu:} {@kbd{Ctrl+K Shift+<N>} (@acronym{UNIX})}
+@item Key:  @tab @kbd{Alt+<N>}
+@item Key:  @tab @kbd{Ctrl+K Shift+<N>} (@acronym{UNIX})
+@item Menu: @tab n/a
+@end multitable
+
+  Remember the current position.  There are three markers available, so replace
+@samp{<N>} with @kbd{1}, @kbd{2}, or @kbd{3}.
+
+
+@node SetTabs
+@unnumberedsec SetTabs
+
+@multitable {Menu:} {Word > Tabs > Set tabs}
+@item Key:  @tab @kbd{Ctrl+Tab}
+@item Menu: @tab Word > Tabs > Set tabs
+@end multitable
+
+  Set the logical and physical tab sizes.  The logical tab size determines the
+number of spaces used when the tab key is pressed (in fixed tab mode); the
+physical tab size determines the number of spaces used by the actual tab
+character.  For example, setting logical tab size to @samp{4}, but physical tab
+size to @samp{8}, would mean @kbd{Tab} would have to be pressed twice to
+generate one tab character.
+
+
+@node Shell
+@unnumberedsec Shell
+
+@multitable {Menu:} {@kbd{Shift+Ctrl+P}}
+@item Key:  @tab @kbd{Shift+Ctrl+P}
+@item Menu: @tab Other > Shell
+@end multitable
+
+  Temporarily leave the editor by running the system's shell program.  Type
+@samp{exit} to return to @acronym{TDE}.  @strong{Caution}: @acronym{TDE} will
+not recognise screen size changes made during the shell, so any changes made
+should be restored prior to returning to @acronym{TDE}.  (No harm will result
+in returning with a different size, but nothing will display correctly.)
+
+
+@node SizeWindow
+@unnumberedsec SizeWindow
+
+@multitable {Menu:} {Window > Size}
+@item Key:  @tab @kbd{Shift+F9}
+@item Menu: @tab Window > Size
+@end multitable
+
+  Size the current window (and any related windows).  It will usually change the
+top and/or left edges, but a top- and/or left-most window will change the bottom
+and/or right edges.
+
+
+@node SortBoxBlock
+@unnumberedsec SortBoxBlock
+
+@multitable {Menu:} {Block > Sort}
+@item Key:  @tab @kbd{Alt+S}
+@item Menu: @tab Block > Sort
+@end multitable
+
+  Sort the lines in the block, prompting to sort ascending or descending.  If
+a line block is marked, the entire line acts as the key; a box block will use
+the contents of the block as the key; this function is not available for a
+stream block.  To sort multiple columns, sort the least significant column
+first.  The case mode (@pxref{ToggleSearchCase}) controls the case sensitivity
+of the sort.
+
+
+@node SplitHalfHorizontal
+@unnumberedsec SplitHalfHorizontal
+
+@multitable {Menu:} {Window > Split half horiz.}
+@item Key:  @tab @kbd{Shift+Alt+F12}
+@item Menu: @tab Window > Split half horiz.
+@end multitable
+
+  Split the current window in half, creating two views of the one file.  The new
+window will be the bottom half of the current window and will then become the
+current window.
+
+
+@node SplitHalfVertical
+@unnumberedsec SplitHalfVertical
+
+@multitable {Menu:} {Window > Split half vert.}
+@item Key:  @tab @kbd{Shift+Alt+F11}
+@item Menu: @tab Window > Split half vert.
+@end multitable
+
+  Split the current window in half, creating two views of the one file.  The new
+window will be the right half of the current window and will then become the
+current window.
+
+
+@node SplitHorizontal
+@unnumberedsec SplitHorizontal
+
+@multitable {Menu:} {Window > Split horizontal}
+@item Key:  @tab @kbd{F9}
+@item Menu: @tab Window > Split horizontal
+@end multitable
+
+  Split the current window at the cursor, creating two views of the one file.
+The current line will become the header of the new window.
+
+
+@node SplitLine
+@unnumberedsec SplitLine
+
+@multitable {Menu:} {Other > Split}
+@item Key:  @tab @kbd{Ctrl+-}
+@item Menu: @tab Other > Split
+@end multitable
+
+  Split the current line at the cursor.  If indent or dynamic word wrap mode is
+on, the new line will match the indentation of the current; if fixed wrap, the
+line will start at the left margin.
+
+
+@node SplitVertical
+@unnumberedsec SplitVertical
+
+@multitable {Menu:} {Window > Split vertical}
+@item Key:  @tab @kbd{F8}
+@item Menu: @tab Window > Split vertical
+@end multitable
+
+  Split the current window at the cursor, creating two views of the one file.
+The current column will become the vertical separator between the windows.
+
+
+@node StampFormat
+@unnumberedsec StampFormat
+
+@multitable {Menu:} {@kbd{Shift+Alt+F}}
+@item Key:  @tab @kbd{Shift+Alt+F}
+@item Menu: @tab Stamp Format
+@end multitable
+
+  Set the format for how the time will be displayed (@pxref{DateTimeStamp}).
+The default format can be configured --- please see @file{config/tde.cfg}.
+
+
+@node StartOfLine
+@unnumberedsec StartOfLine
+
+@multitable {Menu:} {@kbd{Shift+Home}}
+@item Key:  @tab @kbd{Shift+Home}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to column 1.
+
+
+@node Statistics
+@unnumberedsec Statistics
+
+@multitable {Menu:} {@kbd{Shift+GreyEnter}}
+@item Key:  @tab @kbd{Shift+GreyEnter}
+@item Menu: @tab File > Statistics
+@end multitable
+
+  Display certain statistics about the current file, such as the number of
+lines, words and strings, the size of the file on disk (using the current line
+ending format) and the amount of memory the file uses (including windows and
+syntax highlighting).
+
+
+@node Status
+@unnumberedsec Status
+
+@multitable {Menu:} {@kbd{Ctrl+GreyEnter}}
+@item Key:  @tab @kbd{Ctrl+GreyEnter}
+@item Menu: @tab File > Status
+@end multitable
+
+  Display the status of the current file, such as where and what type of block
+is marked and where the markers are located.
+
+
+@node StreamCharLeft
+@unnumberedsec StreamCharLeft
+
+@multitable {Menu:} {@kbd{Shift+Left}}
+@item Key:  @tab @kbd{Shift+Left}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor one character to the left; if the cursor is on the first
+column, move to the end of the previous line.
+
+
+@node StreamCharRight
+@unnumberedsec StreamCharRight
+
+@multitable {Menu:} {@kbd{Shift+Right}}
+@item Key:  @tab @kbd{Shift+Right}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor one character to the right; if the cursor is at (or beyond)
+the end of the line, move to the first column of the next line.
+
+
+@node StreamDeleteChar
+@unnumberedsec StreamDeleteChar
+
+@multitable {Menu:} {@kbd{Ctrl+Delete}}
+@item Key:  @tab @kbd{Ctrl+Delete}
+@item Menu: @tab n/a
+@end multitable
+
+  Delete the character under the cursor, shifting all remaining characters back
+one; if the cursor is at (or beyond) the end of the line, join the next line
+with the current.
+
+
+@node StringEndLeft
+@unnumberedsec StringEndLeft
+
+@multitable {Menu:} {@kbd{Shift+Alt+;}}
+@item Key:  @tab @kbd{Shift+Alt+;}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the end of the previous string.
+
+
+@node StringEndRight
+@unnumberedsec StringEndRight
+
+@multitable {Menu:} {@kbd{Shift+Alt+'}}
+@item Key:  @tab @kbd{Shift+Alt+'}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the end of the next string.
+
+
+@node StringLeft
+@unnumberedsec StringLeft
+
+@multitable {Menu:} {@kbd{Shift+Ctrl+Left}}
+@item Key:  @tab @kbd{Shift+Ctrl+Left}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the start of the previous string.
+
+
+@node StringRight
+@unnumberedsec StringRight
+
+@multitable {Menu:} {@kbd{Shift+Ctrl+Right}}
+@item Key:  @tab @kbd{Shift+Ctrl+Right}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the start of the next string.
+
+
+@node SumBlock
+@unnumberedsec SumBlock
+
+@multitable {Menu:} {Block > Sum}
+@item Key:  @tab @kbd{Alt+Grey+}
+@item Menu: @tab Block > Sum
+@end multitable
+
+  Sum the numbers in a box block.  The numbers are treated as signed decimal.
+If the cursor is at @acronym{TOF} or @acronym{EOF}, or if the file is read-only,
+the sum will be displayed in a message; otherwise it will be inserted (or
+overwritten) into the file.
+
+
+@node SwapBlock
+@unnumberedsec SwapBlock
+
+@multitable {Menu:} {@kbd{Shift+Alt+S}}
+@item Key:  @tab @kbd{Shift+Alt+S}
+@item Menu: @tab Block > Swap
+@end multitable
+
+  Mark another region in the file and swap it with the block.  This function is
+not available for a stream block.
+
+  Swapping a box block has two separate operations, depending on the size of the
+block and the location of the cursor.  If the cursor is above the block, within
+range of the number of lines in the block (i.e. if the block was at the cursor,
+it would overlap itself) then the rows of the block will swap with the rows of
+the swap region (the width remains the same).  In any other case, the swap
+region will have the same number of rows, allowing a different number of columns
+to be swapped.
+
+  The swap region can be sized by using the arrow keys; in conjunction with
+@kbd{Ctrl} the swap will be made the same size as the block.  @kbd{Home} will
+move to the first line or column of the swap and @kbd{End} to the last.
+@kbd{Enter} will accept the swap, @kbd{Esc} will cancel it.
+
+
+@node SyntaxSelect
+@unnumberedsec SyntaxSelect
+
+@multitable {Menu:} {File > Select Language}
+@item Key:  @tab @kbd{Shift+Alt+L}
+@item Menu: @tab File > Select Language
+@end multitable
+
+  Select the language to be used for syntax highlighting.  If the same language
+is chosen it will be re-read from file.  If no language is chosen (i.e. an
+empty string) a list of all languages will be displayed.  This is similar to
+the directory list (@pxref{DirList}).  It displays the selected language, with
+its parent language in brackets, if present; a semicolon- (@acronym{DOS}, Win32)
+or colon- (@acronym{UNIX}) separated list of patterns; and how the language
+treats case (@samp{inherit} indicates the parent language determines case).
+Sometimes you may see duplicated languages; this is due to the language being
+defined both locally and globally.
+
+
+@node Tab
+@unnumberedsec Tab
+
+@multitable {Menu:} {@kbd{Ctrl+I}}
+@item Key:  @tab @kbd{Tab}
+@item Key:  @tab @kbd{Ctrl+I}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the next tab stop and, in insert mode, insert spaces.
+@xref{ToggleSmartTabs}, for how tab stops are determined.
+
+
+@node TitleWindow
+@unnumberedsec TitleWindow
+
+@multitable {Menu:} {Window > Title}
+@item Key:  @tab @kbd{Ctrl+`}
+@item Menu: @tab Window > Title
+@end multitable
+
+  Use something other than the file name to identify the window.  The default
+name is the complete path, which won't be split like it usually is (i.e. as
+@samp{name - path}).
+
+
+@node ToggleCRLF
+@unnumberedsec ToggleCRLF
+
+@multitable {Menu:} {Toggles > Line ending}
+@item Key:  @tab @kbd{Ctrl+F3}
+@item Menu: @tab Toggles > Line ending
+@end multitable
+
+  Change the line ending used when writing the file.  It alternates between
+@samp{crlf} (native @acronym{DOS} and Windows), @samp{lf} (native
+@acronym{UNIX}) and @samp{BIN} (no line ending).
+
+
+@node ToggleCursorCross
+@unnumberedsec ToggleCursorCross
+
+@multitable {Menu:} {Toggles > Cursor cross}
+@item Key:  @tab @kbd{Shift+Alt+X}
+@item Menu: @tab Toggles > Cursor cross
+@end multitable
+
+  Turn the cursor cross on or off.  The cross is horizontal and vertical lines
+intersecting at the cursor.
+
+
+@node ToggleCWD
+@unnumberedsec ToggleCWD
+
+@multitable {Menu:} {Toggles > Cur. directory}
+@item Key:  @tab @kbd{Ctrl+/}
+@item Menu: @tab Toggles > Cur. directory
+@end multitable
+
+  Turn the current directory display on or off.  When on, the current directory
+will always be displayed at the top of the screen.
+
+
+@node ToggleDraw
+@unnumberedsec ToggleDraw
+
+@multitable {Menu:} {Toggles > Drawing}
+@item Key:  @tab @kbd{Alt+Insert}
+@item Menu: @tab Toggles > Drawing
+@end multitable
+
+  Turn drawing mode on or off.  In drawing mode, the
+@code{(Stream)CharLeft/Right} and @code{LineUp/Down} functions will draw a line
+(or corner or intersection, as appropriate) using the current graphic set
+(@pxref{ToggleGraphicChars}).  Turning on draw mode will automatically turn on
+the graphic characters.
+
+
+@node ToggleEOL
+@unnumberedsec ToggleEOL
+
+@multitable {Menu:} {Toggles > EOL display}
+@item Key:  @tab @kbd{Ctrl+F2}
+@item Menu: @tab Toggles > EOL display
+@end multitable
+
+  Indicate whether a special character should be displayed at the end of each
+line (and also display tab characters), or at the end of the window if the line
+is longer, or if nothing should be displayed (default).
+
+
+@node ToggleGraphicChars
+@unnumberedsec ToggleGraphicChars
+
+@multitable {Menu:} {Toggles > Graphic characters}
+@item Key:  @tab @kbd{Shift+Alt+G}
+@item Menu: @tab Toggles > Graphic characters
+@end multitable
+
+  Turn graphic characters on or off.  When using graphic characters, the
+numbers and minus are translated to drawing characters, with the function keys
+controlling the type:
+
+@quotation
+@multitable @columnfractions .13 .84
+@item @kbd{F1} @tab single line
+@item @kbd{F2} @tab double line
+@item @kbd{F3} @tab single horizontal, double vertical
+@item @kbd{F4} @tab double horizontal, single vertical
+@item @kbd{F5} @tab solid
+@item @kbd{F6} @tab @acronym{ASCII}
+@end multitable
+@end quotation
+
+  Imagine a grid overlaid the numbers of the keypad to see how they are
+translated, with @samp{0} as the vertical line and @samp{-} as the horizontal.
+Solid mode is slightly different, though (for codepage 437):
+
+@quotation
+@multitable @columnfractions .13 .87
+@item @kbd{0} @tab light shade
+@item @kbd{1} @tab medium shade
+@item @kbd{2} @tab lower half block
+@item @kbd{3} @tab heavy shade
+@item @kbd{4} @tab right half block
+@item @kbd{5} @tab full block
+@item @kbd{6} @tab left half block
+@item @kbd{7} @tab left-pointing double angle quotation mark
+@item @kbd{8} @tab upper half block
+@item @kbd{9} @tab right-pointing double angle quotation mark
+@item @kbd{-} @tab black square
+@end multitable
+@end quotation
+
+
+@node ToggleIndent
+@unnumberedsec ToggleIndent
+
+@multitable {Menu:} {Toggles > Indent}
+@item Key:  @tab @kbd{Alt+I}
+@item Menu: @tab Toggles > Indent
+@end multitable
+
+  Turn indent mode on or off.  In indent mode, creating a new line will line it
+up with the previous line's indentation.
+
+
+@node ToggleLineNumbers
+@unnumberedsec ToggleLineNumbers
+
+@multitable {Menu:} {Toggles > Line numbers}
+@item Key:  @tab @kbd{Shift+Alt+N}
+@item Menu: @tab Toggles > Line numbers
+@end multitable
+
+  Turn the display of line numbers on or off.  The left side of the window is
+used to display the line numbers.
+
+
+@node ToggleOverWrite
+@unnumberedsec ToggleOverWrite
+
+@multitable {Menu:} {@kbd{Ctrl+V}}
+@item Key:  @tab @kbd{Insert}
+@item Key:  @tab @kbd{Ctrl+V}
+@item Menu: @tab n/a
+@end multitable
+
+  Change between insert or overwrite mode.
+
+
+@node ToggleQuickEdit
+@unnumberedsec ToggleQuickEdit
+
+@multitable {Menu:} {@kbd{Ctrl+Alt+Q}}
+@item Key:  @tab @kbd{Ctrl+Alt+Q}
+@item Menu: @tab n/a
+@end multitable
+
+  Change the state of the Win32 console's QuickEdit mode.  This controls how
+the mouse will be used.  It is only available to @file{tdew.exe}.
+
+
+@node ToggleReadOnly
+@unnumberedsec ToggleReadOnly
+
+@multitable {Menu:} {Toggles > Read only}
+@item Key:  @tab @kbd{Alt+\}
+@item Menu: @tab Toggles > Read only
+@end multitable
+
+  Allow the file to be edited or not.  If the file is read only an @samp{!} is
+displayed in the window's header.  A read only file also allows keys usually
+used as characters to be used as functions.
+
+
+@node ToggleRuler
+@unnumberedsec ToggleRuler
+
+@multitable {Menu:} {Toggles > Ruler}
+@item Key:  @tab @kbd{Alt+R}
+@item Menu: @tab Toggles > Ruler
+@end multitable
+
+  Turn the ruler on or off.  The ruler is displayed at the top of each window,
+indicating the current cursor position and the margins.
+
+
+@node ToggleSearchCase
+@unnumberedsec ToggleSearchCase
+
+@multitable {Menu:} {Search > Toggle Case}
+@item Key:  @tab @kbd{Ctrl+F5}
+@item Menu: @tab Search > Toggle Case
+@end multitable
+
+  Alternate the search case between ignoring and matching.  This option also
+applies to diffing (@pxref{DefineDiff}) and sorting (@pxref{SortBoxBlock}).
+
+
+@node ToggleSmartTabs
+@unnumberedsec ToggleSmartTabs
+
+@multitable {Menu:} {Word > Tabs > Smart tabs}
+@item Key:  @tab @kbd{Alt+Tab}
+@item Key:  @tab @kbd{Shift+Ctrl+I}
+@item Menu: @tab Word > Tabs > Smart tabs
+@end multitable
+
+  Alternate between fixed tabs and smart tabs.  Fixed tabs use the logical tab
+size to determine the next (or previous) tab stop; smart tabs use the next (or
+previous) string in the previous non-blank line.
+
+
+@node ToggleSync
+@unnumberedsec ToggleSync
+
+@multitable {Menu:} {Move > Cursor sync}
+@item Key:  @tab @kbd{Ctrl+F1}
+@item Menu: @tab Move > Cursor sync
+@end multitable
+
+  Turn cursor synchronisation on or off.  With sync on, most movement functions
+will be applied to every visible window.
+
+
+@node ToggleSyntax
+@unnumberedsec ToggleSyntax
+
+@multitable {Menu:} {Toggles > Syntax highlight}
+@item Key:  @tab @kbd{Ctrl+L}
+@item Menu: @tab Toggles > Syntax highlight
+@end multitable
+
+  Turn syntax highlighting on or off (for the current window).
+
+
+@node ToggleTabInflate
+@unnumberedsec ToggleTabInflate
+
+@multitable {Menu:} {Word > Tabs > Inflate tabs}
+@item Key:  @tab @kbd{Shift+Alt+T}
+@item Menu: @tab Word > Tabs > Inflate tabs
+@end multitable
+
+  Select one of three tab modes: deflate tabs treats tabs as normal characters;
+inflate tabs expands tabs to spaces when editing, then compresses spaces to tabs
+when done; real tabs edits with the tab characters, when possible.  Spaces are
+not compressed after a quote character (either @samp{"} or @samp{'}).  The tab
+mode is separate for each file.
+
+
+@node ToggleTrailing
+@unnumberedsec ToggleTrailing
+
+@multitable {Menu:} {Toggles > Trim trailing}
+@item Key:  @tab @kbd{Ctrl+F4}
+@item Menu: @tab Toggles > Trim trailing
+@end multitable
+
+  Turn trim trailing on or off.  When on, any trailing space at the end of the
+line will be removed.  This only applies to the line being edited; trailing
+space is not removed when a file is loaded or saved, @ref{BlockTrimTrailing}, to
+do that.
+
+
+@node ToggleUndoGroup
+@unnumberedsec ToggleUndoGroup
+
+@multitable {Menu:} {Toggles > Group undo}
+@item Key:  @tab @kbd{Shift+Alt+U}
+@item Menu: @tab Toggles > Group undo
+@end multitable
+
+  Alternate between individual or group undo.  In group undo, every instance of
+a repeated function is undone in one go.
+
+
+@node ToggleUndoMove
+@unnumberedsec ToggleUndoMove
+
+@multitable {Menu:} {Toggles > Undo movement}
+@item Key:  @tab @kbd{Shift+Alt+Y}
+@item Menu: @tab Toggles > Undo movement
+@end multitable
+
+  Determine if movement should be undone.  If movement is not undone,
+@code{Undo} will move to the position being undone, before actually undoing.
+
+
+@node ToggleWordWrap
+@unnumberedsec ToggleWordWrap
+
+@multitable {Menu:} {Toggles > Word wrap}
+@item Key:  @tab @kbd{Alt+V}
+@item Menu: @tab Toggles > Word wrap
+@end multitable
+
+  Word wrap will move words to the next line if they exceed the right margin.
+There are two methods: fixed wrap will move the word to the left margin; dynamic
+wrap will align with the previous line's indentation.
+
+
+@node ToggleZ
+@unnumberedsec ToggleZ
+
+@multitable {Menu:} {Toggles > Control Z}
+@item Key:  @tab @kbd{Alt+Z}
+@item Menu: @tab Toggles > Control Z
+@end multitable
+
+  Control whether a control-Z (@acronym{EOF}) character is written at the end of
+the file.
+
+
+@node TopLine
+@unnumberedsec TopLine
+
+@multitable {Menu:} {Move > Line to top}
+@item Key:  @tab @kbd{Alt+Home}
+@item Menu: @tab Move > Line to top
+@end multitable
+
+  Move the current line and the cursor to the top line of the window.
+
+
+@node TopOfFile
+@unnumberedsec TopOfFile
+
+@multitable {Menu:} {Move > Top of File}
+@item Key:  @tab @kbd{Ctrl+Home}
+@item Menu: @tab Move > Top of File
+@end multitable
+
+  Move the cursor to the first page of the file (place @acronym{TOF} at the top
+of the window); the cursor will remain at the same screen position.
+
+
+@node TopOfScreen
+@unnumberedsec TopOfScreen
+
+@multitable {Menu:} {Move > Top line}
+@item Key:  @tab @kbd{Ctrl+PgUp}
+@item Menu: @tab Move > Top line
+@end multitable
+
+  Move the cursor to the first line of the window.
+
+
+@node Transpose
+@unnumberedsec Transpose
+
+@multitable {Menu:} {@kbd{Shift+Ctrl+T}}
+@item Key:  @tab @kbd{Shift+Ctrl+T}
+@item Menu: @tab n/a
+@end multitable
+
+  Swap the character before the cursor with the character before that; if on the
+first or second column, swap those two characters.
+
+
+@node TwoCharKey
+@unnumberedsec TwoCharKey
+
+@multitable {Menu:} {@kbd{Ctrl+K}}
+@item Key:  @tab @kbd{Ctrl+K}
+@item Menu: @tab n/a
+@end multitable
+
+  A configuration setting to indicate that this key will be followed by another.
+
+
+@node Undo
+@unnumberedsec Undo
+
+@multitable {Menu:} {@kbd{Alt+Backspace}}
+@item Key:  @tab @kbd{Alt+Backspace}
+@item Menu: @tab n/a
+@end multitable
+
+  [This function is not yet implemented.]
+
+  Undo each function in turn.
+
+
+@node UnMarkBlock
+@unnumberedsec UnMarkBlock
+
+@multitable {Menu:} {@kbd{Alt+U}}
+@item Key:  @tab @kbd{Alt+U}
+@item Menu: @tab n/a
+@end multitable
+
+  Unmark the block (in any file).  If no block is marked, restore the
+previous block in the current file.
+
+
+@node UserScreen
+@unnumberedsec UserScreen
+
+@multitable {Menu:} {Other > User Screen}
+@item Key:  @tab @kbd{Shift+Ctrl+U}
+@item Menu: @tab Other > User Screen
+@end multitable
+
+  Display the screen prior to running @acronym{TDE}, or from the shell or
+command; press any key to return to @acronym{TDE}.  It is not available in an
+xterm.
+
+
+@node WordDelete
+@unnumberedsec WordDelete
+
+@multitable {Menu:} {@kbd{Ctrl+T}}
+@item Key:  @tab @kbd{Ctrl+T}
+@item Menu: @tab n/a
+@end multitable
+
+  Delete from the cursor to the beginning of the next word.
+
+
+@node WordDeleteBack
+@unnumberedsec WordDeleteBack
+
+@multitable {Menu:} {@kbd{Ctrl+Backspace}}
+@item Key:  @tab @kbd{Ctrl+Backspace}
+@item Menu: @tab n/a
+@end multitable
+
+  Delete from the cursor to the beginning of the current or previous word.
+
+
+@node WordEndLeft
+@unnumberedsec WordEndLeft
+
+@multitable {Menu:} {@kbd{Alt+;}}
+@item Key:  @tab @kbd{Alt+;}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the end of the previous word.
+
+
+@node WordEndRight
+@unnumberedsec WordEndRight
+
+@multitable {Menu:} {@kbd{Alt+'}}
+@item Key:  @tab @kbd{Alt+'}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the end of the next word.
+
+
+@node WordLeft
+@unnumberedsec WordLeft
+
+@multitable {Menu:} {@kbd{Ctrl+Left}}
+@item Key:  @tab @kbd{Ctrl+A}
+@item Key:  @tab @kbd{Ctrl+Left}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the start of the previous word.
+
+
+@node WordRight
+@unnumberedsec WordRight
+
+@multitable {Menu:} {@kbd{Ctrl+Right}}
+@item Key:  @tab @kbd{Ctrl+F}
+@item Key:  @tab @kbd{Ctrl+Right}
+@item Menu: @tab n/a
+@end multitable
+
+  Move the cursor to the start of the next word.
+
+
+@node ZoomWindow
+@unnumberedsec ZoomWindow
+
+@multitable {Menu:} {Window > Zoom}
+@item Key:  @tab @kbd{Ctrl+F9}
+@item Menu: @tab Window > Zoom
+@end multitable
+
+  Resize the current window to the maximum possible, hiding all other visible
+windows.
+
+
+@node Dialogs & Prompts
+@unnumbered Dialogs & Prompts
+
+@unnumberedsec Dialogs
+
+  Dialogs in @acronym{TDE} are quite simple, consisting only of edit fields and
+check boxes.  Use @kbd{Tab}/@kbd{PgDn} and @kbd{Shift+Tab}/@kbd{PgUp} to switch
+between edit fields and the function keys to toggle check boxes;
+@code{GotoMark<N>} will move to the <N>th edit field.  To accept the values
+press @kbd{Enter}; @kbd{Esc} will cancel the dialog.  Cancelling a dialog will
+@emph{not} necessarily restore the original values (for example, turning on
+@option{RegX} in @code{DefineSearch}, then cancelling, will still leave the
+@option{RegX} option on the next time).
+
+  When a dialog is opened from a macro (either recording or playing), all the
+check boxes will be cleared and the focus will be set to the first edit field
+(however, a macro definition can include the flag @option{UsesDialog} to prevent
+this).
+
+
+@unnumberedsec Prompts
+
+  Prompts (and edit fields) can be edited in much the same way as any text in
+the editor.  If the first key is a character, @code{DeleteChar} or
+@code{StreamDeleteChar}, the initial answer will be erased.  The following
+functions have the same meaning as their main editor counterpart:
+
+@quotation
+@multitable @columnfractions .3 .4 .3
+@item @code{BackSpace}    @tab @code{EndOfLine}        @tab @code{Transpose}
+@item @code{BegOfLine}    @tab @code{SetDirectory}     @tab @code{WordDelete}
+@item @code{CharLeft}     @tab @code{StreamCharLeft}   @tab @code{WordDeleteBack}
+@item @code{CharRight}    @tab @code{StreamCharRight}  @tab @code{WordLeft}
+@item @code{DelBegOfLine} @tab @code{StreamDeleteChar} @tab @code{WordRight}
+@item @code{DelEndOfLine} @tab @code{ToggleOverWrite}
+@item @code{DeleteChar}   @tab @code{ToggleSearchCase}
+@end multitable
+@end quotation
+
+@noindent
+The following functions are also available:
+
+@quotation
+@multitable @columnfractions .31 .69
+@item @code{AbortCommand}       @tab cancel the prompt, keep original answer
+@item @code{BackTab}            @tab filename completion
+@item @code{BegNextLine}        @tab copy the string from the current window
+@item @code{CopyToClipboard}    @tab copy the answer to the clipboard
+@item @code{CutToClipboard}     @tab copy the answer to the clipboard
+@item @code{DeleteLine}         @tab erase the answer, but add it to the history
+@item @code{Help}               @tab display help for the command, if any
+@item @code{KopyToClipboard}    @tab copy the answer to the clipboard
+@item @code{LineDown}           @tab retrieve the next answer from the history
+@item @code{LineUp}             @tab retrieve the previous answer from the history
+@item @code{NextLine}           @tab copy the word from the current window
+@item @code{PasteFromClipboard} @tab copy the first line from the clipboard
+@item @code{Rturn}              @tab accept the answer and add it to the history
+@item @code{ScrollDnLine}       @tab complete next entry from the history
+@item @code{ScrollUpLine}       @tab complete previous entry from the history
+@item @code{Tab}                @tab filename completion
+@item @code{ToggleCWD}          @tab if the @option{DisplayCWD} option is off,
+display the current directory above the prompt, or at the bottom of the screen
+in a dialog
+@end multitable
+@end quotation
+
+  The clipboard functions are only available to @file{tdep.exe} and
+@file{tdew.exe}.
+
+  Copying the word or string from the current window, or the line from the
+clipboard, will use the insert or overwrite mode.  If it is the first key
+pressed, the current answer will be erased.
+
+  Filename completion is only available to functions that expect a filename.  If
+the answer contains wildcard characters, each matching filename will become the
+answer.  If there are no wildcards, the entire answer will form the prefix of a
+filename.  The first completion will add the characters common to all matching
+files; each subsequent completion will be the filename itself.  Once all names
+have been displayed, the common characters will again be shown.
+
+  History completion will search the history for a line that matches the answer
+up to the current cursor position.  The search mode case will be used.
+
+  Prompts that expect a filename (more specifically, any prompt that uses the
+file history) will recognise a leading @samp{~/} and substitute it for
+@acronym{TDE}'s home directory (@env{TDEHOME}, @env{HOME} or the same path as
+the executable).
+
+
+@node Issues
+@unnumbered Issues
+
+  Most users should have no problem running @acronym{TDE}, but there a few
+situations that cause troubles.
+
+@table @asis
+@item TDEW & TZ
+
+  If you need to use the @env{TZ} environment variable, include the
+abbreviation, otherwise the current time will be wrong.  Eg: use
+@samp{set TZ=EST-10}, not @samp{set TZ=-10}.
+
+@item TDEP & DR-DOS
+
+  The built-in @acronym{DPMI} server needs to be used, otherwise the keyboard
+will not function correctly.
+
+@item Cygwin/MSYS
+
+  TDE will not run correctly in the shells of these environments.  Use
+@command{start} to run @acronym{TDE} in a new console window.
+
+@end table
+
+
+@node Glossary
+@unnumbered Glossary
+
+@multitable @columnfractions .2 .8
+@item arrow keys     @tab the up, down, left and right keys (see below)
+@item @acronym{BOL}  @tab beginning of line --- the first column
+@item @acronym{CRLF} @tab a text file where each line ends with a carriage
+return and line feed pair
+@item @acronym{EOF}  @tab end of file --- one more than the last line
+@item @acronym{EOL}  @tab end of line --- one more than the last character
+@item @acronym{LF}   @tab a text file where each line ends with a line feed
+@item n/a            @tab not available
+@item paragraph      @tab a group of lines between blank lines
+@item string         @tab a group of characters separated by space or tab
+@item @acronym{TOF}  @tab top of file --- the ``zeroth'' line
+@item word           @tab a group of letters, numbers and underscore
+@end multitable
+
+
+  Functions that reference keys are actually referring to the default functions
+assigned to those keys:
+
+@multitable @columnfractions .2 .8
+@item @kbd{Down}       @tab LineDown
+@item @kbd{End}        @tab EndOfLine
+@item @kbd{Enter}      @tab Rturn (@kbd{Enter} is usually temporarily remapped)
+@item @kbd{Esc}        @tab AbortCommand (@kbd{Esc} is usually temporarily remapped)
+@item @kbd{F1}         @tab Help (@kbd{F1} is usually temporarily remapped)
+@item @kbd{Home}       @tab BegOfLine
+@item @kbd{Left}       @tab CharLeft or StreamCharLeft
+@item @kbd{PgDn}       @tab ScreenDown
+@item @kbd{PgUp}       @tab ScreenUp
+@item @kbd{Right}      @tab CharRight or StreamCharRight
+@item @kbd{Tab}        @tab Tab
+@item @kbd{Up}         @tab LineUp
+@item @kbd{Ctrl+Down}  @tab ScrollDnLine
+@item @kbd{Ctrl+Left}  @tab WordLeft
+@item @kbd{Ctrl+Right} @tab WordRight
+@item @kbd{Ctrl+Up}    @tab ScrollUpLine
+@item @kbd{Shift+Tab}  @tab BackTab
+@end multitable
