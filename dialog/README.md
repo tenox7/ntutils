@@ -2,7 +2,7 @@
 
 This is a port of Thomas E. Dickey [Dialog](https://invisible-island.net/dialog/) to Windows NT Console.
 
-It works suprisingly well with Windows CMD scripts. 
+It works suprisingly well with Windows CMD/BAT scripts. 
 
 This example lets you pick WIM file for DISM in WinPE using Dialog Menu:
 
