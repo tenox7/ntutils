@@ -7,12 +7,6 @@ Some editors, Dialog, Figlet, etc.
 Most of the software is not mine. 
 Copyrights included if available.
 
-Because seriously WTF Microsoft?
-
-![Screenshot](edit.png)
-
-Seriously?
-
 # Table of Contents 
 
 * [dialog](dialog/) - Thomas E. Dickey Dialog port to Windows
