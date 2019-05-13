@@ -13,6 +13,34 @@ Because seriously WTF Microsoft?
 
 Seriously?
 
+# Table of Contents 
+
+* [dialog](dialog/) - Thomas E. Dickey Dialog port to Windows
+
+* [ed-nt](ed-nt/) - DEC EDT editor port to Windows
+
+* [elvis](elvis/) - Elvis VI clone port to Windows
+
+* [figlet](figlet/) - Figlet port to Windows
+
+* [fte](fte/) - FTE Editor port to Windows
+
+* [k](k/) - A binary release of [k_edit](https://github.com/fwmechanic/k_edit)
+
+* [mep](mep/) - Microsoft Editor 
+
+* [owvi](owvi/) - Open Watcom VI Editor
+
+* [sleep](sleep/) - Like Unix *sleep(1)* but for Windows
+
+* [stevie](stevie/) - Stevie VI Clone port to Windows NT
+
+* [tde](tde/) - Thomson-Davis Editor port to Windows
+
+* [xvi](xvi/) - XVI port to Windows
+
+* [z](z/) - Z Text Editor by Mark Zbikowski
+
 # You may also be interested in...
 
 ## Editors for Windows Consoe (Current and Free)
