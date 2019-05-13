@@ -1,0 +1,537 @@
+Copyright (C) 1992, 1993 by Rush Record
+Copyright (C) 1993, 1994 by Charles Sandmann (sandmann@clio.rice.edu)
+
+This file is part of ED.
+
+ED is free software; you can redistribute it and/or modify it under the terms
+of the GNU General Public License as published by the Free Software Foundation.
+
+ED is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with ED
+(see the file COPYING).  If not, write to the Free Software Foundation, 675
+Mass Ave, Cambridge, MA 02139, USA.
+
+-------------------------------------------------------------------------------
+ABOUT ED
+-------------------------------------------------------------------------------
+
+ED is an EDT look-alike editor that is portable to many platforms. If you use
+EMACS, you'll probably hate it, but it does have some nice features.
+
+ED will:
+
+o  Let you edit files on other hosts, if you are connected to the Internet.
+o  Display many files on the screen simultaneously.
+o  Save key definitions and other editor settings on command.
+o  Let you mark your spot in a file, and return to it easily.
+o  Let you put tab stops wherever you want them.
+o  Let you use wildcards in search strings.
+o  Let you redefine the keys on your terminal.
+o  Let you say things like: ED *.dat, if you want to edit all .dat files.
+o  Allow you to teach it how to talk to different terminals.
+o  Calculate the value of algebraic expressions that include math functions.
+o  Sort a file or a portion of a file.
+o  Let you read the network news.
+
+ED is free software, see the file COPYING for details.
+
+ED is available from
+
+  ftp://clio.rice.edu/pub/
+
+If you need a particular binary version and don't have a compiler to build
+it - send me a note.  I've got access to a wide range of systems.
+
+-------------------------------------------------------------------------------
+IF BAFFLED
+-------------------------------------------------------------------------------
+
+If all the wonderful help that appears below fails miserably, which seems not
+unlikely, and your local guru can't get ED running, send e-mail to:
+
+   sandmann@clio.rice.edu
+
+or write to
+
+   Charles Sandmann
+   1206 Braelinn
+   Sugarland, TX  77479
+
+and I'll help if I can.  The known bugs are listed in the file edbugs in
+this distribution and on the above FTP site.  If in doubt, check the FTP
+site since edbugs is kept up to date there.
+
+-------------------------------------------------------------------------------
+UNPACKING ED
+-------------------------------------------------------------------------------
+
+If you are on a VMS system (or any other system with ZIP), you should have a 
+zip file called ED-vvv.zip (vvv is the version).  To unpack it, get a copy of 
+Info-ZIP UNZIP 5.0 (or PKUNZIP 2.04g on DOS) and say:
+
+$ unzip ED-vvv.zip
+
+This will create a subdirectory of your current directory called "ED-vvv"
+which will contain the needed files.
+
+If you are on a unixy system, you could have a file called ED-vvv.tar.Z (it
+might originally be called ED-vvv.taZ, in this case mv it to ED-vvv.tar.Z).  To
+unpack it, create a temporary directory, cd to it, move ED-vvv.tar.Z to it, and
+say:
+
+uncompress < ED-vvv.tar.Z | tar xf -
+
+If you are on a unixy system, you could have a file called EDtarvvv.zip.  To
+unpack it, create a temporary directory, cd to it, move EDtarvvv.zip to it. 
+You need either GZIP or Info-Zip UNZIP to extract this file.
+
+For GZIP, say:
+gunzip < EDtarvvv.gz | tar xf -
+
+For Info-UnZip, just say:
+
+unzip EDtarvvv.zip
+tar xf ED-vvv.tar
+
+You should definitely read the COPYING file before you even *think* about
+selling any code that uses ED source in any way. ED is free, but you cannot
+use any of its source code in any commercial product.
+
+-------------------------------------------------------------------------------
+BUILDING ED ON A UNIX-Y SYSTEM
+-------------------------------------------------------------------------------
+
+To build ED, you need a compiler for the C language. There are a lot of
+different models around, and we can't guarantee that all of them will build ED
+successfully. To try to minimize the distinctions, you should run a shell
+script called 'autoconfigure', which tries to understand the situation on your
+machine.
+
+Autoconfigure creates two files: 'compiler' and 'config.h'. compiler has
+specifics on how to run the C compiler on your machine. config.h has some
+special C code that allows ED to be built on different kinds of hardware.
+
+There can be problems with using autoconfigure. For example, the NeXT machine
+comes with a C-library that contains the 'sbrk' function, but it doesn't work
+right.  On some Linux and BSD386 systems, mmap is available but does not seem
+to work properly.  If the compiler built with autoconfigure has compilation
+problems or does not run correctly (indicates the file is empty when you
+know it isn't) try running configure or specifying "#define NO_MMAP" and
+"#define NO_SBRK" in the config.h file.  If you want to use 8-bit character
+display (for national character sets, for example) you need to add the
+line "#define USE_NCS" to your config.h file.  If you compile in a POSIX
+environment you will also need to "#define NO_TERMSIZE", and potentially
+CUSERID_ENV if cuserid() is not in the library.  In any case, if autoconfigure
+doesn't work right for your system, let me know and I will try to fix
+it in the next release.
+
+Once you have successfully run autoconfigure (or configure, if that's
+appropriate), you need to run make (gmake for BSD386 systems). On Solaris 2.x
+systems use the command "make -f makefile.solaris2".  Make will compile
+all the .c files and build a file called 'a.out', which is the ED executable
+program. Once you have built the program you should create a directory to hold 
+the program and some other files (or move it to a standard shared location such 
+as /usr/local/bin). Move the program (you can call it what you like, perhaps 
+"ed" would be a good idea), *.ed, ed.setup and ed.hlp to that directory:
+
+mkdir ~/ED
+mv a.out ~/ED/ed
+cp load.key *.ed ed.setup ed.hlp ~/ED
+
+Note: if you cp a.out instead, remember to chmod 755 ~/ED/ed !
+
+At this point you should review the files in the set_size subdirectory.  These
+files help you set up the terminal size information and setting up aliases
+for the editor.  You may also need to link vt100.ed or vt200.ed to different
+file names for use with different TERM variables that behave as a superset of
+these terminals (ie vt220.ed, vt320.ed, etc).
+
+If you have a local directory for man pages, you may want to move ED.1 into
+that directory so there will be man support for ED.
+
+-------------------------------------------------------------------------------
+BUILDING ED ON A VMS SYSTEM
+-------------------------------------------------------------------------------
+
+First of all, your VAX must have a C compiler. You can say HELP CC to determine
+whether you do. If no help is available, you probably don't. In that case, you
+should either find a system that has one or buy one.  If all else fails, 
+contact us to get a binary (olb or exe) distribution.
+
+VMS systems don't have unix-style networking by default - you have to buy
+software from a third party to enable it. And, of course, these manufacturers
+pay no attention whatever to one another, with the result that the programmer's
+interface varies somewhat from one manufacturer to another. We currently
+support the networking of three manufacturers: WOLLONGONG, MULTINET and UCX. If
+you have another variety, you'll have to provide us with either documentation
+for it, or access to your system so we can get it up and running.
+
+What all this is leading up to is that you need to run a command procedure
+called MAKE.VMS. This procedure calls another procedure (CONFIGURE.COM), which
+determines which kind of networking you have, and a few other details for the C
+compiler. CONFIGURE.COM creates two files: 'config.h', which has information
+the C compiler uses, and 'vmslink.com', which is the command procedure that
+runs the linker when ED is being built.  Unless you have a Vax 4000 series
+machine, I suggest you submit make.vms as a batch job.
+
+When CONFIGURE.COM completes, MAKE.VMS tries to compile and build ED. If no
+nasty error messages appear, it probably worked. Now decide where you want
+the ED files to live and move them there:
+
+$ CREATE/DIRECTORY SYS$LOGIN:[ED]
+$ COPY ED.EXE,*.ED,ED.HLP,LOAD.KEY SYS$LOGIN:[ED]
+$ COPY ED.SETUP-VMS SYS$LOGIN:[ED]ED.SETUP
+
+-------------------------------------------------------------------------------
+BUILDING ED ON A DOS LIKE SYSTEM
+-------------------------------------------------------------------------------
+
+First of all, a DOS PC must have the GCC port to DOS, DJGPP.  Version 1.10 or 
+later is required to run under Windows or an OS/2 DOS session.  You will also
+need the event library from LIBGRX for the keyboard handling (or define the
+symbol NO_EVENTS when compiling TTYPUT.C).  A binary distribution for DOS is 
+also available.  There is currently not a TCP/IP package that works with DJGPP,
+so the FTP and NEWS functions are disabled.
+
+To build the image you execute MAKE_DOS.BAT (which creates config.h and runs
+the compiler).  You may want to edit this file to change the coff2exe binding
+step (if you would rather stub the image with the extender).
+
+To build ED under NT, you need the Microsoft SDK.  It is as simple as saying
+"nmake -f makefile.nt" if you unpacked the files on a FAT partition.  If you
+are using HPFS or NTFS, you will need to fix the makefile to reflect the
+longer file names.  A binary distribution is available if you don't want to
+bother or don't have the SDK.  The NT distribution has FTP file editing 
+enabled but does not currently support NEWS.
+
+An fully prototyped version of ED has also been built with BORLAND C, but it 
+is limited to 32 Kbyte files and not very suitable for real work.  So far
+everyone I know has 386+ systems so noone thinks it's worth the effort to fix.
+
+Native OS/2 versions have also been built with GCC/2, but it is not as easy,
+since you have to link to the KBD and VIO routines.  Contact us for more 
+instructions for building the OS/2 native version.
+
+-------------------------------------------------------------------------------
+FILES ED USES
+-------------------------------------------------------------------------------
+
+ED uses four auxiliary files, which are ordinary text files (whatever that
+means on your platform). They are:
+
+  1) Your editor setup file, usually called ~/ed.setup (or SYS$LOGIN:ED.SETUP
+     on VMS systems). If you invoke ED and it cannot open the setup file, it
+     copies it from the directory that contains the ED program itself. You must
+     specify the name of your startup file on the command line when you run ED.
+  2) Your journal file, which is specified in your setup file. Typically it's
+     called ~/ed.jou (or SYS$LOGIN:ED.JOU on VMS systems).
+  3) Your terminal description file, whose name depends on what kind of term-
+     inal or terminal emulator you are using. Several examples come with the
+     program. You specify the terminal file on the command line when you run
+     ED. If you don't know what kind of terminal you have, try the vt100.ed
+     file. (Note that ED can create new description files for you if you use
+     the -z command-line option.)
+  4) The editor help file, called ed.hlp. This file should be in the same
+     directory as the executable program.
+
+-------------------------------------------------------------------------------
+HOW TO GET ED RUNNING
+-------------------------------------------------------------------------------
+
+There are some files in the set_size subdirectory which contain example
+code for inclusion in csh and ksh startup files for defining an alias 
+under unix systems.  There is also a program which helps to make sure 
+the terminal size is set properly.
+
+First, define an alias (VMS users: symbol) to run the editor. I do this as
+follows on unix systems (assuming directory name you used above was ED or 
+/usr/local/bin and the program was ed).
+
+with the csh shell (depending on your setup):
+
+alias ed '~/ED/ed ~/ED/$TERM.ed ~/ed.setup `stty size`'
+alias ed '/usr/local/bin/ed /usr/local/bin/$TERM.ed ~/ed.setup 0 0'
+
+or with the Korn shell:
+
+alias ed='/usr/local/bin/ed /usr/local/bin/${TERM}.ed ~/ed.setup 0 0'
+
+The rows and columns sizing parameters are such that they can be set using
+the `stty size` command, or the editor internally tries to determine these
+values if 0 0 are specified.  For some shells you may not be able to create
+an alias, and you may need to create a command script with this information.
+
+Note:  Some systems (IRIX) do not support the "stty size" command.
+For these systems you may be able to use the C shell command:
+  eval `resize`
+This defines the variables LINES, and COLUMNS, then define the C shell alias:
+  alias ed '~/ED/ed ~/ED/$TERM.ed ~/ed.setup $LINES $COLUMNS'
+
+Then, to edit file.name, I say ed file.name.
+
+On VMS I use something like the following (note that this assumes you put all
+of ED's files in your home directory):
+
+$ Ed:==$SYS$LOGIN:ED SYS$LOGIN:VT200.ED SYS$LOGIN:ED.SETUP 0 0
+
+Note that you can say things like:
+
+ed file1.dat a*.b x.y xyzzy.tmp *.c
+
+and all the named files will be loaded by ED, one after the other.
+
+The ed.setup file enables some non-EDT extensions you might not like.  If you
+want close EDT emulation until you learn to love the extensions, use edt.setup.
+
+Many popular defined keys are defined in the file load.key.  For example:
+ GOLD-O : open a new file window
+ GOLD-M : switch to other file window
+ GOLD-C : close current file window
+ GOLD-S : create a system/subprocess/DCL window (also GOLD-D)
+ GOLD-B : toggle the box cut paste mode
+ GOLD-X : calculate expression on current line and paste it into line
+ CTRL-A : toggle insert/overstrike mode
+ CTRL-B : make current window one line bigger
+You may modify this file (maybe merge it with your own command key file
+created with the "unload" command) and then issue the command "load load.key".
+At this point the keys defined in a volatile state.  To save them permanently,
+issue the command "store keys", which puts them in your ed.setup file.
+ 
+-------------------------------------------------------------------------------
+WHY IT DIDN'T WORK
+-------------------------------------------------------------------------------
+
+ED is supposed to spit out informative error messages if something's wrong when
+you try to run it. The main things that can go wrong are:
+
+1) You specified the terminal file or setup file wrong. Be sure that TERM is
+   defined in your environment if you're on a unix system (if you're using the
+   above alias).
+2) You don't have write access to the directory where ED wants to put the
+   ed.setup file. This is unlikely, unless you really don't have write access
+   to your home directory.
+3) You don't have write access to the directory where ED wants to put the
+   journal file. You can fix this by changing the first line of your ed.setup
+   file to point to a directory you have write access to.
+4) You specified the terminal rows and columns incorrectly. On most systems,
+   you can specify them both as zero to get a reasonable default behavior.
+
+-------------------------------------------------------------------------------
+DIRECTORY BROWSING
+-------------------------------------------------------------------------------
+
+If you specify the name of a directory, instead of a file, ED enters 'diredit
+mode.' In this mode, ED lists the files in the named directory (along with some
+details about each file). To view a file, move the cursor to it and press the
+'a' key (or the 'b' key, if you want to look at it in binary mode). You can hit
+'a' on ".." (or "[-]" under VMS) to move up one level in the directory
+hierarchy.
+
+-------------------------------------------------------------------------------
+USING ED ON THE INTERNET
+-------------------------------------------------------------------------------
+
+If your workstation is connected to the Internet, ED can open files and
+directories on other computers. You do this by using the following syntax:
+
+/host.domain:/dir1/dir2.../dirn/file
+
+or
+
+/user@host.domain:/dir1/dir2.../dirn/file
+
+If you use the first form, ED tries to connect with the username "anonymous"
+and passes your username and host as the password. If you use the second form,
+ED prompts you to enter a password. If you leave off the directories, ED puts
+you in the top level directory, "/" (or "[000000]" on VMS).
+
+From within ED, you can hit ^Z and say 'help ftp' to get more complete
+information about using ED in the internet.
+
+-------------------------------------------------------------------------------
+WHAT'S EDT?
+-------------------------------------------------------------------------------
+
+If you don't know how to use EDT, well, you have much to learn in order to use
+ED. Unlike EMACS, ED uses the keypad (at the right end of the keyboard) to do
+everything. Some keys move the cursor, some kill (delete) text from the file,
+some insert previously killed text into the file. You can, from within ED, hit
+control-Z and say HELP KEYPAD to get more information, but it isn't a very good
+way to learn it all.
+
+If I still haven't discouraged you, here's a brief description. (The expression
+[x] means keypad key x. This description assumes a VT100-style keypad.)
+
+MOVING THE CURSOR
+
+If your keyboard has arrow keys, you can use those to move around. If not, the
+[0], [1], [2], [3], [7] and [8] keys move you around as follows:
+
+1) All these keys understand a 'direction' of motion that you can change with
+the [4] and [5] keys. When you first get into ED, you are 'going forward,' and
+pressing any movement key moves the cursor forward in the file. The [5] key
+changes the direction to 'going backward,' which means the same keys now move
+you backward through the file. The [4] key can set you going forward again.
+
+2) The [3] key moves one character at a time.
+
+3) The [1] key move one word at a time.
+
+4) The [2] key moves to the end of a line.
+
+5) The [0] key moves to the beginning of a line.
+
+6) The [7] key moves to a page boundary.
+
+7) The [8] key moves one 'section' of lines (default: 18 lines).
+
+KILLING TEXT
+
+Whenever you kill text in ED, the killed text goes into an internal buffer,
+from which you can generally retrieve it later on. There are four such buffers:
+
+o  the CHAR buffer holds one character, and it gets loaded when you use the
+   DELETE key or the [,] key.
+o  the WORD buffer holds one 'word' (which may be arbitrarily long) and gets
+   loaded when you use the ^J key or the [-] key.
+o  the LINE buffer holds one 'line' (which may be arbitrarily long) and gets
+   loaded when you use the [PF4] key or the [PF1]-[2] combination.
+o  the PASTE buffer holds any arbitrary chunk of text (possibly many lines) and
+   gets loaded when you use the [6] key.
+
+For each buffer, there are keystroke combinations that cause ED to insert the
+contents of the buffer into the file at the cursor position. More about that
+later, first the keys that kill:
+
+1) The Delete key kills the character to the left of the cursor.
+
+2) The [,] key kills the single character the cursor is on.
+
+3) The [-] key kills from the cursor to the beginning of the next word.
+
+4) The [PF4] key kills from the cursor to the end of the current line,
+including the end of the line itself.
+
+5) The [6] key kills the 'select range,' which is an arbitrary area in the file
+that you define using the 'select marker.' This works as follows:
+
+   a) You press the [.] key. This puts the select marker at the cursor
+   position.
+
+   b) You move the cursor somewhere else.
+
+   c) You press [6] to kill everything from the cursor to the marker.
+
+The [6] key will also kill the search string, if the cursor is currently
+sitting on the search string. See FINDING STRINGS below for more about the
+search string.
+
+UNKILLING TEXT
+
+To insert text, you just type. There is an 'overstrike' mode, but it is not
+enabled by default. The Delete key lets you back up. The [,], [-] and [PF4]
+keys save the text they kill in buffers that you can later 'unkill,' or insert,
+into the file. You do this by pressing the [PF1] key (also called the GOLD key)
+and then pressing [,], [-] or [PF4]. Similarly, pressing GOLD [6] unkills
+whatever you last killed with the [6] key. This is how you move big blocks of
+text around.
+
+Pressing [PF2] immediately before killing something causes what would be killed
+to be copied to the appropriate buffer, without actually removing the text from
+the file.
+
+Note that ^J (otherwise known as 'delete previous word') loads what it kills
+into the WORD buffer (the same one [-] kills into). Also, [PF1]-[2] (otherwise
+known as 'delete to end of line') kills into the LINE buffer (the same one [PF4]
+kills into).
+
+REPEAT COUNTS
+
+Any keystroke can be issued to ED with a 'repeat count,' which, in effect,
+makes it as if you had pressed the key many times. You enter a repeat count by
+pressing GOLD, then typing in a number, then pressing a key (or a GOLD-key
+combination). For example, to insert 27 'a' characters, you would press GOLD,
+type 27 (on the main keyboard), and press a.
+
+FINDING STRINGS
+
+To search for a string, press GOLD [PF3]. ED will prompt you for a search
+string. Type something in, and press [4] to search forward or [5] to search
+backward. It beeps if the string is not found. If it does find the string, it
+moves the cursor there. To find the next occurrence of the string (in the
+current direction) just press [PF3]. See the SET SEARCH help topic for more
+about searching.
+
+SAVING CHANGES
+
+To save your changes, press control-Z to get into command mode, and say E and
+hit RETURN. The file is updated on disk, and you get a prompt for another file
+name. To get out of ED completely, just hit RETURN one more time.
+
+To get out of a file without saving changes, type control-Z and say Q and hit
+RETURN. All your changes are thrown away.
+
+MULTI-WINDOW EDITING
+
+ED lets you open 'windows' into other files while you're editing. To do this:
+
+1) Press GOLD [PF2]. You get a prompt that says Open,Close,Move,Spawn>. Say O
+and hit RETURN.
+
+2) Enter a file name and press RETURN. The screen splits and you get popped
+into the file you named.
+
+3) To move between windows, say GOLD [PF2] and say M and hit RETURN. The cursor
+moves to the other window. You can have as many windows as you like. You can
+say ML (meaning, Move Last) instead of M to move to the window above the
+current window, or MN (for Move Next) to move to the one below. Similarly, you
+can say MNN to move two windows down, etc.
+
+4) To close a window, say GOLD [PF2] and say C and hit RETURN. The window the
+cursor is in is closed. You cannot close the main window. You can say CN or CL
+to close the window below or above.
+
+5) To create a window with another process (so you can do directories etc) say
+GOLD [PF2] and say S and hit RETURN. Log out of this window to close it. On VMS
+systems, you can use the ATTACH command to return to ED, leaving the process
+window on the screen. You can then move back into the process window, and it
+will return you to the still-waiting process.
+
+6) To update a file you windowed into, move the cursor into the window, say
+control-Z, and type W (meaning, WRITE) and hit RETURN. The contents of the
+window are written to disk. You can say W filename to write the window to a
+specific file.
+
+DEFINING KEYS
+
+By all means, read the help topic 'defining_keys' in the online help. You can
+define keys in ED very easily, and the key definition can include *any* editor
+commands. You can, for example, say e *.c, and when the first .c file comes up,
+you can define a key that does some edits and then does control-Z and EXIT.
+At this point (in the second .c file) you terminate the key definition. Now
+when you press the defined key, it edits one more file and pops you into the
+next one. You could now enter a huge repeat count and press the defined key,
+and the edits would be performed on all the remaining .c files. When there are
+no more .c files (or the edits fail for some reason), the defined key stops.
+
+Once you have defined some keys, you can store them in your setup file, using
+the STORE command. Once you do this, the key definitions become part of your
+setup, so you don't have to define them any more - ED just comes up with them
+already defined.
+
+MORE HELP
+
+There is an online help facility built into ED. To get into it, press control-Z
+and say H and hit RETURN. A list of topics appears. Type the name of a topic to
+get more information, or hit RETURN to work your way back up one level. You can
+abbreviate topic names. A list of important topics:
+
+SHOW - shows editor settings.
+SET - sets editor settings.
+STORE - saves editor settings and key definitions in your setup file.
+RESTORE - restores editor settings and key definitions from your setup file.
+recovery - how to recover edits from the journal file (after a crash).
+recall_commands - describes command recall.
