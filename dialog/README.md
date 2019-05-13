@@ -2,9 +2,9 @@
 
 This is a port of Thomas E. Dickey [Dialog](https://invisible-island.net/dialog/) to Windows NT Console.
 
-It works suprisingly well with Windows CMD/BAT scripts. 
+It works suprisingly well with Windows cmd.exe cmd/bat scripts. 
 
-This example lets you pick WIM file for DISM in WinPE using Dialog Menu:
+This example lets you pick WIM file for [DISM](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism---deployment-image-servicing-and-management-technical-reference-for-windows) in [Windows PE](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-intro) using Dialog Menu:
 
 ```
 setlocal enabledelayedexpansion
