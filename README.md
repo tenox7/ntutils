@@ -21,11 +21,13 @@ Check my [blog post](https://virtuallyfun.com/wordpress/2018/02/15/wanted-consol
 
 History of [Microsoft Editor](https://virtuallyfun.com/wordpress/2018/03/11/microsoft-editor/) that you can find in [mep/](mep/) and [z/](z/) folders
 
+* [nanowin](https://github.com/lhmouse/nano-win) GNU NANO for Windows
+
 ## Other Windows Utilities for Windows Console
 
-[cmdsave](https://github.com/tenox7/cmdsave) dumps contents of Windows Console / cmd.exe / Powershell window in to a text file
+* [cmdsave](https://github.com/tenox7/cmdsave) dumps contents of Windows Console / cmd.exe / Powershell window in to a text file
 
-[cmdmax](https://github.com/tenox7/cmdmax) maximize and or set arbitrary position and size of WIndows Console window
+* [cmdmax](https://github.com/tenox7/cmdmax) maximize and or set arbitrary position and size of WIndows Console window
 
 [winsay](https://github.com/tenox7/winsay) It's a Mac OS X *say(1)* command reimplementation for Windows
 
