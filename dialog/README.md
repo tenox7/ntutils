@@ -15,3 +15,4 @@ for /f %%f in (%TEMP%\ossel.txt) do set wim=%%~ff
 dism /apply-image /imagefile:%wim% /index:1 /applydir:c:\
 ```
 
+![Screenshot](dialog.png)
