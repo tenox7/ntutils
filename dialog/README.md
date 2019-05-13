@@ -9,9 +9,9 @@ This example lets you pick WIM file for DISM in WinPE using Dialog Menu:
 ```
 setlocal enabledelayedexpansion
 for /f %%t in ('dir /b/s win*.wim') do set menu=!menu! %%t ""
-dialog --ok-label "FLASH..." --menu "Select OS Version for Flashing" 30 60 20 !menu:~1! 2>%TEMP%\fwsel.txt
+dialog --ok-label "FLASH..." --menu "Select OS Version for Flashing" 30 60 20 !menu:~1! 2>%TEMP%\ossel.txt
 endlocal
-for /f %%f in (%TEMP%\fwsel.txt) do (
+for /f %%f in (%TEMP%\ossel.txt) do (
     set wim=%%~ff
     set rel=%%~pf
 )
