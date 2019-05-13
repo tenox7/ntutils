@@ -21,7 +21,9 @@ Check my [blog post](https://virtuallyfun.com/wordpress/2018/02/15/wanted-consol
 
 History of [Microsoft Editor](https://virtuallyfun.com/wordpress/2018/03/11/microsoft-editor/) that you can find in [mep/](mep/) and [z/](z/) folders
 
-* [nanowin](https://github.com/lhmouse/nano-win) GNU NANO for Windows
+* [micro](https://micro-editor.github.io/) Micro Editor also for Windows
+
+* [nano](https://github.com/lhmouse/nano-win) - GNU NANO Windows Port
 
 ## Other Windows Utilities for Windows Console
 
