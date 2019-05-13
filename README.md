@@ -19,7 +19,7 @@ Seriously?
 
 Check my [blog post](https://virtuallyfun.com/wordpress/2018/02/15/wanted-console-text-editor-for-windows/) for a comphrehensive list of editors for the windows console
 
-History of [Microsoft Editor](https://virtuallyfun.com/wordpress/2018/03/11/microsoft-editor/) that you can find in mep/ and z/ folders,
+History of [Microsoft Editor](https://virtuallyfun.com/wordpress/2018/03/11/microsoft-editor/) that you can find in [mep/](mep/) and [z/](z/) folders
 
 ## Other Windows Utilities for Windows Console
 
