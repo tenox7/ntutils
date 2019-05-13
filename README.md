@@ -15,11 +15,11 @@ Seriously?
 
 # You may also be interested in...
 
-## Editors
+## Editors for Windows Consoe
 
 Check my [blog post](https://virtuallyfun.com/wordpress/2018/02/15/wanted-console-text-editor-for-windows/) for a comphrehensive list 
 
-## Other Windows Console Utilities
+## Other Windows Utilities for Windows Console
 
 [cmdsave](https://github.com/tenox7/cmdsave) dumps contents of Windows Console / cmd.exe / Powershell window in to a text file
 
@@ -41,3 +41,6 @@ Check my [blog post](https://virtuallyfun.com/wordpress/2018/02/15/wanted-consol
 
 [regln](https://github.com/tenox7/regln) Manage Windows Registry Links (REG_LINK type)
 
+## Even more stuff...
+
+[yori](http://www.malsmith.net/yori/) What Windows Console Should Really Be Like
