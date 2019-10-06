@@ -66,7 +66,7 @@ Also history of [Microsoft Editor](https://virtuallyfun.com/wordpress/2018/03/11
 
 * [diskimg](https://github.com/tenox7/diskimg) Hard disk imaging (dump/restore) utility for Windows Console
 
-* [disktrim](https://github.com/tenox7/diskimg) SSD TRIM/UNMAP/DISCARD. Linux *blkdiscard(1)* for Windows
+* [disktrim](https://github.com/tenox7/disktrim) SSD TRIM/UNMAP/DISCARD. Linux *blkdiscard(1)* for Windows
 
 * [snoopy](https://github.com/tenox7/snoopy) is a portable single exe no-driver tcp/ip packet sniffer for Windows Console
 
