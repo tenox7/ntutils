@@ -45,6 +45,8 @@ Copyrights included if available.
 
 * [kit](https://turtlewar.org/projects/editor/) - Kinesis Text Editor
 
+* [brief](http://www.briefeditor.com/) - Brief Text Editor
+
 For a more comphrehensive list of editors for the windows console check my [blog post](https://virtuallyfun.com/wordpress/2018/02/15/wanted-console-text-editor-for-windows/) 
 
 Also history of [Microsoft Editor](https://virtuallyfun.com/wordpress/2018/03/11/microsoft-editor/) that you can find in [mep/](mep/) and [z/](z/) folders
